@@ -85,6 +85,12 @@ public class PathfindingGrid {
             bool pathSuccess = false;
             Node startNode = GetNode(start);
             Node endNode = GetNode(end);
+
+            if (startNode == null || startNode.position == null || endNode == null || endNode.position == null) {
+                requestComplete(new PathResult(null, false));
+                return;
+            }
+
             startNode.parent = startNode;
 
             if (tilePassable(startNode.position) && tilePassable(endNode.position)) {
@@ -124,7 +130,7 @@ public class PathfindingGrid {
             if (pathSuccess) {
                 waypoints = RetracePath(startNode, endNode);
             }
-            UnityEngine.Debug.Log("Path found in " + (sw.ElapsedMilliseconds / 1000f) + " seconds. Total path length is " + waypoints.Length + " nodes.");
+            //UnityEngine.Debug.Log("Path found in " + (sw.ElapsedMilliseconds / 1000f) + " seconds. Total path length is " + waypoints.Length + " nodes.");
             sw.Stop();
             
             requestComplete(new PathResult(waypoints, pathSuccess));
@@ -139,7 +145,13 @@ public class PathfindingGrid {
                 path.Add(currentNode.position);
                 currentNode = currentNode.parent;
             }
-            return path.ToArray();
+            //Reverse the path
+            Vector2[] pt = new Vector2[path.Count];
+            for (int i = 0; i < path.Count; i++) {
+                pt[path.Count - 1 - i] = path[i];
+            }
+
+            return pt;
         }
 
         int GetDistance(Node nodeA, Node nodeB) {

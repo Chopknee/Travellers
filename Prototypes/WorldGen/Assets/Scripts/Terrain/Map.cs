@@ -14,6 +14,7 @@ public class Map : MonoBehaviour {
     public NoiseData noiseData;
     public TextureData textureData;
     public Material terrainMaterial;
+    public int elevationChangePenalty;
     //
     public float[,] heights;
 
@@ -25,6 +26,7 @@ public class Map : MonoBehaviour {
 
     public bool UpdateInEditor = false;
     public TileManager tileManager;
+    public PathfindingGrid pathfinder;
 
     public int mapChunkSize {
         get {
@@ -34,6 +36,7 @@ public class Map : MonoBehaviour {
 
     public void Awake() {
         tileManager = new TileManager(this);
+        pathfinder = new PathfindingGrid(mapChunkSize, mapChunkSize);
     }
 
     public void GenerateTerrain() {
@@ -97,7 +100,8 @@ public class Map : MonoBehaviour {
             terrainMeshObject = go;
             terrainMeshFilter = terrainMeshObject.GetComponent<MeshFilter>();
             terrainMeshRenderer = terrainMeshObject.GetComponent<MeshRenderer>();
-            terrainMeshObject.transform.localScale = Vector3.one * terrainData.uniformScale;
+            Vector3 scl = new Vector3(1, 1, -1);
+            terrainMeshObject.transform.localScale = scl * terrainData.uniformScale;
             terrainMeshObject.transform.SetParent(transform);
         }
     }
@@ -230,19 +234,38 @@ public class Map : MonoBehaviour {
     public Vector3 TerrainCoordToRealWorld(Vector2 pos) {
         int halfWidth = Mathf.RoundToInt(mapChunkSize * 0.5f);
         int halfHeight = Mathf.RoundToInt(mapChunkSize * 0.5f);
-        return new Vector3((-halfWidth + pos.x) * terrainData.uniformScale, GetScaledHeight(pos), -1*(-halfHeight + pos.y) * terrainData.uniformScale);
+        return new Vector3((-halfWidth + pos.x) * terrainData.uniformScale, GetScaledHeight(pos), (-halfHeight + pos.y) * terrainData.uniformScale);
     }
 
     public Vector2 RealWorldToTerrainCoord(Vector3 pos) {
         int halfWidth = Mathf.RoundToInt(mapChunkSize * 0.5f);
         int halfHeight = Mathf.RoundToInt(mapChunkSize * 0.5f);
-        return new Vector2(pos.x / terrainData.uniformScale + halfWidth, -(pos.z / terrainData.uniformScale) + halfHeight);
+        return new Vector2(pos.x / terrainData.uniformScale + halfWidth, (pos.z / terrainData.uniformScale) + halfHeight);
     }
+
+    public int GetPathfindingTileCost(Vector2 currentPosition, Vector2 nextPosition) {
+        return (int)Mathf.Max(0, ((GetHeight(nextPosition) - GetHeight(currentPosition)) * elevationChangePenalty));
+    }
+
+    public bool TileIsPassable(Vector2 position) {
+        return tileManager.GetTile(position).CanWalkHere();//For now, all tiles will be marked as passable.
+    }
+
 
     public static Vector2 GetAverageGradient(float[,] map) {
         float rowSlope = GetAverageSlope(GetRowSums(map));
         float columnSlope = GetAverageSlope(GetColumnSums(map));
         return new Vector2(rowSlope, columnSlope);
+    }
+
+    public static Vector2 GetAverageGradient(Tile[,] map) {
+        float[,] heights = new float[map.GetLength(0), map.GetLength(1)];
+        for (int x = 0; x < map.GetLength(0); x++) {
+            for (int y = 0; y < map.GetLength(1); y++) {
+                heights[x,y] = map[x,y].unscaledHeight;
+            }
+        }
+        return GetAverageGradient(heights);
     }
 
     private static float[] GetRowSums(float[,] map) {

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6f39671f39f0046be5f5594c9a24b6, type: 3}
-  m_Name: Temple
+  m_Name: Cave
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  texelSize: {x: 14, y: 14}
-  maximumSlope: 0.744
-  alignToSlope: 1
+  texelSize: {x: 4, y: 4}
+  maximumSlope: 0.563
+  alignToSlope: 0
   flattenTerrain: 1
-  numberToSpawn: 5
+  numberToSpawn: 2
   structurePrefabs:
-  - {fileID: -927199367670048503, guid: 7f753c3dd33dfcf4b8033c6d2d53ffb4, type: 3}
+  - {fileID: 1313682475652131972, guid: 57f7cf178dcf76b42a1a900bdb3f5059, type: 3}
