@@ -2074,6 +2074,7 @@ GameObject:
   - component: {fileID: 2002930764}
   - component: {fileID: 2002930763}
   - component: {fileID: 2002930762}
+  - component: {fileID: 2002930765}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2146,6 +2147,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &2002930765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002930761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db7dc6fa5a5db3b4690d6d31d5f08a09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followTarget: {fileID: 0}
+  followCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  multiplier: 1
+  cam: {fileID: 2002930763}
 --- !u!1 &2044073726 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7941106588625948817, guid: 1fd5e9cd8df7f6a48b1e5ba8fe5adb61,
@@ -2377,6 +2417,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822365178215254495, guid: ee23565a2c6ccef4db6ba8b2ec513a88,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2883285211324135481, guid: ee23565a2c6ccef4db6ba8b2ec513a88,
         type: 3}
