@@ -12,17 +12,11 @@ public class CameraFollow : MonoBehaviour {
     public AnimationCurve followCurve;
     [Range(0.5f, 4), Tooltip("Controls how far from the center of the camera the target can get.")]
     public float multiplier = 1;
-    public Camera cam;
     // Use this for initialization
-    private float why;
     void Start () {
         if (followTarget == null) {
             followTarget = GameObject.FindGameObjectWithTag("Player");
         }
-        if (cam == null) {
-            cam = GetComponent<Camera>();
-        }
-        why = transform.position.y;
     }
 	
 	// Update is called once per frame

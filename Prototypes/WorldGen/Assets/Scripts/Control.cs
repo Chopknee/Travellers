@@ -23,6 +23,12 @@ public class Control: MonoBehaviour {
         }
     }
 
+    public int NoiseSeed {
+        get {
+            return map.noiseData.seed;
+        }
+    }
+
     private void Awake () {
         inst = this;
     }

@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 947b97860286a7c41a42760f9ed559d1, type: 3}
-  m_Name: DefaultNoise
+  m_Script: {fileID: 11500000, guid: 35674389b2fb51a40bdeb0fa3bb4a921, type: 3}
+  m_Name: GoldCoin
   m_EditorClassIdentifier: 
   autoUpdate: 1
-  noiseScale: 100
-  octaves: 10
-  persistance: 0.252
-  lacunarity: 4
-  seed: 32
-  offset: {x: 0, y: 0}
-  normalizeMode: 1
+  collectionName: GoldCoin
+  displayColor: {r: 0.764151, g: 0.55974543, b: 0.16220188, a: 1}

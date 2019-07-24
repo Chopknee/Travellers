@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 
-public class Player : MonoBehaviour
-{
+public class Player : MonoBehaviour {
 
     private Map map;
     private Camera mainCamera;
@@ -15,9 +14,14 @@ public class Player : MonoBehaviour
     Vector2[] currentPath;
     int pathIndex = 0;
 
+    public GameObject pointerPrefab;
+    private GameObject pointer;
+
     void Start() {
         Invoke("start", 1);
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        pointer = Instantiate(pointerPrefab);
+        pointer.SetActive(false);
     }
 
     void start() {
@@ -40,27 +44,39 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && !pathRequested) {
             TerrainClick tc = TryClickTerrain(resolution, mainCamera, map);
             tp = tc.terrainPoint.position;
-            if (tc.success) {
-                //Attempt to pathfind.
-                
+            //Two options here, the end tile is occupied, in which case we attempt to interact, or it is not occupied in which case we navigate to that item
+            if (tc.terrainPoint.Occupied) {
+                //Attempt to interact
+                UnityEngine.Debug.Log("Space was occupied!");
+                IMapInteractable interactable = tc.terrainPoint.occupyingObject.GetComponent<IMapInteractable>();
+                if (interactable != null) {
+                    //We need to make sure to navigate to the closest point of the perimeter of the object.
+                    UnityEngine.Debug.Log("Interactable was found!");
+                }
+            } else if (tc.success) {
+                //Attempt to pathfind.                
                 map.pathfinder.RequestPath(terrainPosition, tc.terrainPoint.gridPosition, map.GetPathfindingTileCost, map.TileIsPassable, true, RequestComplete);
                 pathRequested = true;
-                
+            } else {
+                //No valid point was found???
             }
         }
 
         if (followPath) {
+            pointer.SetActive(true);
             progress += Time.deltaTime * speed;
             //Moving from one point to another
             Vector2 tp = Vector2.Lerp(terrainPosition, currentPath[pathIndex], progress);
             //UnityEngine.Debug.Log("Pathfinding! " + progress);
             transform.position = map.TerrainCoordToRealWorld(tp);
+            pointer.transform.position = map.TerrainCoordToRealWorld(currentPath[currentPath.Length-1]);
             if (progress > 1) {
                 progress = 0;
                 terrainPosition = currentPath[pathIndex];
                 pathIndex ++;
                 if (pathIndex == currentPath.Length) {
                     followPath = false;
+                    pointer.SetActive(false);
                 }
             }
         }

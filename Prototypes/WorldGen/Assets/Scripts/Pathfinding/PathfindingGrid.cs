@@ -173,13 +173,9 @@ public class PathfindingGrid {
 
         public List<Node> GetNeighbors(Node node, bool useSubCardinals) {
             List<Node> neighbors = new List<Node>();
-
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
-                    //A very clunky if statement but whatever....
-                    if ( useSubCardinals && x == 0 && y == 0 //If we want to use all 8 possible directions
-                    || !useSubCardinals && x == -1 && y == -1 || !useSubCardinals && x == 1 && y == -1//If we want to only use the 4 direct neighbors
-                    || !useSubCardinals && x == 1 && y == 1 || !useSubCardinals && x == 1 && y == -1) {
+                    if (useSubCardinals && x == 0 && y == 0 || !useSubCardinals && !(x==0 || y == 0)) {
                         continue;
                     }
                     int checkX = (int)node.position.x + x;
@@ -189,8 +185,6 @@ public class PathfindingGrid {
                     }
                 }
             }
-
-
             return neighbors;
         }
     }
