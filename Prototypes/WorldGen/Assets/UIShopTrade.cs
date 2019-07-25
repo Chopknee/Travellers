@@ -26,6 +26,7 @@ public class UIShopTrade : MonoBehaviour {
     public Text txtBuyValue;
     public Text txtDirections;
     public Text txtPlayerGold;
+    public Text txtNet;
 
     public void Awake() {
         inst = this;
@@ -52,7 +53,7 @@ public class UIShopTrade : MonoBehaviour {
         
         uishopInventory.associatedInventory = shopInventory;
         buyWindow.associatedInventory = shopInventory;
-        txtPlayerGold.text = "Your gold - " + string.Format("{0, 0:D3}g", tradingPlayer.gold);
+        txtPlayerGold.text = "+ On Hand: " + string.Format("{0, 0:D3}g", tradingPlayer.gold);
 
         //Fill the player inventory with all items
         foreach (ItemCard c in tradingPlayer.inventory.GetItems()) {
@@ -70,9 +71,9 @@ public class UIShopTrade : MonoBehaviour {
     public void OnItemsListChanged(UIItemsList obj ) {
         //huh
         //Debug.Log("Items list has changed!!!");
-        txtSellValue.text = string.Format("{0, 0:D3}g", sellWindow.GoldValue);
-        txtBuyValue.text = string.Format("{0, 0:D3}g", buyWindow.GoldValue);
-
+        txtSellValue.text = "+ Sell: " + string.Format("{0, 0:D3}g", sellWindow.GoldValue);
+        txtBuyValue.text = "- Buy: " + string.Format("{0, 0:D3}g", buyWindow.GoldValue);
+        txtNet.text = "Net: " + string.Format("{0, 0:D3}g", sellWindow.GoldValue - buyWindow.GoldValue + tradingPlayer.gold);
         /*
             Rules for the trade to execute successfully
             There has to be items that are being purchased or sold.
@@ -99,7 +100,7 @@ public class UIShopTrade : MonoBehaviour {
 
     public void ExecuteTrade() {
         //Complete the trade!!!
-        txtPlayerGold.text = "Your gold - " + string.Format("{0, 0:D3}g", tradingPlayer.gold);
+        txtPlayerGold.text = "+ On Hand: " + string.Format("{0, 0:D3}g", tradingPlayer.gold);
         int value = sellWindow.GoldValue - buyWindow.GoldValue;
         tradingPlayer.gold += value;
         tradingPlayer.inventory.PutItems(buyWindow.containedCards.ToArray(), shopInventory);
@@ -108,8 +109,9 @@ public class UIShopTrade : MonoBehaviour {
         ExitTrade();
         ShowTradeWindow(shopInventory, tradingPlayer);
         //Quick and dirty fix ;;;)))
-        txtSellValue.text = string.Format("{0, 0:D3}g", sellWindow.GoldValue);
-        txtBuyValue.text = string.Format("{0, 0:D3}g", buyWindow.GoldValue);
+        txtSellValue.text = "+ Sell: " + string.Format("{0, 0:D3}g", sellWindow.GoldValue);
+        txtBuyValue.text = "- Buy: " + string.Format("{0, 0:D3}g", buyWindow.GoldValue);
+        txtNet.text = "Net: 000g";
 
     }
 

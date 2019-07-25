@@ -12,7 +12,7 @@ public class ItemWidget : IUIItemcard {
     public Image itemImage;
 
     public override void CardDataChanged(ItemCard cd) {
-        nameText.text = cd.name;
+        nameText.text = cd.itemName;
         valueText.text = string.Format("{0, 0:D1}g", cd.value);
         itemImage.sprite = cd.itemSprite;
     }

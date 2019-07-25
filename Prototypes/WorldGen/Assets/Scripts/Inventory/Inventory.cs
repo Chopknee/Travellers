@@ -38,9 +38,13 @@ public class Inventory {
     //Adds an item to this inventory
     public bool PutItem ( ItemCard item, Inventory other) {
         if (CanHoldMore) {
-            cards.Add(item);
+            
             if (other != null) {
                 other.cards.Remove(item);
+                cards.Add(item);
+            } else {
+                //If the other inventory is null, I am assuming this is a new item being spawned in!!
+                cards.Add(item.GetNew());
             }
             return true;
         }
@@ -52,10 +56,7 @@ public class Inventory {
         if (maxSize == 0 || cards.Count + items.Length < maxSize) {
             foreach (ItemCard c in items) {
                 if (CanHoldMore) {
-                    cards.Add(c);
-                    if (other != null) {
-                        other.cards.Remove(c);
-                    }
+                    PutItem(c, other);
                 }
             }
             return true;

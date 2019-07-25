@@ -44,8 +44,9 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
             //Case the dropped item as an item card.
             ItemCard cardData = ((IUIItemcard)item).CardData;
             bool passed = blackListMode;//Set up the passed variable for the scenario where the card is not part of a group
+            passed = passed && allowLinkedInventoryOnly && associatedInventory == cardData.owningInventory;
             //If there is no group filter specified, or the card is not part of a group, bypass the following nested loop
-            if (GroupsList.Length != 0 && cardData.collections.Length != 0) {
+            if (GroupsList.Length != 0 && cardData.collections.Length != 0 && !allowLinkedInventoryOnly) {
                 //Searching through the specified filter groups and the card's groups
                 foreach (Collection checkCollection in GroupsList) {
                     foreach (Collection cardCollection in cardData.collections) {
