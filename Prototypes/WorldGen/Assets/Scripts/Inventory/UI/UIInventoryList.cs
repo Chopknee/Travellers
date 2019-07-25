@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIShop : MonoBehaviour, IUIDropZone {
+public class UIInventoryList : MonoBehaviour, IUIDropZone {
 
     public string debugName = "";
     [Tooltip("If left empty, all items may be dropped here.")]

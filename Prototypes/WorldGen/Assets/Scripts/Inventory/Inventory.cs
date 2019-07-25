@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Inventory : MonoBehaviour {
+public class Inventory {
 
-    public List<ItemCard> cards = new List<ItemCard>();
+    private List<ItemCard> cards = new List<ItemCard>();
     public int ItemCount {
         get {
             return cards.Count;
@@ -16,6 +16,10 @@ public abstract class Inventory : MonoBehaviour {
         get {
             return maxSize == 0 || cards.Count < maxSize;
         }
+    }
+
+    public Inventory() {
+        cards = new List<ItemCard>();
     }
 
     //Gets a copy of all items in this inventory
@@ -35,7 +39,9 @@ public abstract class Inventory : MonoBehaviour {
     public bool PutItem ( ItemCard item, Inventory other) {
         if (CanHoldMore) {
             cards.Add(item);
-            other.cards.Remove(item);
+            if (other != null) {
+                other.cards.Remove(item);
+            }
             return true;
         }
         return false;
@@ -47,7 +53,9 @@ public abstract class Inventory : MonoBehaviour {
             foreach (ItemCard c in items) {
                 if (CanHoldMore) {
                     cards.Add(c);
-                    other.cards.Remove(c);
+                    if (other != null) {
+                        other.cards.Remove(c);
+                    }
                 }
             }
             return true;
