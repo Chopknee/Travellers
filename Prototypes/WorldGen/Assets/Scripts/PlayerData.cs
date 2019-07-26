@@ -6,8 +6,12 @@ public class PlayerData {
 
     public static int MaxBaseInventory = 10;
 
+
     public delegate void PlayerGoldChanged(PlayerData player);
     public PlayerGoldChanged OnPlayerGoldChanged;
+
+    public delegate void PlayerNameChanged(PlayerData player);
+    public PlayerNameChanged OnPlayernameChanged;
 
     //Generic class holding information about a player.
     public int gold {
@@ -29,4 +33,18 @@ public class PlayerData {
     }
 
     public Inventory inventory = new Inventory();
+
+    public string Name {
+        get {
+            return name;
+        }
+        set {
+            OnPlayernameChanged?.Invoke(this);
+            name = value;
+        }
+    }
+
+    private string name;
+
+
 }

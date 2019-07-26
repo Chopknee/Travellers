@@ -21,7 +21,7 @@ public class TestTradeActivation : MonoBehaviour {
 
         Inventory shopInv = new Inventory();
         shopInv.PutItems(shopInventory, null);
-        UIShopTrade.Instance.ShowTradeWindow(shopInv, pd);
+        UIShopTrade.Instance.ShowTradeWindow("", shopInv, pd);
 
         //Debug.Log("I think this works!");
     }

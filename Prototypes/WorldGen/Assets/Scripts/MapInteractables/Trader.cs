@@ -17,7 +17,7 @@ public class Trader : Inventory, IMapInteractable {
     }
 
     //public 
-    public void Interact() {
+    public void Interact(Player p) {
         //The trade interaction menu should pop up.
         Debug.Log("I am a market trader!");
     }

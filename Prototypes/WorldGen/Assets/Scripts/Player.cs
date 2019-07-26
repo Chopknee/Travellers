@@ -9,6 +9,8 @@ public class Player : MonoBehaviour {
     private Camera mainCamera;
     private Vector2 terrainPosition;
 
+    public PlayerData data;
+
     volatile bool pathRequested = false;
     volatile bool followPath = false;
     Vector2[] currentPath;
@@ -18,6 +20,12 @@ public class Player : MonoBehaviour {
     private GameObject pointer;
 
     void Start() {
+
+        //Temporary stuff here.
+        data = new PlayerData();
+        data.Name = "Test player 1";
+        data.gold = 10;
+
         Invoke("start", 1);
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         pointer = Instantiate(pointerPrefab);
@@ -42,23 +50,28 @@ public class Player : MonoBehaviour {
     void Update() {
 
         if (Input.GetButtonDown("Fire1") && !pathRequested) {
+
             TerrainClick tc = TryClickTerrain(resolution, mainCamera, map);
-            tp = tc.terrainPoint.position;
-            //Two options here, the end tile is occupied, in which case we attempt to interact, or it is not occupied in which case we navigate to that item
-            if (tc.terrainPoint.Occupied) {
-                //Attempt to interact
-                UnityEngine.Debug.Log("Space was occupied!");
-                IMapInteractable interactable = tc.terrainPoint.occupyingObject.GetComponent<IMapInteractable>();
-                if (interactable != null) {
-                    //We need to make sure to navigate to the closest point of the perimeter of the object.
-                    UnityEngine.Debug.Log("Interactable was found!");
+
+            if (tc.terrainPoint != null) {
+                tp = tc.terrainPoint.position;
+                //Two options here, the end tile is occupied, in which case we attempt to interact, or it is not occupied in which case we navigate to that item
+                if (tc.terrainPoint.Occupied) {
+                    //Attempt to interact
+                    UnityEngine.Debug.Log("Space was occupied!");
+                    IMapInteractable interactable = tc.terrainPoint.occupyingObject.GetComponent<IMapInteractable>();
+                    if (interactable != null) {
+                        //We need to make sure to navigate to the closest point of the perimeter of the object.
+                        UnityEngine.Debug.Log("Interactable was found!");
+                        interactable.Interact(this);
+                    }
+                } else if (tc.success) {
+                    //Attempt to pathfind.                
+                    map.pathfinder.RequestPath(terrainPosition, tc.terrainPoint.gridPosition, map.GetPathfindingTileCost, map.TileIsPassable, true, RequestComplete);
+                    pathRequested = true;
+                } else {
+                    //No valid point was found???
                 }
-            } else if (tc.success) {
-                //Attempt to pathfind.                
-                map.pathfinder.RequestPath(terrainPosition, tc.terrainPoint.gridPosition, map.GetPathfindingTileCost, map.TileIsPassable, true, RequestComplete);
-                pathRequested = true;
-            } else {
-                //No valid point was found???
             }
         }
 
@@ -107,38 +120,9 @@ public class Player : MonoBehaviour {
     }
 
     public TerrainClick TryClickTerrain(float resolution, Camera camera, Map map) {
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
-        TerrainClick res = new TerrainClick();
-        res.success = false;
-        float lastY = 0;
-        //Loop through all the points between the camera near and camera far divided into the resolution
-        for (float i = 0; i < mainCamera.farClipPlane; i+=resolution) {
-            Vector2 mousePos = Input.mousePosition;
-            Vector3 mouseWorldPoint = mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, i));
-            Tile t = map.tileManager.GetTile(map.RealWorldToTerrainCoord(mouseWorldPoint));
-            if (t != null) {
-                if (i == 0) 
-                    lastY = mouseWorldPoint.y;
-
-                if (Mathf.Abs(t.position.y - lastY) > Mathf.Abs(t.position.y - mouseWorldPoint.y)) {
-                    lastY = mouseWorldPoint.y;
-                    res.success = true;
-                    res.terrainPoint = t;
-                }
-
-                if (mouseWorldPoint.y <= t.position.y) {
-                    break;//No sense in continuing on if the ray goes through the terrain
-                }
-            }
-        }
-        sw.Stop();
-        //UnityEngine.Debug.Log("Raycast complete, took " + (sw.ElapsedMilliseconds/1000f) + " seconds.");
-        return res;
+        Vector3 farpoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.farClipPlane));
+        Vector3 closePoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane));
+        return map.TerrayCast(resolution, (farpoint - closePoint).normalized, camera.ScreenToWorldPoint(Input.mousePosition), camera.farClipPlane);
     }
 
-    public struct TerrainClick {
-        public bool success;
-        public Tile terrainPoint;
-    }
 }

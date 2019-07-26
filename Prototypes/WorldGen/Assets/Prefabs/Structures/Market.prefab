@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 5958276930641811933}
   - component: {fileID: 3452866680877769707}
   - component: {fileID: 8995802372429815570}
-  - component: {fileID: 1533500954741056334}
+  - component: {fileID: -286881589177124860}
   m_Layer: 0
   m_Name: Market
   m_TagString: Untagged
@@ -262,7 +262,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1533500954741056334
+--- !u!114 &-286881589177124860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,23 +271,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7271999018955811790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18b898a407d1dcc43bc797d0cdfcb42f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6547577bb3f92f94480fe66c0b36a06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cards: []
-  maxSize: 0
-  startingItemPool:
-  - {fileID: 11400000, guid: ef07874ded1d2d340b56f4c89f2f35fe, type: 2}
-  - {fileID: 11400000, guid: 769cdaa4fc25cb24d90b7952b34f8794, type: 2}
-  - {fileID: 11400000, guid: b40735e74a8a8674b9b8946d46984cad, type: 2}
-  - {fileID: 11400000, guid: 2b8be2da2f38008469a246177bade578, type: 2}
-  - {fileID: 11400000, guid: 23f8415fd5e9f894f8430246b7c9411c, type: 2}
-  - {fileID: 11400000, guid: 65ffa08c7310819429df053574000b46, type: 2}
-  - {fileID: 11400000, guid: 4e86010ca53cf2646992b8056fdf9ffb, type: 2}
-  - {fileID: 11400000, guid: 9d59eb654f23fbc499c971c0ba9635d3, type: 2}
-  - {fileID: 11400000, guid: a019c27fb8dc9b64b883f350a4da6b15, type: 2}
-  - {fileID: 11400000, guid: 121da6feace86eb4b94a740775270fc4, type: 2}
-  - {fileID: 11400000, guid: aaf796b0726d68343a0c5fd837d3bb7e, type: 2}
-  - {fileID: 11400000, guid: b3a1fad4a52012d48b129b2a963b5f7b, type: 2}
-  MinStartItems: 5
-  MaxStartItems: 15
+  shopData: {fileID: 11400000, guid: b1b2803b47f8c644f8d49ee7b18a46ee, type: 2}

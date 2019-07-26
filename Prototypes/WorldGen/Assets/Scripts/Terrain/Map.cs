@@ -250,7 +250,31 @@ public class Map : MonoBehaviour {
     public bool TileIsPassable(Vector2 position) {
         return tileManager.GetTile(position).CanWalkHere();//For now, all tiles will be marked as passable.
     }
+    //Performs a 'raycast' that tries to find a point on the terrain.
+    public TerrainClick TerrayCast(float castStepSize, Vector3 forward, Vector3 start, float max) {
+        TerrainClick res = new TerrainClick();
+        res.success = false;
+        float lastY = 0;
+        for (float i = 0; i < max; i+=castStepSize) {
+            Vector3 newPos = start + (forward * i);
+            Tile t = tileManager.GetTile(RealWorldToTerrainCoord(newPos));
+            if (t != null) {
+                if (i == 0) 
+                    lastY = newPos.y;
 
+                if (Mathf.Abs(t.position.y - lastY) > Mathf.Abs(t.position.y - newPos.y)) {
+                    lastY = newPos.y;
+                    res.success = true;
+                    res.terrainPoint = t;
+                }
+
+                if (newPos.y <= t.position.y) {
+                    break;//No sense in continuing on if the ray goes through the terrain
+                }
+            }
+        }
+        return res;
+    }
 
     public static Vector2 GetAverageGradient(float[,] map) {
         float rowSlope = GetAverageSlope(GetRowSums(map));
@@ -304,6 +328,11 @@ public class Map : MonoBehaviour {
         }
         return slope / points.Length;
     }
+}
+
+public struct TerrainClick {
+    public bool success;
+    public Tile terrainPoint;
 }
 
     // public void SetHeightsTransformed(Vector2 position, Vector2 center, Vector2 size, float angle, float[,] values) {
