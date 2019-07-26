@@ -9,13 +9,15 @@ public class Trader : Inventory, IMapInteractable {
     public void Start() {
         //Randomly fill the inventory of the shop with items.
         int itemsToSpawnWith = Noise.GetRandomRange(Control.Instance.NoiseSeed, MinStartItems, MaxStartItems);
+
         for (int i = 0; i < itemsToSpawnWith; i++) {
-            cards.Add(startingItemPool[Noise.GetRandomRange(Control.Instance.NoiseSeed, 0, startingItemPool.Length)]);
+            PutItem(startingItemPool[Noise.GetRandomRange(Control.Instance.NoiseSeed, 0, startingItemPool.Length)], null);
         }
+        
     }
 
     //public 
-    public void Interact() {
+    public void Interact(Player p) {
         //The trade interaction menu should pop up.
         Debug.Log("I am a market trader!");
     }

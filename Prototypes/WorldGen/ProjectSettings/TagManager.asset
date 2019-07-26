@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - ItemCard
+  - ShopGUI
   layers:
   - Default
   - TransparentFX
