@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
+  m_Name: Wood_Sword
+  m_EditorClassIdentifier: 
+  itemName: Wooden Sword
+  description: Might leave a bruise if you hit hard enougn...
+  value: 4
+  itemSprite: {fileID: 21300000, guid: 0d452a0902acb634483ae9fd5145ccf4, type: 3}
+  cardTier: 0
+  collections:
+  - {fileID: 11400000, guid: 28bb7e4985b7d404da7f7e29804b8be7, type: 2}
