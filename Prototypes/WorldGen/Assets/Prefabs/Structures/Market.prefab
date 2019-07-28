@@ -242,7 +242,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2bf76c6d08d6a4c499fc3208e13a254d, type: 2}
+  - {fileID: 2100000, guid: 84b0ee4f71abde9449328bcbe5792358, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -275,3 +275,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopData: {fileID: 11400000, guid: b1b2803b47f8c644f8d49ee7b18a46ee, type: 2}
+  minItems: 0
+  maxItems: 10

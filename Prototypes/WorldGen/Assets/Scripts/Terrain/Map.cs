@@ -18,7 +18,6 @@ public class Map : MonoBehaviour {
     //
     public float[,] heights;
 
-    float[,] falloffMap;
     public GameObject terrainMeshObject;
     //private MapDisplay mapDisplay;
     private MeshFilter terrainMeshFilter;
@@ -50,6 +49,8 @@ public class Map : MonoBehaviour {
         foreach (ITerrainModifier tm in modifiers) {
             tm.Modify(this);
         }
+        //terrainMaterial.SetTexture("Texture2D_2B67DF3E", heightmap);
+        terrainMaterial.SetFloat("Vector1_43C4DCE9",terrainData.maxHeight);
     }
 
     public void CreateMesh() {
@@ -59,22 +60,6 @@ public class Map : MonoBehaviour {
 
     float[,] GenerateMapData ( Vector2 center ) {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize + 2, mapChunkSize + 2, noiseData.seed, noiseData.noiseScale, noiseData.octaves, noiseData.persistance, noiseData.lacunarity, center + noiseData.offset, noiseData.normalizeMode);
-
-        if (terrainData.useFalloff) {
-
-            if (falloffMap == null) {
-                falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize + 2);
-            }
-
-            for (int y = 0; y < mapChunkSize + 2; y++) {
-                for (int x = 0; x < mapChunkSize + 2; x++) {
-                    if (terrainData.useFalloff) {
-                        noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - falloffMap[x, y]);
-                    }
-                }
-            }
-        }
-
         return noiseMap;
     }
 
@@ -98,12 +83,12 @@ public class Map : MonoBehaviour {
             go.AddComponent<MeshFilter>();
             go.AddComponent<MeshRenderer>();
             terrainMeshObject = go;
-            terrainMeshFilter = terrainMeshObject.GetComponent<MeshFilter>();
-            terrainMeshRenderer = terrainMeshObject.GetComponent<MeshRenderer>();
             Vector3 scl = new Vector3(1, 1, -1);
             terrainMeshObject.transform.localScale = scl * terrainData.uniformScale;
             terrainMeshObject.transform.SetParent(transform);
         }
+        terrainMeshFilter = terrainMeshObject.GetComponent<MeshFilter>();
+        terrainMeshRenderer = terrainMeshObject.GetComponent<MeshRenderer>();
     }
 
     public void Generate() {

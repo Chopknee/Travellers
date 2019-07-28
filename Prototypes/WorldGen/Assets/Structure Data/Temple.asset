@@ -19,4 +19,4 @@ MonoBehaviour:
   flattenTerrain: 1
   numberToSpawn: 5
   structurePrefabs:
-  - {fileID: -927199367670048503, guid: 7f753c3dd33dfcf4b8033c6d2d53ffb4, type: 3}
+  - {fileID: 4328292645622524436, guid: 3abce7e7b74a41e48afeb26c82d83df8, type: 3}

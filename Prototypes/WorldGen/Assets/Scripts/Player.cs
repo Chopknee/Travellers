@@ -98,14 +98,14 @@ public class Player : MonoBehaviour {
     Vector3 tp = new Vector3();
 
     public void OnDrawGizmos() {
-        if (Application.isPlaying) {
-            if (currentPath != null) {
-                Gizmos.color = new Color(0, 255, 255);
-                Gizmos.DrawCube(currentPath[currentPath.Length-1], Vector3.one*10);
-            }
-            Gizmos.color = new Color(255, 0, 255);
-            Gizmos.DrawCube(tp, Vector3.one*10);
-        }
+        // if (Application.isPlaying) {
+        //     if (currentPath != null) {
+        //         Gizmos.color = new Color(0, 255, 255);
+        //         Gizmos.DrawCube(currentPath[currentPath.Length-1], Vector3.one*10);
+        //     }
+        //     Gizmos.color = new Color(255, 0, 255);
+        //     Gizmos.DrawCube(tp, Vector3.one*10);
+        // }
     }
 
     //This is called from a thread
@@ -122,7 +122,12 @@ public class Player : MonoBehaviour {
     public TerrainClick TryClickTerrain(float resolution, Camera camera, Map map) {
         Vector3 farpoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.farClipPlane));
         Vector3 closePoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane));
+        if (map != null) {
         return map.TerrayCast(resolution, (farpoint - closePoint).normalized, camera.ScreenToWorldPoint(Input.mousePosition), camera.farClipPlane);
+        }
+        TerrainClick tc = new TerrainClick();
+        tc.success = false;
+        return tc;
     }
 
 }
