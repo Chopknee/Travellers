@@ -11,7 +11,7 @@ public class MeshSaver : MonoBehaviour
 
     void SaveMesh() {
 
-        Map map = Control.Instance.Map;
+        Map map = OverworldControl.Instance.Map;
         if (map == null) {
             Debug.Log("How the fuck is map null?");
         }

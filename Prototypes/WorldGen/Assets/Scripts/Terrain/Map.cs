@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class Map : MonoBehaviour {
     [Range(0, MeshGenerator.numSupportedChunkSizes - 1)]
@@ -18,6 +19,8 @@ public class Map : MonoBehaviour {
     //
     public float[,] heights;
 
+    public float[,] pathMap;
+
     public GameObject terrainMeshObject;
     //private MapDisplay mapDisplay;
     private MeshFilter terrainMeshFilter;
@@ -26,6 +29,10 @@ public class Map : MonoBehaviour {
     public bool UpdateInEditor = false;
     public TileManager tileManager;
     public PathfindingGrid pathfinder;
+
+    public bool BlurPath = true;
+    [Range(0, 15)]
+    public int BlurRadius = 7;
 
     public int mapChunkSize {
         get {
@@ -39,7 +46,7 @@ public class Map : MonoBehaviour {
     }
 
     public void GenerateTerrain() {
-        
+        pathMap = new float[mapChunkSize+2, mapChunkSize+2];
         heights = GenerateMapData(Vector2.zero);
         //Get all terrain modifiers currently attatched
         ITerrainModifier[] terrainModifiers = GetComponents<ITerrainModifier>();
@@ -49,8 +56,13 @@ public class Map : MonoBehaviour {
         foreach (ITerrainModifier tm in modifiers) {
             tm.Modify(this);
         }
-        //terrainMaterial.SetTexture("Texture2D_2B67DF3E", heightmap);
         terrainMaterial.SetFloat("Vector1_43C4DCE9",terrainData.maxHeight);
+
+        if (BlurPath) {
+            TextureGenerator.BlurMap(pathMap, BlurRadius);//Will it work???
+        }
+
+        terrainMaterial.SetTexture("Texture2D_1F7D3F7B", TextureGenerator.TextureFromHeightMap(pathMap));
     }
 
     public void CreateMesh() {
@@ -163,6 +175,23 @@ public class Map : MonoBehaviour {
         heights[(int) pos.x, (int) pos.y] = value;
     }
 
+    public Tile[,] GetTilesFromRadius(Vector2 center, float radius) {
+        float radSquared = radius * radius;
+        Tile[,] tiles = new Tile[(int)radius*2+1, (int)radius*2+1];//There is always a center point
+        for (int x = -(int)radius; x < (int)radius+1; x ++) {
+            for (int y = -(int)radius; y < (int)radius+1; y++) {
+                Tile t = tileManager.GetTile(new Vector2(center.x + x, center.y + y));
+                if (t != null) {//If in range of the array.
+                    Vector2 pos = center + new Vector2(x, y);
+                    pos = pos - center;
+                    if (pos.sqrMagnitude <= radSquared)
+                        tiles[x+(int)radius, y+(int)radius] = t;
+                }
+            }
+        }
+        return tiles;
+    }
+
     public Tile[,] GetTilesTransformed(Vector2 position, Vector2 center, Vector2 size, float angle) {
         //The rotation matrix
         float[,] rotationMatrix = Get2DRotationMatrix(angle);
@@ -182,7 +211,7 @@ public class Map : MonoBehaviour {
         return rotatedHeights;
     }
 
-        public float[,] GetHeightsTransformed(Vector2 position, Vector2 center, Vector2 size, float angle) {
+    public float[,] GetHeightsTransformed(Vector2 position, Vector2 center, Vector2 size, float angle) {
         //The rotation matrix
         float[,] rotationMatrix = Get2DRotationMatrix(angle);
         float[,] rotatedHeights = new float[(int) size.x, (int) size.y];
@@ -205,7 +234,7 @@ public class Map : MonoBehaviour {
      * Sets up a new rotation matrix that can be used for rotating a point.
      */
     private float[,] Get2DRotationMatrix(float angle) {
-        float rad = angle * Mathf.Deg2Rad;
+        float rad = angle * Mathf.Deg2Rad - (Mathf.PI / 4);
         float[,] mat = new float[2, 2];
         mat[0, 0] = Mathf.Cos(rad); mat[0, 1] = -Mathf.Sin(rad);
         mat[1, 0] = Mathf.Sin(rad); mat[1, 1] = Mathf.Cos(rad);

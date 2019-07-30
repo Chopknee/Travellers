@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using System.Threading;
+using System;
 
 public class PathfindingGrid {
 
@@ -42,8 +43,8 @@ public class PathfindingGrid {
         }
     }
 
-    public Thread RequestPath(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, PathRequestComplete reuqestCompleteFunction) {
-        PathRequest pr = new PathRequest(start, end, tileCost, tilePassable, useSubCardinals, grid, reuqestCompleteFunction);
+    public Thread RequestPath(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, PathRequestComplete reuqestCompleteFunction, bool simplify) {
+        PathRequest pr = new PathRequest(start, end, tileCost, tilePassable, grid, reuqestCompleteFunction, useSubCardinals, simplify);
         Thread t = new Thread(pr.FindPath);
         t.Start();
         return t;
@@ -58,8 +59,9 @@ public class PathfindingGrid {
         private bool useSubCardinals;
         private Node[,] grid;
         private PathRequestComplete requestComplete;
+        private bool simplify;
 
-        public PathRequest(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, Node[,] grid, PathRequestComplete requestComplete) {
+        public PathRequest(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, Node[,] grid, PathRequestComplete requestComplete,  bool useSubCardinals, bool simplify) {
             this.start = start;
             this.end = end;
             this.tileCost = tileCost;
@@ -67,6 +69,7 @@ public class PathfindingGrid {
             this.useSubCardinals = useSubCardinals;
             this.grid = grid;
             this.requestComplete = requestComplete;
+            this.simplify = simplify;
         }
 
         /*
@@ -128,7 +131,7 @@ public class PathfindingGrid {
             }
 
             if (pathSuccess) {
-                waypoints = RetracePath(startNode, endNode);
+                waypoints = RetracePath(startNode, endNode, simplify);
             }
             //UnityEngine.Debug.Log("Path found in " + (sw.ElapsedMilliseconds / 1000f) + " seconds. Total path length is " + waypoints.Length + " nodes.");
             sw.Stop();
@@ -137,21 +140,46 @@ public class PathfindingGrid {
             //return new PathResult(waypoints, pathSuccess);
         }
 
-        Vector2[] RetracePath(Node start, Node end) {
-            List<Vector2> path = new List<Vector2>();
+        Vector2[] RetracePath(Node start, Node end, bool simplifyPath) {
+            List<Node> path = new List<Node>();
             Node currentNode = end;
-
+            
             while (currentNode != start) {
-                path.Add(currentNode.position);
+                path.Add(currentNode);
                 currentNode = currentNode.parent;
             }
             //Reverse the path
-            Vector2[] pt = new Vector2[path.Count];
-            for (int i = 0; i < path.Count; i++) {
-                pt[path.Count - 1 - i] = path[i];
+            Vector2[] pt;
+            if (simplifyPath) {
+                pt = SimplifyPath(path);
+            } else {
+                pt = GetWaypoints(path);
             }
-
+            
+            Array.Reverse(pt);
             return pt;
+        }
+
+        Vector2[] GetWaypoints(List<Node> path) {
+            Vector2[] waypoints = new Vector2[path.Count];
+            for (int i = 0; i < path.Count; i++) {
+                waypoints[i] = path[i].position;
+            }
+            return waypoints;
+        }
+
+        Vector2[] SimplifyPath(List<Node> path) {
+            List<Vector2> waypoints = new List<Vector2>();
+            Vector2 directionOld = Vector2.zero;
+            
+            for (int i = 1; i < path.Count; i ++) {
+                Vector2 directionNew = new Vector2(path[i-1].position.x - path[i].position.x,path[i-1].position.y - path[i].position.y);
+                if (directionNew != directionOld) {
+                    waypoints.Add(path[i].position);
+                }
+                directionOld = directionNew;
+            }
+            return waypoints.ToArray();
         }
 
         int GetDistance(Node nodeA, Node nodeB) {

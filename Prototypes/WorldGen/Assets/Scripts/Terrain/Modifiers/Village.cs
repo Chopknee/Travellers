@@ -60,8 +60,8 @@ public class Village : MonoBehaviour, ITerrainModifier {
                     int structureIndex = Mathf.FloorToInt(Noise.GetRandomRange(map.noiseData.seed, structuresToSpawn.Count));
                     //Get a random rotation
                     float rotation = Noise.GetRandomRange(map.noiseData.seed, 360);
-
-                    if (IsValid(candidate, sampleRegionSize, cellSize, structureRadius, points, poissonGrid) && IsSlopeGood(candidate, structuresToSpawn[structureIndex], map, rotation)) {
+                    Tile[,] tilesUnderStructure = map.GetTilesFromRadius(candidate, structuresToSpawn[structureIndex].radius);
+                    if (IsValid(candidate, sampleRegionSize, cellSize, structureRadius, points, poissonGrid) && IsSlopeGood(tilesUnderStructure, map, structuresToSpawn[structureIndex])) {
                         //Extra conditions include if the gradient/slope of the location is able to support the structure
                         //Also need to figure out how the mapping converts
                         points.Add(candidate);
@@ -74,10 +74,13 @@ public class Village : MonoBehaviour, ITerrainModifier {
                         Vector2 texelSize = structuresToSpawn[structureIndex].texelSize;
 
                         float h = tileManager.tiles[Mathf.RoundToInt(candidate.x), Mathf.RoundToInt(candidate.y)].unscaledHeight;
-                        Tile[,] tilesUnderStructure = map.GetTilesTransformed(candidate, -texelSize / 2, texelSize, rotation);
+                        
 
                         foreach (Tile t in tilesUnderStructure) {
+                            if (t == null)
+                                continue;
                             t.occupyingObject = building;
+                            map.pathMap[(int)t.gridPosition.x, (int)t.gridPosition.y] = 1;
                             t.unscaledHeight = h;
                         }
                         
@@ -106,6 +109,7 @@ public class Village : MonoBehaviour, ITerrainModifier {
         }
     }
 
+    //For the poisson distrobusion
     bool IsValid( Vector2 candidate, Vector2 sampleRegionSize, float cellsize, float radius, List<Vector2> points, int[,] grid) {
         if (candidate.x >= 0 && candidate.x < sampleRegionSize.x && candidate.y >= 0 && candidate.y < sampleRegionSize.y ) {
             int cellX = (int) ( candidate.x / cellsize );
@@ -131,20 +135,34 @@ public class Village : MonoBehaviour, ITerrainModifier {
         return false;
     }
 
-    bool IsSlopeGood(Vector2 candidateCenter, Structure candidateSpawn, Map map, float angle) {
-        Vector2 texelSize = candidateSpawn.texelSize;
-        float[,] texel = map.GetHeightsTransformed(candidateCenter, -texelSize / 2, texelSize, angle);
-        return Map.GetAverageGradient(texel).magnitude < candidateSpawn.maximumSlope;
-    }
-
-    float[,] GenerateHeightArray(float h, Vector2 size) {
-        float[,] heights = new float[Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y)];
-        for (int x = 0; x < Mathf.RoundToInt(size.x); x++) {
-            for (int y = 0; y < Mathf.RoundToInt(size.y); y++) {
-                heights[x, y] = h;
+    bool IsSlopeGood(Tile[,] tiles, Map map, Structure candidate) {
+        float accum = 0;
+        float tCount = 0;
+        //Calculates the average slop of the group of tiles.
+        for (int x = 0; x < tiles.GetLength(0); x++) {
+            for (int y = 0; y < tiles.GetLength(1); y++) {
+                if (tiles[x,y] != null) {
+                    accum += tiles[x, y].unscaledHeight;
+                    tCount ++;
+                    if (tiles[x,y].Occupied)
+                        return false;
+                }
             }
         }
-        return heights;
-    }
 
+        accum /= tCount;//The average height of the entire thing.
+        //Fills the texel with the values from tile, setting any null values to the average height of the whole area.
+        float[,] texel = new float[tiles.GetLength(0), tiles.GetLength(1)];
+        for (int x = 0; x < tiles.GetLength(0); x++) {
+            for (int y = 0; y < tiles.GetLength(1); y++) {
+                if (tiles[x,y] != null) {
+                    texel[x,y] = tiles[x,y].unscaledHeight;
+                } else {
+                    texel[x,y] = accum;
+                }
+            }
+        }
+        
+        return Map.GetAverageGradient(texel).magnitude < candidate.maximumSlope;
+    }
 }

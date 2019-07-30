@@ -25,7 +25,7 @@ public class ExampleUse : MonoBehaviour
     public void DoPathfind() {
         //Actually finding a path
         PathfindingGrid pg = new PathfindingGrid(Width, Height);
-        pg.RequestPath(new Vector2(10, 20), new Vector2(85, 50), TileMoveCost, TileIsPassable, true, Complete);
+        //pg.RequestPath(new Vector2(10, 20), new Vector2(85, 50), TileMoveCost, TileIsPassable, true, Complete);
     }
 
     public void OnDrawGizmos () {

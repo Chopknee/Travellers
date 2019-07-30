@@ -28,9 +28,10 @@ public class BuildingSpawn : MonoBehaviour, ITerrainModifier
                 float diagonalLength = Mathf.Ceil(structure.texelSize.magnitude);//The length of the diagonal for the texel. Helps prevent issues relating to out of bounds exceptions.
                 Vector2 randomCenter = new Vector2(Noise.GetRandomRange(seed, diagonalLength, map.mapChunkSize - 1 - diagonalLength), Noise.GetRandomRange(seed, diagonalLength, map.mapChunkSize - 1 - diagonalLength));
                 Tile center = map.tileManager.GetTile(randomCenter);
-                Tile[,] buildingTexel = map.GetTilesTransformed(center.gridPosition, -structure.texelSize / 2, structure.texelSize, rotation );
+
+                Tile[,] buildingTexel = map.GetTilesFromRadius(center.gridPosition, structure.radius);
                 //Now we can actually check if the slope is too high.
-                if (IsLocationValid(buildingTexel, structure)) {
+                if (IsLocationValid(buildingTexel, map, structure)) {
 
                     doneThing = true;
                     int ind = Mathf.FloorToInt(Noise.GetRandomNumber(map.noiseData.seed) * structure.structurePrefabs.Length);    
@@ -40,10 +41,12 @@ public class BuildingSpawn : MonoBehaviour, ITerrainModifier
 
                     float h = center.unscaledHeight;
                     foreach (Tile t in buildingTexel) {
+                        if (t == null)
+                            continue;
                         t.occupyingObject = building;
                         t.unscaledHeight = h;
+                        map.pathMap[(int)t.gridPosition.x, (int)t.gridPosition.y] = 1;
                     }
-
                 }
 
                 if (doneThing) {
@@ -53,20 +56,35 @@ public class BuildingSpawn : MonoBehaviour, ITerrainModifier
         }
     }
 
-    bool IsLocationValid(Tile[,] tiles, Structure candidate) {
-        float[,] heights = new float[tiles.GetLength(0), tiles.GetLength(1)];
-
+    bool IsLocationValid(Tile[,] tiles, Map map, Structure candidate) {
+        float accum = 0;
+        float tCount = 0;
+        //Calculates the average slop of the group of tiles.
         for (int x = 0; x < tiles.GetLength(0); x++) {
             for (int y = 0; y < tiles.GetLength(1); y++) {
-                heights[x,y] = tiles[x,y].unscaledHeight;
-                if (map.tileManager.tiles[x, y].Occupied)
-                    return false;
+                if (tiles[x,y] != null) {
+                    accum += tiles[x, y].unscaledHeight;
+                    tCount ++;
+                    if (tiles[x,y].Occupied)
+                        return false;
+                }
             }
         }
 
-        if (Map.GetAverageGradient(heights).magnitude > candidate.maximumSlope)
-            return false;
-        return true;
+        accum /= tCount;//The average height of the entire thing.
+        //Fills the texel with the values from tile, setting any null values to the average height of the whole area.
+        float[,] texel = new float[tiles.GetLength(0), tiles.GetLength(1)];
+        for (int x = 0; x < tiles.GetLength(0); x++) {
+            for (int y = 0; y < tiles.GetLength(1); y++) {
+                if (tiles[x,y] != null) {
+                    texel[x,y] = tiles[x,y].unscaledHeight;
+                } else {
+                    texel[x,y] = accum;
+                }
+            }
+        }
+        
+        return Map.GetAverageGradient(texel).magnitude < candidate.maximumSlope;
     }
 
     public int GetPriority () {
@@ -76,4 +94,20 @@ public class BuildingSpawn : MonoBehaviour, ITerrainModifier
     public void Modify ( Map map ) {
         GenerateBuildings();
     }
+
+    // bool IsLocationValid(Tile[,] tiles, Structure candidate) {
+    //     float[,] heights = new float[tiles.GetLength(0), tiles.GetLength(1)];
+
+    //     for (int x = 0; x < tiles.GetLength(0); x++) {
+    //         for (int y = 0; y < tiles.GetLength(1); y++) {
+    //             heights[x,y] = tiles[x,y].unscaledHeight;
+    //             if (map.tileManager.tiles[x, y].Occupied)
+    //                 return false;
+    //         }
+    //     }
+
+    //     if (Map.GetAverageGradient(heights).magnitude > candidate.maximumSlope)
+    //         return false;
+    //     return true;
+    // }
 }
