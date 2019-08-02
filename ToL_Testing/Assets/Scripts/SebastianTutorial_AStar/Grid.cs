@@ -32,7 +32,9 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
-                grid[x, y] = new Node(walkable, worldPoint, x, y, 0); // GENERATING NODE HERE, default direction of north.
+                bool start = false, end = false;
+                
+                grid[x, y] = new Node(walkable, worldPoint, x, y, 0, start, end); // GENERATING NODE HERE, default direction of north.
 
             }
         }
@@ -68,12 +70,13 @@ public class Grid : MonoBehaviour
     {
         RoomTemplates rooms = GameObject.FindGameObjectWithTag("Rooms").GetComponent<RoomTemplates>();
         List<Node> unwalkables = new List<Node>();
+
         foreach (Node n in grid)
         {
             if (n.room == null)
             {
-                n.dungeonTile = true;
                 n.room = Instantiate(rooms.wall, n.worldPosition, Quaternion.identity);
+                n.dungeonTile = true;
             }
            
         }

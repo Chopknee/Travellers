@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MultiplayerScene.unity
     guid: 6b68f5b18d5d4d945a8558207431aee1
   - enabled: 1
-    path: Assets/Scenes/Dungeon.unity
+    path: Assets/Scenes/Dungeon/Dungeon.unity
     guid: d5397a28c0b2cc04ea1d9e991cf7623e
   m_configObjects: {}

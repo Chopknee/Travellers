@@ -14,12 +14,15 @@ public class Pathfinding : MonoBehaviour
     bool retracingPath;
     bool end;
     float r1, r2;
+    Transform player;
 
     private void Awake()
     {
+        
         r1 = Mathf.Round(Random.Range(3, 6));
         r2 = Mathf.Round(Random.Range(5, 9));
         grid = GetComponent<Grid>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         rooms = GameObject.FindGameObjectWithTag("Rooms").GetComponent<RoomTemplates>();
         Invoke("UpdateNavigation", .5f);
     }
@@ -39,15 +42,26 @@ public class Pathfinding : MonoBehaviour
     {
         Node startNode = grid.GetNodeFromWorldPoint(startPos);
         Node targetNode = grid.GetNodeFromWorldPoint(targetPos);
+        
 
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
+        startNode.start = true;
+        targetNode.end = true;
+        
+        
+        
+
         while (openSet.Count > 0)
         {
             currentRoomCount = openSet.Count;
             Node currentNode = openSet[0];
+
+            
+            
+
             for (int i = 1; i < openSet.Count; i++)
             {
 
@@ -103,22 +117,7 @@ public class Pathfinding : MonoBehaviour
                 }
             }
 
-            //if (Mathf.Clamp01(Random.Range(1, 5)) == .1f) // random number from 0 to 1, if it's equal to .1f, a 20% chance?
-            //{
-
-            //    int o = Mathf.RoundToInt(Random.Range(1f, 3f)); // random number between 1 and 4 as the index
-
-            //    Node n = grid.CheckNode(currentNode, o); // checks the random node between the 4 directions to see if there is an empty node there.
-
-            //    if (n != null && !n.walkable && !closedSet.Contains(n)) // checks if it is not walkable, and if we haven't already seen it before.
-            //    {
-            //        n.gCost = currentNode.gCost + GetDistance(currentNode, n); // updating their costs
-            //        n.hCost = GetDistance(n, targetNode); // ditto
-            //        n.parent = currentNode; // remembering its parent for the pathfinding later (recursive)
-            //        if (!openSet.Contains(n)) // checks if it's in the open set (if we are currently already testing it)
-            //            openSet.Add(n); // if not then add it to the open set.
-            //    }
-            //}
+            
 
         }
     }
@@ -148,7 +147,7 @@ public class Pathfinding : MonoBehaviour
             {
                 //destroy the current gameobject that currentnode is referencing
                 Destroy(currentNode.room);
-
+                
 
                 currentNode.room = Instantiate(rooms.rooms[Random.Range(0, rooms.rooms.Length)], currentNode.worldPosition, Quaternion.identity);
 
@@ -163,7 +162,14 @@ public class Pathfinding : MonoBehaviour
 
         grid.path = path;
 
+        Destroy(startNode.room);
+        Destroy(endNode.room);
+
+        startNode.room = Instantiate(rooms.startRoom, startNode.worldPosition, Quaternion.identity);
+        endNode.room = Instantiate(rooms.endRoom, endNode.worldPosition, Quaternion.identity);
+        player.position = new Vector3(startNode.worldPosition.x + 2f, player.position.y, startNode.worldPosition.z);
         Debug.Log("Finished.");
+        
         retracingPath = false;
     }
     

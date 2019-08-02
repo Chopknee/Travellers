@@ -32,31 +32,43 @@ public class PlayerMovement : MonoBehaviour
 
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layer_mask))
                 {
-                    destinationPosition = hit.point; //ray.GetPoint(hitDist);
-                    targetRotation = Quaternion.LookRotation(destinationPosition - transform.position);
-                    StartCoroutine(CreateArrow(destinationPosition));
+                    if (hit.collider.transform.root.CompareTag("Room"))
+                    {
+                        Vector3 p = hit.collider.transform.root.transform.position;
+                        destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z); //ray.GetPoint(hitDist);
+                        targetRotation = Quaternion.LookRotation(destinationPosition - transform.position);
+                        StartCoroutine(CreateArrow(destinationPosition));
+                    }
                 }
             }
         }
-        if(destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
+        if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
         {
             GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
         }
 
-        
-        
+
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PortalOut"))
+        {
+            Debug.LogError("----------------------Exited----------------------");
+        }
     }
 
     IEnumerator CreateArrow(Vector3 dest)
     {
-        GameObject o = Instantiate(arrow, dest + new Vector3(0, 1, 0), Quaternion.Euler(new Vector3(-90,0,0)));
+        GameObject o = Instantiate(arrow, dest + new Vector3(0, 1, 0), Quaternion.Euler(new Vector3(-90, 0, 0)));
         arrowsInGame = GameObject.FindGameObjectsWithTag("DestinationArrowTmp");
-        if(arrowsInGame.Length < 1)
+        if (arrowsInGame.Length < 1)
         {
             Destroy(arrowsInGame[0]);
         }
         yield return new WaitForSeconds(.1f);
-        
+
         yield return new WaitUntil(() => Vector3.Distance(transform.position, dest) <= 2 || Input.GetMouseButtonDown(0));
         Destroy(o);
     }

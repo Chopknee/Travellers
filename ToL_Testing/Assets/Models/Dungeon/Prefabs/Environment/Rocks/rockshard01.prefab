@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5943457181463400483}
   - component: {fileID: 2646401690511646760}
   m_Layer: 0
-  m_Name: Cylinder_004
+  m_Name: rockshard01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4a2964e4c5e560b42be64796322dd1ed, type: 3}
+  - {fileID: 2100000, guid: 90adc1129da0763479ef8736516723c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
