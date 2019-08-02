@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 0
   texelSize: {x: 4, y: 4}
+  radius: 2
   maximumSlope: 0.563
   alignToSlope: 0
   flattenTerrain: 1

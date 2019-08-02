@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 1915338612017356176}
   - component: {fileID: 858716734}
   - component: {fileID: 858716729}
+  - component: {fileID: 2044073727}
   m_Layer: 0
-  m_Name: Control
+  m_Name: MapControl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab22fda6f7e12854ca58272d4ef18104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightPenalty: 5000
+  buildingsPointerPrefab: {fileID: 2579224472333801143, guid: b6073a1700a2b3a4dba8beff246d5306,
+    type: 3}
+  bp: {fileID: 0}
 --- !u!114 &1214593886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,8 +69,11 @@ MonoBehaviour:
   noiseData: {fileID: 11400000, guid: 605eadde22d690d45ad5bb122afad38c, type: 2}
   textureData: {fileID: 11400000, guid: 5ca60ebc268d4664b8ceca65d3a98510, type: 2}
   terrainMaterial: {fileID: 2100000, guid: 9cd983cc299083942beb394fea912c58, type: 2}
+  elevationChangePenalty: 5000
   terrainMeshObject: {fileID: 0}
   UpdateInEditor: 0
+  BlurPath: 1
+  BlurRadius: 7
 --- !u!114 &1915338612017356176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,3 +124,19 @@ MonoBehaviour:
   structureRadius: 8
   ModifierPriority: 30
   maximumSpawnAttempts: 20
+--- !u!114 &2044073727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7941106588625948817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7054ac4c4aa2d4fa4f63ef4931b423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Structures:
+  - {fileID: 11400000, guid: 6236ea38c9496d847bb9f7b6ba87d639, type: 2}
+  - {fileID: 11400000, guid: a6349756571f31e45bcb581ae47d9576, type: 2}
+  ModifierPriority: 40

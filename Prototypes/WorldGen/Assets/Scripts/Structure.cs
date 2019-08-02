@@ -6,6 +6,7 @@ using UnityEngine;
 public class Structure : UpdateableData {
 
     public Vector2 texelSize;
+    public float radius;
     [Range(0, 1)]
     public float maximumSlope;
     public bool alignToSlope;

@@ -30,6 +30,9 @@ public class UIShopTrade : MonoBehaviour {
     public Text shopName;
     public Text playerName;
 
+    public delegate void Closed();
+    public Closed OnClosed;
+
     public void Awake() {
         inst = this;
         gameObject.SetActive(false);
@@ -130,6 +133,7 @@ public class UIShopTrade : MonoBehaviour {
         buyWindow.Cleanup();
         uishopInventory.Cleanup();
         playerInventory.Cleanup();
+        OnClosed?.Invoke();
     }
 
 
