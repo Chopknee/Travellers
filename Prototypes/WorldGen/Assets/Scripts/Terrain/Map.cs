@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System.IO;
+using BaD.Modules.Terrain;
+using BaD.Modules;
+using BaD.Modules.Terrain.Modifiers;
 
 public class Map : MonoBehaviour {
     [Range(0, MeshGenerator.numSupportedChunkSizes - 1)]
@@ -11,9 +10,13 @@ public class Map : MonoBehaviour {
     [Range(0, MeshGenerator.numSupportedLODs - 1)]
     public int LevelOfDetail;
 
-    public TerrainData terrainData;
+    [Tooltip("Optional for generating map previews in editor.")]
+    public MapData editorMapData;
+
+    [HideInInspector]
+    public BaD.Modules.Terrain.TerrainData terrainData;
+    [HideInInspector]
     public NoiseData noiseData;
-    public TextureData textureData;
     public Material terrainMaterial;
     public int elevationChangePenalty;
     //
@@ -21,10 +24,13 @@ public class Map : MonoBehaviour {
 
     public float[,] pathMap;
 
+    [HideInInspector]
     public GameObject terrainMeshObject;
+
     //private MapDisplay mapDisplay;
     private MeshFilter terrainMeshFilter;
     private MeshRenderer terrainMeshRenderer;
+    private MeshCollider terrainMeshCollider;
 
     public bool UpdateInEditor = false;
     public TileManager tileManager;
@@ -33,6 +39,8 @@ public class Map : MonoBehaviour {
     public bool BlurPath = true;
     [Range(0, 15)]
     public int BlurRadius = 7;
+
+    public bool Generated { get; private set; } = false;
 
     public int mapChunkSize {
         get {
@@ -45,29 +53,35 @@ public class Map : MonoBehaviour {
         pathfinder = new PathfindingGrid(mapChunkSize, mapChunkSize);
     }
 
-    public void GenerateTerrain() {
+    public void GenerateTerrain( MapData data ) {
+
+        terrainData = data.terrainData;
+        noiseData = data.noiseData;
+
         pathMap = new float[mapChunkSize+2, mapChunkSize+2];
         heights = GenerateMapData(Vector2.zero);
-        //Get all terrain modifiers currently attatched
-        ITerrainModifier[] terrainModifiers = GetComponents<ITerrainModifier>();
-        //Order them by priority
-        IEnumerable<ITerrainModifier> modifiers = terrainModifiers.OrderBy(terrain => terrain.GetPriority());
+
         //Execute the modifiers
-        foreach (ITerrainModifier tm in modifiers) {
-            tm.Modify(this);
+        foreach (AModifierData modifier in data.terrainModifiers) {
+            modifier.Execute(this);
         }
+
+        //Update the maximum height in the shader
         terrainMaterial.SetFloat("Vector1_43C4DCE9",terrainData.maxHeight);
 
+        //Take the path map and blur it for smoothed paths.
         if (BlurPath) {
             TextureGenerator.BlurMap(pathMap, BlurRadius);//Will it work???
         }
 
+        //Update the shader's path map
         terrainMaterial.SetTexture("Texture2D_1F7D3F7B", TextureGenerator.TextureFromHeightMap(pathMap));
     }
 
     public void CreateMesh() {
         terrainMeshRenderer.material = terrainMaterial;
         terrainMeshFilter.sharedMesh = MeshGenerator.GenerateTerrainMesh(heights, terrainData.meshHeightMultiplier, terrainData.meshHeightCurve, LevelOfDetail, false).CreateMesh();
+        terrainMeshCollider.sharedMesh = terrainMeshFilter.sharedMesh;
     }
 
     float[,] GenerateMapData ( Vector2 center ) {
@@ -94,6 +108,9 @@ public class Map : MonoBehaviour {
             GameObject go = new GameObject("Game Terrain");
             go.AddComponent<MeshFilter>();
             go.AddComponent<MeshRenderer>();
+            go.AddComponent<MeshCollider>();
+            go.tag = "Map";
+            go.layer = 8;
             terrainMeshObject = go;
             Vector3 scl = new Vector3(1, 1, -1);
             terrainMeshObject.transform.localScale = scl * terrainData.uniformScale;
@@ -101,12 +118,16 @@ public class Map : MonoBehaviour {
         }
         terrainMeshFilter = terrainMeshObject.GetComponent<MeshFilter>();
         terrainMeshRenderer = terrainMeshObject.GetComponent<MeshRenderer>();
+        terrainMeshCollider = terrainMeshObject.GetComponent<MeshCollider>();
+
     }
 
-    public void Generate() {
+    public void Generate(MapData data) {
+        Debug.Log("Generating world with seed " + data.noiseData.seed);
         CreateTerrainMeshObject();
-        GenerateTerrain();
+        GenerateTerrain(data);
         CreateMesh();
+        Generated = true;
     }
 
     public void GenerateInEditor() {
@@ -118,7 +139,7 @@ public class Map : MonoBehaviour {
             }
             terrainMeshObject.transform.localScale = Vector3.one * terrainData.uniformScale;
             //CreateTerrainMeshObject();
-            GenerateTerrain();
+            GenerateTerrain(editorMapData);
             CreateMesh();
             Noise.Reset(noiseData.seed);
         }
@@ -130,26 +151,7 @@ public class Map : MonoBehaviour {
         }
     }
 
-    void OnTextureValuesUpdated () {
-        textureData.UpdatMeshHeights(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
-        textureData.ApplyToMaterial(terrainMaterial);
-    }
-
-    private void OnValidate () {
-        if (terrainData != null) {
-            terrainData.OnValuesUpdated -= OnValuesUpdated;
-            terrainData.OnValuesUpdated += OnValuesUpdated;
-        }
-        if (noiseData != null) {
-            noiseData.OnValuesUpdated -= OnValuesUpdated;
-            noiseData.OnValuesUpdated += OnValuesUpdated;
-        }
-        if (textureData != null) {
-            textureData.OnValuesUpdated -= OnTextureValuesUpdated;
-            textureData.OnValuesUpdated += OnTextureValuesUpdated;
-        }
-
-    }
+    //private void OnValidate () {}
 
     public float heightScale {
         get {

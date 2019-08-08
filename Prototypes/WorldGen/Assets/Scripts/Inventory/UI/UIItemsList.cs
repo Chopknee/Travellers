@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using BaD.Modules.Networking;
+using BaD.UI.DumpA;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,10 +20,10 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
     public delegate void ItemsChanged(UIItemsList caller);
     public ItemsChanged OnItemsChanged;
 
-    public List<ItemCard> containedCards;
-
     public bool allowLinkedInventoryOnly = false;
-    public Inventory associatedInventory;
+    public NetInventory associatedInventory;
+
+    public List<IUIItemcard> items = new List<IUIItemcard>();
 
     [Tooltip("If left empty, all items may be dropped here.")]
     public Collection[] GroupsList;
@@ -31,7 +33,7 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
     public int GoldValue {
         get {
             int gv = 0;
-            foreach (ItemCard card in containedCards) {
+            foreach (ItemCard card in NetworkedInventoryManager.Instance.GetItemData(associatedInventory.Items)) {
                 gv += card.value;
             }
             return gv;
@@ -42,14 +44,15 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
         //Checking if the dropped item is an item card type.
         if (item is IUIItemcard) {
             //Case the dropped item as an item card.
-            ItemCard cardData = ((IUIItemcard)item).CardData;
+            IUIItemcard uiItemData = (IUIItemcard) item;
+            ItemCard itemData = uiItemData.CardData;
             bool passed = blackListMode;//Set up the passed variable for the scenario where the card is not part of a group
-            passed = passed && allowLinkedInventoryOnly && associatedInventory == cardData.owningInventory;
+            passed = passed && allowLinkedInventoryOnly && associatedInventory == uiItemData.OwnerInventory;
             //If there is no group filter specified, or the card is not part of a group, bypass the following nested loop
-            if (GroupsList.Length != 0 && cardData.collections.Length != 0 && !allowLinkedInventoryOnly) {
+            if (GroupsList.Length != 0 && itemData.collections.Length != 0 && !allowLinkedInventoryOnly) {
                 //Searching through the specified filter groups and the card's groups
                 foreach (Collection checkCollection in GroupsList) {
-                    foreach (Collection cardCollection in cardData.collections) {
+                    foreach (Collection cardCollection in itemData.collections) {
                         if (blackListMode) {
                             //Whitelist mode if any condition is true
                             passed = passed && checkCollection != cardCollection;
@@ -65,12 +68,11 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
             passed = passed && (!res.HasValue || res.HasValue && res.Value);
             //If passed is true at this point, then we can transfer the card!!
             if (passed) {
-                ItemCard c = ((IUIItemcard)item).CardData;
-                containedCards.Add(c);
+                IUIItemcard uiItem = (IUIItemcard) item;
+                items.Add(uiItem);
                 OnItemsChanged?.Invoke(this);
             }
             return passed;
-
         }
         Debug.Log("An object not inheriting from IUIItemCard was dropped in " + debugName );
         return false;
@@ -79,37 +81,38 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
     public bool TryGrabItem(UIDraggable item) {
         //Debug.Log("Item taken from shop " + debugName);
         bool? res = OnGrabItem?.Invoke(item);
-        if (res.HasValue) {
-            return res.Value;
+        bool successful = true;
+        successful &= !res.HasValue || ( res.HasValue && res.Value );
+
+        if (successful) {
+            //Take the item from the inventory obejct.
+            IUIItemcard uiItem = (IUIItemcard) item;
+            items.Remove(uiItem);
         }
-        return true;
+
+        return successful;
     }
 
     public void TransferComplete(UIDraggable item) {
         if (item is IUIItemcard) {
-            ItemCard c = ((IUIItemcard)item).CardData;
-            containedCards.Remove(c);
             OnItemsChanged?.Invoke(this);
         }
 //        Debug.Log("Transfer from shop " + debugName + " complete.");
         OnTransferComplete?.Invoke(item);
     }
 
-    public void InstantiateItem(ItemCard cardData) {
-        GameObject go = Instantiate(itemCardPrefab);
-        go.GetComponent<ItemWidget>().CardData = cardData;
-        go.transform.SetParent(transform);
-        go.transform.localPosition = Vector3.zero;
-        containedCards.Add(cardData);
-    }
-
-    public void Cleanup() {
+    public void Cleanup () {
+        List<Item> cardsToPutBack = new List<Item>();
         foreach (Transform child in transform) {
             if (child.GetComponent<UIDraggable>() != null) {
                 GameObject.Destroy(child.gameObject);
+                if (child.GetComponent<IUIItemcard>() != null) {
+                    cardsToPutBack.Add(child.GetComponent<IUIItemcard>().sourceItem);
+                }
             }
         }
-        containedCards.Clear();
+        associatedInventory.AddItems(cardsToPutBack.ToArray());
+        items.Clear();
     }
 }
 

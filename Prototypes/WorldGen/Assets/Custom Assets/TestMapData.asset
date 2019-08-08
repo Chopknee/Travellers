@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0df8c5746a6e334bbdab1a9d9676118, type: 3}
+  m_Name: TestMapData
+  m_EditorClassIdentifier: 
+  noiseData: {fileID: 11400000, guid: 105ba4546209f4448857883ca3c23be9, type: 2}
+  terrainData: {fileID: 11400000, guid: a682c94b4262ba84fa0697bd64bb09c1, type: 2}
+  terrainMaterial: {fileID: 2100000, guid: 9cd983cc299083942beb394fea912c58, type: 2}
+  terrainModifiers:
+  - {fileID: 11400000, guid: a8bb38e208a0f2440a63be3003ee77c9, type: 2}
+  - {fileID: 11400000, guid: 432f68d35456d384193af517da504381, type: 2}

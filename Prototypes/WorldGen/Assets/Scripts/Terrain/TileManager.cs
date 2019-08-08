@@ -15,7 +15,7 @@ public class TileManager {
         tiles = new Tile[map.mapChunkSize, map.mapChunkSize];
         for (int x = 0; x < tiles.GetLength(0); x++) {
             for (int y = 0; y < tiles.GetLength(1); y++) {
-                tiles[x, y] = new Tile(map, this, new Vector2(x, y));
+                tiles[x, y] = new Tile(map, this, new Vector2(x, y), false);
             }
         }
     }

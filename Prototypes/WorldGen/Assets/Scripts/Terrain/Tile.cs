@@ -6,13 +6,14 @@ public class Tile {
 
     private Map map;
     private TileManager tileManager;
-    public GameObject occupyingObject;
     private Vector2 terrainCoordinate;
-    //public 
-    public Tile ( Map map, TileManager grid, Vector2 terrainCoordinate ) {
+    public bool Blocked { get; set; }
+
+    public Tile ( Map map, TileManager grid, Vector2 terrainCoordinate, bool blocked ) {
         this.map = map;
         this.tileManager = grid;
         this.terrainCoordinate = terrainCoordinate;
+        Blocked = blocked;
     }
 
     public float scaledHeight {
@@ -35,12 +36,6 @@ public class Tile {
             if (map != null) {
                 map.heights[(int) terrainCoordinate.x, (int) terrainCoordinate.y] = value;
             }
-        }
-    }
-
-    public bool Occupied {
-        get {
-            return occupyingObject != null;
         }
     }
 
@@ -74,7 +69,7 @@ public class Tile {
     }
 
     public bool CanWalkHere() {
-        return !Occupied;
+        return !Blocked;
     }
 
     public static float[,] ToTexel(Tile[,] tiles, bool scaledHeight) {

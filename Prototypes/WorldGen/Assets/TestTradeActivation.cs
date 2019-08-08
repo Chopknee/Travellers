@@ -15,13 +15,13 @@ public class TestTradeActivation : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        PlayerData pd = new PlayerData();
-        pd.gold = playerGold;
-        pd.inventory.PutItems(playerInventory, null);
+        //PlayerData pd = new PlayerData();
+        //pd.gold = playerGold;
+        //pd.inventory.PutItems(playerInventory, null);
 
-        Inventory shopInv = new Inventory();
-        shopInv.PutItems(shopInventory, null);
-        UIShopTrade.Instance.ShowTradeWindow("", shopInv, pd);
+        NetInventory shopInv = new NetInventory();
+        //shopInv.PutItems(shopInventory, null);
+        //UIShopTrade.Instance.ShowTradeWindow("", shopInv, pd);
 
         //Debug.Log("I think this works!");
     }

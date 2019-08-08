@@ -11,9 +11,9 @@ public class UIInventorySlot : MonoBehaviour  {
     public delegate void ItemPickedUp ();
     public ItemPickedUp OnItemPickedUp;
 
-    private Inventory inv;
+    private NetInventory inv;
 
     public void Start () {
-        inv = GetComponentInParent<Inventory>();
+        inv = GetComponentInParent<NetInventory>();
     }
 }

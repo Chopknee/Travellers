@@ -1,57 +1,102 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
+﻿using BaD.Modules.Terrain;
+using BaD.UI.DumpA;
+using Photon.Pun;
+using System;
 using UnityEngine;
 
-public class OverworldControl: MonoBehaviour {
-    
-    public static OverworldControl Instance {
-        get {
-            return inst;
+namespace BaD.Modules {
+    public class OverworldControl: MonoBehaviourPunCallbacks, IPunObservable {
+
+        [SerializeField]
+#pragma warning disable 0649
+        private MapData mapGenerationInformation;
+
+        //[SerializeField]
+        //private int MapSeed = 0;
+        private int mpSd = 0;
+
+        [SerializeField]
+        private GameObject buildingsPointerPrefab;
+
+        public static OverworldControl Instance {
+            get {
+                return LocalPlayerReference;
+            }
         }
-    }
 
-    private static OverworldControl inst;
-    
-    private Map map;
-    public Map Map {
-        get {
-            return map;
+        private static OverworldControl LocalPlayerReference;
+
+        public Map Map {
+            get {
+                return GetComponent<Map>();
+            }
         }
-    }
 
-    public int NoiseSeed {
-        get {
-            return map.noiseData.seed;
+        public int NoiseSeed {
+            get {
+                return Map.noiseData.seed;
+            }
         }
-    }
 
-    private void Awake () {
-        inst = this;
-        map = GetComponent<Map>();
-        bp = Instantiate(buildingsPointerPrefab);
-        bp.SetActive(false);
-
-    }
-
-    public void Setup() {
-        map.Generate();
-    }
-
-    public bool GUIOpen {
-        get {
-            //Check each gui to see if it is in the open state.
-            return UIShopTrade.Instance.gameObject.activeSelf;
+        public bool MapReady {
+            get {
+                return Map.Generated;
+            }
         }
-    }
 
-    public GameObject buildingsPointerPrefab;
-
-    public GameObject BuildingPointer {
-        get {
-            return bp;
+        private void Awake () {
+            //There should only ever be a single instance of this object on every player's game.
+            LocalPlayerReference = this;
+            bp = Instantiate(buildingsPointerPrefab);
+            bp.SetActive(false);
         }
-    }
 
-    public GameObject bp;
+        public void Start () {
+            if (photonView.IsMine) {
+                //Only sync the variables here if we are the owner of the server.
+                ulong value = 0;
+                ulong.TryParse(PlayerPrefs.GetString(UISeedEntry.worldSeedPrefNameKey), out value);
+                mpSd = (int)value;
+                mapGenerationInformation.noiseData.seed = mpSd;
+                Map.Generate(mapGenerationInformation);//Since we know dat will be set at this point.
+                MapGenerated = true;//Prevents double-regeneration
+            }
+        }
+
+        bool MapGenerated = false;
+
+        public void OnPhotonSerializeView ( PhotonStream stream, PhotonMessageInfo info ) {
+            if (stream.IsWriting) {//Only send the data if the instance is miine????
+                stream.SendNext(mpSd);
+            } else {
+                //Waiting for the map generation information to be synchronized.
+                if (!MapGenerated) {
+                    object rcvd = stream.ReceiveNext();
+                    try {
+                        mpSd = (int) rcvd;
+                        mapGenerationInformation.noiseData.seed = mpSd;
+                        Map.Generate(mapGenerationInformation);
+                        MapGenerated = true;
+                    } catch (InvalidCastException) {
+                        Debug.LogFormat("<Color=Red>Could not receive map seed, the stream data was in the wrong format. {0}", rcvd);
+                    }
+                }
+            }
+        }
+
+        public bool GUIOpen {
+            get {
+                //Check each gui to see if it is in the open state.
+                return MainControl.Instance.ShopGUI.activeSelf;
+            }
+        }
+
+        public GameObject BuildingPointer {
+            get {
+                return bp;
+            }
+        }
+
+        private GameObject bp;
+    }
 }

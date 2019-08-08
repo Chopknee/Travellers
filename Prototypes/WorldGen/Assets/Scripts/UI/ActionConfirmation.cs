@@ -28,6 +28,11 @@ public class ActionConfirmation : MonoBehaviour {
         baseTransform.position = pos;
     }
 
+    public void Update() {
+        //While active, keep the dialog on screen and locked to it's relative position
+        
+    }
+
     public void Confirm() {
         OnResult?.Invoke(true);
         Close();

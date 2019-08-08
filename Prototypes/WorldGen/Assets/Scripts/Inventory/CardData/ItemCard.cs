@@ -18,8 +18,6 @@ public class ItemCard: UpdateableData {
     //public List<Set> sets;
     public Collection[] collections;
 
-    [Tooltip("Used only for UI. Assignmnets to this will be ignored.")]
-    public Inventory owningInventory;//Used for ui stuff
 
     public ItemCard GetNew() {
         ItemCard ic = (ItemCard)ScriptableObject.CreateInstance("ItemCard");

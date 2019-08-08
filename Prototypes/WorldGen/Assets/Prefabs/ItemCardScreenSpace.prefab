@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 1127766380}
   - component: {fileID: 7543765621211379464}
   - component: {fileID: 6395558200594894848}
-  - component: {fileID: 1127766379}
   m_Layer: 5
   m_Name: ItemCardScreenSpace
   m_TagString: ItemCard
@@ -181,18 +180,6 @@ MonoBehaviour:
   - {fileID: 5027037575126274589}
   - {fileID: 4425898524935086735}
   cardBackground: {fileID: 5908117570858480178}
---- !u!114 &1127766379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2612451866447878188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c5a793d511721419a5d54429d29372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4404656879307849518
 GameObject:
   m_ObjectHideFlags: 0

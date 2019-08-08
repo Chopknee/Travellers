@@ -9,17 +9,29 @@ public class UIDraggable : MonoBehaviour, IDragHandler, IDropHandler, IBeginDrag
 
     public Vector3 originalPosition = Vector3.zero;
 
+    private bool dragAllowed = false;
+
+    public bool Dragging {
+        get {
+            return dragging;
+        }
+    }
+    private bool dragging;
+
     public void Start() {
         originalParent = transform.parent;
     }
 
     public void OnDrag ( PointerEventData eventData ) {
-        //This will continue to move the card with the mouse.
-        transform.position = Input.mousePosition;
-        //Should probably use the drag start handler for this.
+        if (dragAllowed) {
+            //This will continue to move the card with the mouse.
+            transform.position = Input.mousePosition;
+            //Should probably use the drag start handler for this.
+        }
     }
 
-    public void OnDrop ( PointerEventData eventData ) {
+    public virtual void OnDrop ( PointerEventData eventData ) {
+        dragging = false;
         //Force refresh the pointer because it doesn't properly refresh here?
         eventData.position = Input.mousePosition;//Refreshing pointer position.
         List<RaycastResult> results = new List<RaycastResult>();//List that stores raycast results
@@ -48,10 +60,14 @@ public class UIDraggable : MonoBehaviour, IDragHandler, IDropHandler, IBeginDrag
     public void OnBeginDrag ( PointerEventData eventData ) {
         if (originalParent != null) {
             if (originalParent.gameObject.GetComponent<IUIDropZone>() != null && originalParent.gameObject.GetComponent<IUIDropZone>().TryGrabItem(this)) {
+                dragAllowed = true;
                 originalParent = transform.parent;
                 originalPosition = transform.position;
                 transform.SetParent(gameObject.GetComponentInParent<Canvas>().transform);
+                dragging = true;
+                return;
             }
         }
+        dragAllowed = false;
     }
 }

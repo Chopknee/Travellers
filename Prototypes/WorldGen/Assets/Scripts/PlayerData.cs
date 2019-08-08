@@ -6,12 +6,21 @@ public class PlayerData {
 
     public static int MaxBaseInventory = 10;
 
-
+    public GameObject playerGameobjectRef { get; private set; }
+    public NetInventory Inventory {
+        get {
+            return playerGameobjectRef.GetComponent<NetInventory>();
+        }
+    }
     public delegate void PlayerGoldChanged(PlayerData player);
     public PlayerGoldChanged OnPlayerGoldChanged;
 
     public delegate void PlayerNameChanged(PlayerData player);
     public PlayerNameChanged OnPlayernameChanged;
+
+    public PlayerData(GameObject playerRef) {
+        playerGameobjectRef = playerRef;
+    }
 
     //Generic class holding information about a player.
     public int gold {
@@ -31,8 +40,6 @@ public class PlayerData {
             return MaxBaseInventory;
         }
     }
-
-    public Inventory inventory = new Inventory();
 
     public string Name {
         get {
