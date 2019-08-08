@@ -13,6 +13,7 @@ TagManager:
   - DungeonParent
   - DestroyerRoom
   - Room
+  - PortalOut
   layers:
   - Default
   - TransparentFX

@@ -8,5 +8,5 @@ public class RoomTemplates : MonoBehaviour
 
     public GameObject[] rooms;
 
-    public GameObject startRoom, closedRoom, wall;
+    public GameObject startRoom, closedRoom, wall, endRoom;
 }

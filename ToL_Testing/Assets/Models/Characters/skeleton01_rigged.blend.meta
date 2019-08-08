@@ -1,0 +1,211 @@
+fileFormatVersion: 2
+guid: 5b0aeb42a99624c4abe90d2bd6673c37
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature
+    100002: BezierCircle
+    100004: BezierCircle_001
+    100006: BezierCircle_002
+    100008: BezierCircle_003
+    100010: BezierCircle_004
+    100012: Bone_001
+    100014: Cube_011
+    100016: head
+    100018: jaw
+    100020: L_Arm_001
+    100022: L_Arm_002
+    100024: L_Foot
+    100026: L_Hand
+    100028: L_Hand_IndexFinger_001
+    100030: L_Hand_IndexFinger_002
+    100032: L_Hand_MiddleFinger_001
+    100034: L_Hand_MiddleFinger_002
+    100036: L_Hand_Pinky_001
+    100038: L_Hand_Pinky_002
+    100040: L_Hand_Thumb_001
+    100042: L_Hand_Thumb_002
+    100044: L_Leg_001
+    100046: L_Leg_002
+    100048: L_Pelvis
+    100050: L_Pelvis_001
+    100052: NurbsPath
+    100054: R_Arm_001
+    100056: R_Arm_002
+    100058: R_Foot
+    100060: R_Hand
+    100062: R_Hand_IndexFinger_001
+    100064: R_Hand_IndexFinger_002
+    100066: R_Hand_MiddleFinger_001
+    100068: R_Hand_MiddleFinger_002
+    100070: R_Hand_Pinky_001
+    100072: R_Hand_Pinky_002
+    100074: R_Hand_Thumb_001
+    100076: R_Hand_Thumb_002
+    100078: R_Leg_001
+    100080: R_Leg_002
+    100082: R_Pelvis
+    100084: R_Pelvis_001
+    100086: shoulder_L
+    100088: shoulder_R
+    100090: //RootNode
+    100092: spine_001
+    100094: spine_002
+    100096: spine_003
+    100098: spine_004
+    100100: spine_neck
+    400000: Armature
+    400002: BezierCircle
+    400004: BezierCircle_001
+    400006: BezierCircle_002
+    400008: BezierCircle_003
+    400010: BezierCircle_004
+    400012: Bone_001
+    400014: Cube_011
+    400016: head
+    400018: jaw
+    400020: L_Arm_001
+    400022: L_Arm_002
+    400024: L_Foot
+    400026: L_Hand
+    400028: L_Hand_IndexFinger_001
+    400030: L_Hand_IndexFinger_002
+    400032: L_Hand_MiddleFinger_001
+    400034: L_Hand_MiddleFinger_002
+    400036: L_Hand_Pinky_001
+    400038: L_Hand_Pinky_002
+    400040: L_Hand_Thumb_001
+    400042: L_Hand_Thumb_002
+    400044: L_Leg_001
+    400046: L_Leg_002
+    400048: L_Pelvis
+    400050: L_Pelvis_001
+    400052: NurbsPath
+    400054: R_Arm_001
+    400056: R_Arm_002
+    400058: R_Foot
+    400060: R_Hand
+    400062: R_Hand_IndexFinger_001
+    400064: R_Hand_IndexFinger_002
+    400066: R_Hand_MiddleFinger_001
+    400068: R_Hand_MiddleFinger_002
+    400070: R_Hand_Pinky_001
+    400072: R_Hand_Pinky_002
+    400074: R_Hand_Thumb_001
+    400076: R_Hand_Thumb_002
+    400078: R_Leg_001
+    400080: R_Leg_002
+    400082: R_Pelvis
+    400084: R_Pelvis_001
+    400086: shoulder_L
+    400088: shoulder_R
+    400090: //RootNode
+    400092: spine_001
+    400094: spine_002
+    400096: spine_003
+    400098: spine_004
+    400100: spine_neck
+    2100000: unnamed
+    4300000: Cube_011
+    4300002: BezierCircle_004
+    4300004: BezierCircle_003
+    4300006: BezierCircle_002
+    4300008: BezierCircle_001
+    4300010: BezierCircle
+    4300012: NurbsPath
+    7400000: Default Take
+    9500000: //RootNode
+    13700000: BezierCircle
+    13700002: BezierCircle_001
+    13700004: BezierCircle_002
+    13700006: BezierCircle_003
+    13700008: BezierCircle_004
+    13700010: Cube_011
+    13700012: NurbsPath
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
