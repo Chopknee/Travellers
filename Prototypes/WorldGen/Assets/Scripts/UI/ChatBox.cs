@@ -11,8 +11,9 @@ public class ChatBox : MonoBehaviour {
     [SerializeField]
 #pragma warning disable 0649
     private InputField input;
-
     Chatterbox chatterbox;
+
+    bool opened = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -26,8 +27,30 @@ public class ChatBox : MonoBehaviour {
     }
 
     void OnDoneMessage(string value) {
-        chatterbox.SendTextMessage(value);
-        OnTextMessageReceived(PhotonNetwork.NickName, value);
-        input.text = "";
+        if (value != "") {
+            chatterbox.SendTextMessage(value);
+            OnTextMessageReceived(PhotonNetwork.NickName, value);
+            input.text = "";
+            input.ActivateInputField();
+            input.Select();
+        }
+    }
+    
+    private void Update () {
+        if (Input.GetButtonDown("OpenChat") && !opened) {
+            SetVisible(true);
+            input.ActivateInputField();
+            input.Select();
+        } else if (opened && Input.GetButtonDown("Escape") || !input.isFocused && Input.GetButtonDown("OpenChat")) {
+            SetVisible(false);
+        }
+    }
+
+
+    public void SetVisible(bool value) {
+        CanvasGroup cg = GetComponent<CanvasGroup>();
+        cg.alpha = ( value ) ? 1 : 0;
+        cg.blocksRaycasts = value;
+        opened = value;
     }
 }

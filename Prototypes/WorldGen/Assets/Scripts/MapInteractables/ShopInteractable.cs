@@ -26,7 +26,7 @@ namespace BaD.Modules.Terrain {
 
         public void Start () {
             shopInventory = GetComponent<NetInventory>();
-            shopGuI = MainControl.Instance.ShopGUI.GetComponent<UIShopTrade>();
+            shopGuI = MainControl.Instance.ShopUI.GetComponent<UIShopTrade>();
             shopData = shopData.GetNew();//Workaround type of thing...
             if (OverworldControl.Instance.BuildingPointer != null && pointer == null) {
                 pointer = OverworldControl.Instance.BuildingPointer;
@@ -60,7 +60,7 @@ namespace BaD.Modules.Terrain {
 
         public void Interact ( Player player ) {
             //Do the appropriate stuff here.
-            shopGuI.ShowTradeWindow(DisplayName, shopInventory, player.data);
+            shopGuI.ShowTradeWindow(DisplayName, shopInventory, player.Data);
             shopGuI.OnClosed += ShopClosed;
             guiOpen = true;
         }

@@ -1,4 +1,5 @@
 ﻿using BaD.Modules.Networking;
+using BaD.UI.DumpA;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -11,28 +12,56 @@ namespace BaD.Modules {
 
         public static MainControl Instance { get; private set; }
 
-        public const byte SpawnMapControl = 100;
-        public const byte SpawnPlayerObject = 101;
+        [SerializeField]
+#pragma warning disable 0649
+        private GameObject shopUI;
+        public GameObject ShopUI { get { return shopUI; } }
 
-        public HashSet<int> usedNetworkIds;
+        [SerializeField]
+#pragma warning disable 0649
+        private GameObject actionConfirmationUI;
+        public GameObject ActionConfirmationUI { get { return actionConfirmationUI; } }
 
-        public GameObject ShopGUI;
-        public GameObject ActionConfirmationGUI;
+        [SerializeField]
+#pragma warning disable 0649
+        private GameObject playerInventoryUI;
+        public GameObject PlayerInventoryUI { get { return playerInventoryUI; } }
+        public UIPlayerInventory PlayerInventoryInstance {
+            get {
+                return PlayerInventoryUI.GetComponent<UIPlayerInventory>();
+            }
+        }
+
+        [SerializeField]
+#pragma warning disable 0649
+        private GameObject hudUI;
+        public GameObject HudUI { get { return hudUI; } }
+
+        public GameObject LocalPlayerObjectInstance { get; private set; }
 
         [SerializeField]
 #pragma warning disable 0649
         private GameObject MapControlPrefab;
         [SerializeField]
 #pragma warning disable 0649
-        public GameObject OverworldPlayerPrefab;
+        private GameObject OverworldPlayerPrefab;
 
         void Awake () {
-            if (ShopGUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> Shop GUI prefab reference.", this);
+            //Warning messages about missing objects.
+            if (shopUI == null) {
+                Debug.Log("<Color=Blue><a>Missing</a><Color> Shop GUI reference.", this);
             }
 
-            if (ActionConfirmationGUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> Action Confirmation prefab reference.", this);
+            if (actionConfirmationUI == null) {
+                Debug.Log("<Color=Blue><a>Missing</a><Color> Action Confirmation reference.", this);
+            }
+
+            if (playerInventoryUI == null) {
+                Debug.Log("<Color=Blue><a>Missing</a><Color> Player Inventory reference.", this);
+            }
+
+            if (hudUI == null) {
+                Debug.Log("<Color=Blue><a>Missing</a><Color> HUD reference.", this);
             }
 
             if (MapControlPrefab == null) {
@@ -42,20 +71,16 @@ namespace BaD.Modules {
             if (OverworldPlayerPrefab == null) {
                 Debug.Log("<Color=Blue><a>Missing</a><Color> player prefab reference.", this);
             }
-            usedNetworkIds = new HashSet<int>();
         }
 
         public void Start () {
             if (Instance == null) {
-                Instance = this;//Prevent dual running of the setup code???!!?!?!?
+                Instance = this;
                 if (PhotonNetwork.IsMasterClient) {
-                    //Debug.Log("I am marked as master, and am spawning the map and player object.");
-                    //Only the master should spawn an instance of the map.
+                    //Only the master should spawn an instance of the map. (All other players will spawn this automatically thanks to the network.)
                     NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false, ReceiverGroup.Others, EventCaching.AddToRoomCache);
-                    //SpawnNetworkedMaster(MapControlPrefab, ReceiverGroup.Others, EventCaching.AddToRoomCache, SpawnMapControl);//Skipping over using the jankey workaround type code photon is built with??
                 }
-                NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true, ReceiverGroup.Others, EventCaching.AddToRoomCache);
-                //SpawnNetworkedAsOwner(OverworldPlayerPrefab, ReceiverGroup.Others, EventCaching.AddToRoomCache, SpawnPlayerObject);
+                LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true, ReceiverGroup.Others, EventCaching.AddToRoomCache);
             }
         }
     }

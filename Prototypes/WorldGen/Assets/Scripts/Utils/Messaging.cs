@@ -8,6 +8,8 @@ using UnityEngine;
 namespace BaD.Modules.Networking {
     public abstract class Messaging: MonoBehaviourPunCallbacks, IOnEventCallback {
 
+        public enum NetMessageCodes { TextMessage = 15, InventoryMessage = 10 };
+
         [Tooltip("The specific code used to filter messages of this type.")]
         public byte MessageCode;
         [Tooltip("How long the buffer for tracking sent messages should be.")]

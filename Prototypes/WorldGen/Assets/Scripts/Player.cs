@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Photon.Pun;
+using UnityEngine.EventSystems;
 
 namespace BaD.Modules.Terrain {
     public class Player: MonoBehaviourPunCallbacks {
@@ -8,7 +9,7 @@ namespace BaD.Modules.Terrain {
         private Camera mainCamera;
         private Vector2 terrainPosition;
 
-        public PlayerData data;
+        public PlayerData Data { get; private set; }
 
         Vector2[] currentPath;
         int pathIndex = 0;
@@ -41,14 +42,14 @@ namespace BaD.Modules.Terrain {
 
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             //Temporary stuff here.
-            data = new PlayerData(gameObject);
-            data.Name = "Test player 1";
-            data.gold = 10;
+            Data = new PlayerData(gameObject);
+            Data.Name = PhotonNetwork.NickName;
+            Data.gold = 10;
 
             pointer = Instantiate(pointerPrefab);
             pointer.SetActive(false);
             state = -100;//A completely unused state.
-            actionConfirmationGUI = MainControl.Instance.ActionConfirmationGUI.GetComponent<ActionConfirmation>();
+            actionConfirmationGUI = MainControl.Instance.ActionConfirmationUI.GetComponent<ActionConfirmation>();
             actionConfirmationGUI.OnResult += ActionConfirmed;
 
         }
@@ -112,7 +113,7 @@ namespace BaD.Modules.Terrain {
                 state = 0;
             }
 
-            if (Input.GetButtonDown("Fire1")) {
+            if (Input.GetButtonDown("Interact")) {
                 if (state == 0) {//Waiting for the user to choose what to do..
                     LookForInteraction();
                 }
@@ -143,7 +144,7 @@ namespace BaD.Modules.Terrain {
         }
 
         public void LookForInteraction () {
-
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }
             //Perform a raycast to see what the mouse was hovering over.
             RaycastHit rch = TryClickTerrain(resolution, mainCamera, map);
             //If there was an object hit

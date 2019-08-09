@@ -203,7 +203,7 @@ MonoBehaviour:
   - {fileID: 8448132969249743971}
   - {fileID: 4795715503607780322}
   - {fileID: 4189929436142838640}
-  cardBackground: {fileID: 6247535561281778637}
+  itemBackground: {fileID: 6247535561281778637}
 --- !u!1 &4159880344299360237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,6 +1291,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: img_colorToken
+      objectReference: {fileID: 0}
+    - target: {fileID: 68489472649350510, guid: c5d2ec26736130c439aaa879f55b02fc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 68489472649350511, guid: c5d2ec26736130c439aaa879f55b02fc,
         type: 3}

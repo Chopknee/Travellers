@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UIDraggable : MonoBehaviour, IDragHandler, IDropHandler, IBeginDragHandler {
-
+    [HideInInspector]
     public Transform originalParent;
-
+    [HideInInspector]
     public Vector3 originalPosition = Vector3.zero;
 
     private bool dragAllowed = false;

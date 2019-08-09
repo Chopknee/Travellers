@@ -54,7 +54,12 @@ namespace BaD.UI.DumpA {
                 networkedInventory.OnItemsUpdated += OnInventorySynced;
                 networkedInventory.Open();
             } else {
-                localInventory = new Inventory();
+                if (localInventory == null) {
+                    if (GetComponent<Inventory>() == null) {
+                        gameObject.AddComponent<Inventory>();
+                    }
+                    localInventory = GetComponent<Inventory>();
+                }
             }
         }
 

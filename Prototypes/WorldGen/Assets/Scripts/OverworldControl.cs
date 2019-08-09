@@ -87,7 +87,7 @@ namespace BaD.Modules {
         public bool GUIOpen {
             get {
                 //Check each gui to see if it is in the open state.
-                return MainControl.Instance.ShopGUI.activeSelf;
+                return MainControl.Instance.ShopUI.activeSelf;
             }
         }
 

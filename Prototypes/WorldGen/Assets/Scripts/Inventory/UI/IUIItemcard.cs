@@ -10,8 +10,9 @@ using UnityEngine.EventSystems;
 
 namespace BaD.UI.DumpA {
     public abstract class IUIItemcard: UIDraggable {
-
+        [HideInInspector]
         public Item sourceItem;
+        [HideInInspector]
         public NetInventory OwnerInventory;
 
         public ItemCard CardData {
