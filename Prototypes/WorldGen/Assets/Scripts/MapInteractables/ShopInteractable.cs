@@ -112,7 +112,6 @@ namespace BaD.Modules.Terrain {
             } else {
                 //if ()
                 DisplayName = (string) stream.ReceiveNext();
-                Debug.Log(DisplayName);
             }
         }
     }

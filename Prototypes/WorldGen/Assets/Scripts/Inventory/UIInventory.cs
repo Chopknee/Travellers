@@ -158,11 +158,13 @@ namespace BaD.UI.DumpA {
             successful &= !res.HasValue || ( res.HasValue && res.Value );
 
             if (successful) {
+                IUIItemcard ic = item.GetComponent<IUIItemcard>();
+                ic.safe = false;
                 //Take the item from the inventory obejct.
                 if (UseLocalInventory) {
-                    localInventory.RemoveItem(item.GetComponent<IUIItemcard>().sourceItem);
+                    localInventory.RemoveItem(ic.sourceItem);
                 } else {
-                    LastInventoryRequestID = networkedInventory.RemoveItem(item.GetComponent<IUIItemcard>().sourceItem);
+                    LastInventoryRequestID = networkedInventory.RemoveItem(ic.sourceItem);
                 }
             }
 
@@ -186,13 +188,25 @@ namespace BaD.UI.DumpA {
                         Destroy(go);//Yeh?
                     } else {
                         keepers.Add(go);
+                        go.GetComponent<IUIItemcard>().safe = true;
                     }
                 }
                 ownedItemInstances.Clear();
                 ownedItemInstances.AddRange(keepers);
             } else {
+                List<GameObject> deathList = new List<GameObject>();
+                List<GameObject> keepers = new List<GameObject>();
+                foreach (GameObject go in ownedItemInstances) {
+                    if (!go.GetComponent<IUIItemcard>().safe) {
+                        deathList.Add(go);
+                    } else {
+                        keepers.Add(go);
+                    }
+                }
                 //There was an update of items, make sure our current is equivalent to the current master
-                Choptilities.DestroyList(ownedItemInstances);//Even if the player is actively dragging an item, it will be killed!!!!! >:)
+                Choptilities.DestroyList(deathList);//Even if the player is actively dragging an item, it will be killed!!!!! >:)
+                ownedItemInstances.Clear();
+                ownedItemInstances.AddRange(keepers);
             }
 
 

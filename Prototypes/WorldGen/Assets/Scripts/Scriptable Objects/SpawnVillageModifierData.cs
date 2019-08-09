@@ -83,6 +83,7 @@ namespace BaD.Modules.Terrain.Modifiers {
                                 building.transform.SetParent(map.transform);
                                 building.transform.position = map.TerrainCoordToRealWorld(candidate);
                                 building.transform.rotation = Quaternion.Euler(new Vector3(0, rotation, 0));
+                                building.AddComponent<StructureDataLink>().structureData = structuresToSpawn[structureIndex];
                             }
 
                             //Flatten out the terrain under this structure

@@ -27,6 +27,8 @@ namespace BaD.UI.DumpA {
 
         private ItemCard cd;
 
+        public bool safe = false;
+
         public override void OnDrop ( PointerEventData eventData ) {
             base.OnDrop(eventData);
             //Force refresh the pointer because it doesn't properly refresh here?
