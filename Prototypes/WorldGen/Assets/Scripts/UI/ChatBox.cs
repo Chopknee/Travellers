@@ -7,12 +7,25 @@ using UnityEngine.UI;
 public class ChatBox : MonoBehaviour {
     [SerializeField]
 #pragma warning disable 0649
-    private Text TextArea;
+    private ScrollRect chatLog;
     [SerializeField]
 #pragma warning disable 0649
     private InputField input;
-    Chatterbox chatterbox;
+    [SerializeField]
+#pragma warning disable 0649
+    private Font chatFont;
+    [SerializeField]
+#pragma warning disable 0649
+    private int fontSize;
+    [SerializeField]
+#pragma warning disable 0649
+    private int lineSpacing;
+    [SerializeField]
+#pragma warning disable 0649
+    private Color baseChatColor;
 
+    Chatterbox chatterbox;
+    
     bool opened = false;
 
     // Start is called before the first frame update
@@ -23,7 +36,14 @@ public class ChatBox : MonoBehaviour {
     }
 
     void OnTextMessageReceived(string sender, string message) {
-        TextArea.text += string.Format("{0}] {1}\n", sender, message);
+        GameObject mess = CreateChatMessage(sender, message);
+        mess.transform.SetParent(chatLog.content);
+        Invoke("thing", 0.1f);
+        
+    }
+
+    void thing() {
+        chatLog.verticalScrollbar.value = 0f;
     }
 
     void OnDoneMessage(string value) {
@@ -52,5 +72,20 @@ public class ChatBox : MonoBehaviour {
         cg.alpha = ( value ) ? 1 : 0;
         cg.blocksRaycasts = value;
         opened = value;
+    }
+
+    public GameObject CreateChatMessage(string sender, string message) {
+        GameObject go = new GameObject("Chat Message " + sender);
+        go.AddComponent<CanvasRenderer>();
+        go.AddComponent<RectTransform>();
+        Text tx = go.AddComponent<Text>();
+        tx.font = chatFont;
+        tx.fontSize = fontSize;
+        tx.lineSpacing = lineSpacing;
+        tx.color = baseChatColor;
+        tx.text = string.Format("<color=#FBFBFB>{0}</Color>: {1} ", sender, message);
+        ContentSizeFitter csf = go.AddComponent<ContentSizeFitter>();
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;//I know this is technically not valid, but eff it.
+        return go;
     }
 }

@@ -159,6 +159,7 @@ public class UIShopTrade : MonoBehaviour {
             }
             playerData.Inventory.AddItems(moveBacks.ToArray());
         }
+        //sellWindow.Items
         if (buyWindow.Items.Length != 0) {
             //Revert the shop items back to their inventory
             moveBacks = new List<Item>();
@@ -171,7 +172,9 @@ public class UIShopTrade : MonoBehaviour {
         shopInventoryPanel.Close();
         playerInventoryPanel.Close();
         sellWindow.Close();
+        sellWindow.Cleanup();
         buyWindow.Close();
+        buyWindow.Cleanup();
 
         //Closes the trade window.
         btnExecuteTrade.onClick.RemoveListener(ExecuteTrade);

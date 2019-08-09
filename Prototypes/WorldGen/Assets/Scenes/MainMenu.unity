@@ -2089,7 +2089,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Multiplayer
+  m_Text: M<color=green>u</color>ltiplayer
 --- !u!222 &1968741645
 CanvasRenderer:
   m_ObjectHideFlags: 0

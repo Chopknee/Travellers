@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,6 +15,7 @@ public class Test : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        txt.text = ( EventSystem.current.IsPointerOverGameObject() ) ? "Over" : "Not";
+        //txt.text = ( EventSystem.current.IsPointerOverGameObject() ) ? "Over" : "Not";
+        txt.text = string.Format("Ping: {0}", PhotonNetwork.GetPing());
     }
 }

@@ -40,7 +40,6 @@ namespace BaD.UI.DumpA {
         }
 
         public void OnInventorySynced ( int originalRequestID, Item[] added, Item[] removed ) {
-            Debug.Log("Filling player inventory!");
             //Clear out the old children of the list.
             ClearItems();
             //Make new children to add in the list.
