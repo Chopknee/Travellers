@@ -152,9 +152,12 @@ namespace BaD.Modules.Terrain {
                 //Get the gameobject
                 GameObject hitObject = rch.transform.gameObject;
                 //Set the last point clicked
-                lastTerrainPointClicked = rch.point;//
-                //Two options here, the end tile is occupied, in which case we attempt to interact, or it is not occupied in which case we navigate to that item
+                lastTerrainPointClicked = rch.point;
                 if (hitObject.tag == "Structure") {
+                    //First question; is the player close enough?
+                        //If so, interact
+                        //If not, attempt to pathfind to the object?
+                        //Then interact
                     //Then interact with it.
                     IMapInteractable interactable = hitObject.GetComponent<IMapInteractable>();//Interactable objects must inherit from IMapInteractable
                     if (interactable != null && interactable.TryInteract(this).Interactable) {//if there is an interactable and it is currently interactable.
@@ -163,9 +166,7 @@ namespace BaD.Modules.Terrain {
                         actionConfirmationGUI.Show(interactable.GetActionName(), interactable.GetShortActionName(), Input.mousePosition);
                         state = 10;
                     }
-                } else if (hitObject.tag == "Map") {
-                    
-                    
+                } else if (hitObject.tag == "Map") {   
                     Vector2 terrainPoint = map.RealWorldToTerrainCoord(rch.point);
                     if (!map.tileManager.GetTile(terrainPoint).Blocked) {//First, get the tile and make sure we can pathfind to there
                         //Attempt to pathfind.
@@ -174,10 +175,8 @@ namespace BaD.Modules.Terrain {
                         pointer.SetActive(true);
                         state = 5;
                     }
-                } else {
-                    //Not a recognizable thing
                 }
-            }//No point on the terrain was under the mouse if this happens
+            }//No object was under the mouse
         }
 
         public void RequestComplete ( PathResult result ) {
@@ -229,8 +228,7 @@ namespace BaD.Modules.Terrain {
             if (!OverworldControl.Instance.GUIOpen) {
                 Vector3 farpoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.farClipPlane));
                 Vector3 closePoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane));
-                RaycastHit hit;
-                Physics.Raycast(closePoint, ( farpoint - closePoint ).normalized, out hit, camera.farClipPlane, InteractionLayerMask, QueryTriggerInteraction.Ignore);
+                Physics.Raycast(closePoint, ( farpoint - closePoint ).normalized, out RaycastHit hit, camera.farClipPlane, InteractionLayerMask, QueryTriggerInteraction.Ignore);
                 return hit;
             }
             return new RaycastHit();//Returning an empty raycast

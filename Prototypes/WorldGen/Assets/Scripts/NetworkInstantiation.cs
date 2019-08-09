@@ -21,6 +21,12 @@ namespace BaD.Modules.Networking {
         private GameObject[] spawnablesPool;//Time to go swimming!
         private Dictionary<int, NetworkInstance> instancePool;
 
+        public GameObject[] SpawnablesPool {
+            get {
+                return spawnablesPool;
+            }
+        }
+
         void Awake() {
             if (Instance == null) {//Instance will only ever be equal to the first occurance of this object.
                 Instance = this;
@@ -150,6 +156,20 @@ namespace BaD.Modules.Networking {
             }
 
             return new object[] { viewID, prefabIndex };
+        }
+
+        public int GetSpawnableIndex(GameObject go) {
+            int ind = -1;
+            for (int i = 0; i < spawnablesPool.Length; i++) {
+                if (go == spawnablesPool[i]) {
+                    ind = i;
+                    break;
+                }
+            }
+            if (ind == -1) {
+                Debug.LogErrorFormat("Attempting to find the index of gameobject {0} that has not been added to the spawnables pool.", go.name);
+            }
+            return ind;
         }
 
         private struct NetworkInstance {
