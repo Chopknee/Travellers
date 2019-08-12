@@ -35,6 +35,8 @@ public class Map : MonoBehaviour {
     public bool UpdateInEditor = false;
     public TileManager tileManager;
     public PathfindingGrid pathfinder;
+    [SerializeField]
+    private bool DrawGridGizmos = false;
 
     public bool BlurPath = true;
     [Range(0, 15)]
@@ -290,6 +292,28 @@ public class Map : MonoBehaviour {
             }
         }
         return res;
+    }
+
+    public void OnDrawGizmos () {
+
+        if (tileManager == null || !DrawGridGizmos) { return; }
+        Gizmos.color = Color.red;
+        Vector2 pos = Vector2.zero;
+        for (int x = 0; x < heights.GetLength(0); x++) {
+            for (int y = 0; y < heights.GetLength(1); y++) {
+                pos.x = x;pos.y = y;
+                Tile t = tileManager.GetTile(pos);
+                if (t != null) {
+                    if (t.Blocked) {
+                        Gizmos.color = Color.red;
+                    } else {
+                        Gizmos.color = Color.blue;
+                    }
+                    Gizmos.DrawCube(t.position, Vector3.one);
+                }
+            }
+        }
+        
     }
 
     public static Vector2 GetAverageGradient(float[,] map) {

@@ -65,7 +65,7 @@ namespace BaD.Modules.Terrain {
                -1 - a general error and reset state
                 0 - waiting for the user to click on something on the map.
 
-                //All about moving on the map
+                    All about moving on the map
                 from 0 to 5 - user has clicked on the terrain
                 5 - waiting for pathfinding result
                 from 5 to 6 - path was successfully found, move to state 6 (because this is incremented in a thread, it needs to be called from update)
@@ -78,7 +78,7 @@ namespace BaD.Modules.Terrain {
                 8 - moving player to targeted destination, waiting for path to complete
                 from 7 to -1 - path was completed, resetting for next request
 
-                //All about interacting with something
+                    All about interacting with something
                 from 0 to 10 - interactable was found, show action confirmation gui
                 10 - waiting for interaction confirmation to close
                 from 10 to 11 - action was confirmed, interacting with object
@@ -86,6 +86,12 @@ namespace BaD.Modules.Terrain {
                 11 - waiting for object interaction to complete
                 from 11 to -1 - interaction was completed, resetting for next request
 
+                15 - 20 is for moving closer to interactables
+                Actions now need to deal with getting the player close enough
+                    if the player is close enough skip the move part
+                        else
+                    tell the player they must move to the selected location (as close as possible)
+                    then allow the player to interact
 
          */
 
@@ -102,9 +108,11 @@ namespace BaD.Modules.Terrain {
                     transform.position = map.tileManager.GetTile(terrainPosition).position;
                     state = -1;
                 }
+                return;
             }
 
             if (state == -1) {
+                Debug.Log("Player was put in reset mode.");
                 pointer.SetActive(false);
                 if (lastInteractableClicked != null) {
                     lastInteractableClicked.SetHighlight(false);
@@ -128,7 +136,7 @@ namespace BaD.Modules.Terrain {
                     if (FollowPath()) {
                         //Path is complete!
                         pointer.SetActive(false);
-                        terrainPosition = map.RealWorldToTerrainCoord(transform.position);
+                        terrainPosition = map.RealWorldToTerrainCoord(path.endPoint);
                         state = -1;//Go back to the waiting state.
                     }
                     break;
@@ -140,11 +148,24 @@ namespace BaD.Modules.Terrain {
                         lastInteractableClicked = null;
                     }
                     break;
+                case 16:
+                    actionConfirmationGUI.Show("Move To " + lastInteractableClicked.GetDisplayName(), "Move", Input.mousePosition);
+                    state = 17;
+                    break;
+                case 18:
+                    if (FollowPath()) {
+                        pointer.SetActive(false);
+                        terrainPosition = map.RealWorldToTerrainCoord(path.endPoint);
+                        lastInteractableClicked.SetHighlight(true);
+                        actionConfirmationGUI.Show(lastInteractableClicked.GetActionName(), lastInteractableClicked.GetShortActionName(), Input.mousePosition);
+                        state = 10;
+                    }
+                    break;
             }
         }
 
         public void LookForInteraction () {
-            if (EventSystem.current.IsPointerOverGameObject()) { return; }
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }//Blocks out all clicks on UI components
             //Perform a raycast to see what the mouse was hovering over.
             RaycastHit rch = TryClickTerrain(resolution, mainCamera, map);
             //If there was an object hit
@@ -154,24 +175,37 @@ namespace BaD.Modules.Terrain {
                 //Set the last point clicked
                 lastTerrainPointClicked = rch.point;
                 if (hitObject.tag == "Structure") {
-                    //First question; is the player close enough?
-                        //If so, interact
-                        //If not, attempt to pathfind to the object?
-                        //Then interact
-                    //Then interact with it.
                     IMapInteractable interactable = hitObject.GetComponent<IMapInteractable>();//Interactable objects must inherit from IMapInteractable
-                    if (interactable != null && interactable.TryInteract(this).Interactable) {//if there is an interactable and it is currently interactable.
-                        lastInteractableClicked = interactable;
-                        interactable.SetHighlight(true);
-                        actionConfirmationGUI.Show(interactable.GetActionName(), interactable.GetShortActionName(), Input.mousePosition);
-                        state = 10;
+                    lastInteractableClicked = interactable;
+                    if (interactable != null) {
+                        InteractResult res = interactable.TryInteract(this);
+                        if (res.Interactable) {
+                            //Everything works out, do the thing
+                            interactable.SetHighlight(true);
+                            actionConfirmationGUI.Show(interactable.GetActionName(), interactable.GetShortActionName(), Input.mousePosition);
+                            state = 10;
+                        } else if (!res.Interactable && res.FailReason == InteractResult.Reason.TooFar) {
+                            //Set up for a navigation
+                            Vector2 pos = interactable.GetClosestPoint(this);
+                            if (pos.x == -1) {
+                                state = -1;
+                                Debug.Log("Failed to find navigation for structure " + interactable.GetDisplayName());
+                                return;
+                            }
+                            SetupNav(terrainPosition, pos);
+                            lastTerrainPointClicked = pos;
+                            pointer.transform.position = map.TerrainCoordToRealWorld(pos);
+                            pointer.SetActive(true);
+                            state = 15;
+                        }
                     }
                 } else if (hitObject.tag == "Map") {   
                     Vector2 terrainPoint = map.RealWorldToTerrainCoord(rch.point);
                     if (!map.tileManager.GetTile(terrainPoint).Blocked) {//First, get the tile and make sure we can pathfind to there
                         //Attempt to pathfind.
-                        map.pathfinder.RequestPath(terrainPosition, terrainPoint, map.GetPathfindingTileCost, map.TileIsPassable, true, RequestComplete, true);
-                        pointer.transform.position = lastTerrainPointClicked;
+                        SetupNav(terrainPosition, terrainPoint);
+                        lastTerrainPointClicked = terrainPoint;
+                        pointer.transform.position = map.TerrainCoordToRealWorld(terrainPoint);
                         pointer.SetActive(true);
                         state = 5;
                     }
@@ -179,10 +213,12 @@ namespace BaD.Modules.Terrain {
             }//No object was under the mouse
         }
 
-        public void RequestComplete ( PathResult result ) {
+        public void PathFound ( PathResult result ) {
             //This is technically state 5
+            Debug.Log("Pathfinding returned! " + state);
             if (result.result) {
                 //Path was found!
+                
                 currentPath = result.path;
 
                 List<Vector3> waypoints = new List<Vector3>();
@@ -192,12 +228,17 @@ namespace BaD.Modules.Terrain {
                 if (waypoints.Count > 0) {
                     path = new Path(waypoints.ToArray(), waypoints[0], turnDistance, stoppingDst);
                     pathIndex = 0;
-                    state = 6;
+                    if (state == 5) {
+                        state = 6;
+                    } else if (state == 15) {
+                        state = 16;
+                    }
                 } else {
                     Debug.Log("Something went wrong while pathfinding.", this);
                 }
             } else {
                 //Path was not found!!
+                Debug.Log("Could not find a path.");
                 state = -1;
 
             }
@@ -217,6 +258,12 @@ namespace BaD.Modules.Terrain {
                     //Interact with something
                     lastInteractableClicked.Interact(this);
                     state = 11;
+                } else {
+                    state = -1;
+                }
+            } else if (state == 17) {
+                if (result) {
+                    state = 18;
                 } else {
                     state = -1;
                 }
@@ -271,6 +318,10 @@ namespace BaD.Modules.Terrain {
             //lastY += 
             transform.position = new Vector3(transform.position.x, lastY, transform.position.z);
             return false;
+        }
+
+        public void SetupNav(Vector2 start, Vector2 end) {
+            map.pathfinder.RequestPath(start, end, map.GetPathfindingTileCost, map.TileIsPassable, true, PathFound, true);
         }
 
         public void OnDrawGizmos () {

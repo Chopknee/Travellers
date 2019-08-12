@@ -16,5 +16,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: be66acf4f64e13a4394c1440994c060d, type: 2}
   - {fileID: 11400000, guid: 8bd4da2d35e62fe4aac8f83d7dae71ef, type: 2}
   - {fileID: 11400000, guid: eb81930bf4ee884489b7a6d970c04ef3, type: 2}
-  structureRadius: 6
+  structureRadius: 8
   maximumSpawnAttempts: 20
