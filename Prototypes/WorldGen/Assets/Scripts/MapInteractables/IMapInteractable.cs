@@ -15,16 +15,13 @@ namespace BaD.Modules.Terrain {
         bool InteractionComplete ( Player player );
 
         Vector2 GetClosestPoint ( Player player );
-
+        GameObject GetGameObject();
     }
 
     public class InteractResult {
         //Return some basic information about the interaction
         public bool Interactable { get; private set; }
-        private bool interactable = false;
-
         public enum Reason { None, TooFar, Occupied };
-
         public Reason FailReason { get; private set; }
 
         public InteractResult ( bool canInteract, Reason reason = Reason.None ) {

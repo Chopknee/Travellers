@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 namespace BaD.Modules.Terrain {
     public class Player: MonoBehaviourPunCallbacks {
 
+        public int Actions = 0;
+        public Collection[] actionBonusCollections;
+
         private Camera mainCamera;
         private Vector2 terrainPosition;
 
@@ -42,7 +45,7 @@ namespace BaD.Modules.Terrain {
 
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             //Temporary stuff here.
-            Data = new PlayerData(gameObject);
+            Data = new PlayerData(gameObject, actionBonusCollections);
             Data.Name = PhotonNetwork.NickName;
             Data.gold = 10;
 
@@ -61,41 +64,6 @@ namespace BaD.Modules.Terrain {
         // Update is called once per frame
         public int state = 0;
 
-        /** Since the state machine isn't fully sequential, I will do my best to map the states out here.
-               -1 - a general error and reset state
-                0 - waiting for the user to click on something on the map.
-
-                    All about moving on the map
-                from 0 to 5 - user has clicked on the terrain
-                5 - waiting for pathfinding result
-                from 5 to 6 - path was successfully found, move to state 6 (because this is incremented in a thread, it needs to be called from update)
-                from 5 to -1 - no path was found return to waiting
-                6 - show the action confirmation gui
-                from 6 to 7 - action confirmation gui is showing
-                7 - waiting for action confirmation gui response
-                from 7 to 8 - action was confirmed
-                from 7 to -1 - action was cancelled
-                8 - moving player to targeted destination, waiting for path to complete
-                from 7 to -1 - path was completed, resetting for next request
-
-                    All about interacting with something
-                from 0 to 10 - interactable was found, show action confirmation gui
-                10 - waiting for interaction confirmation to close
-                from 10 to 11 - action was confirmed, interacting with object
-                from 10 to -1 - action was cancelled
-                11 - waiting for object interaction to complete
-                from 11 to -1 - interaction was completed, resetting for next request
-
-                15 - 20 is for moving closer to interactables
-                Actions now need to deal with getting the player close enough
-                    if the player is close enough skip the move part
-                        else
-                    tell the player they must move to the selected location (as close as possible)
-                    then allow the player to interact
-
-         */
-
-
         void Update () {
             if (!photonView.IsMine)
                 return;
@@ -112,7 +80,6 @@ namespace BaD.Modules.Terrain {
             }
 
             if (state == -1) {
-                Debug.Log("Player was put in reset mode.");
                 pointer.SetActive(false);
                 if (lastInteractableClicked != null) {
                     lastInteractableClicked.SetHighlight(false);
@@ -129,7 +96,7 @@ namespace BaD.Modules.Terrain {
 
             switch (state) {
                 case 6:
-                    actionConfirmationGUI.Show("Move Here", "Go", Input.mousePosition);
+                    actionConfirmationGUI.Show("Move Here", "Go", map.TerrainCoordToRealWorld(lastTerrainPointClicked));
                     state = 7;
                     break;
                 case 8:
@@ -149,15 +116,15 @@ namespace BaD.Modules.Terrain {
                     }
                     break;
                 case 16:
-                    actionConfirmationGUI.Show("Move To " + lastInteractableClicked.GetDisplayName(), "Move", Input.mousePosition);
+                    actionConfirmationGUI.Show("Move To " + lastInteractableClicked.GetDisplayName(), "Move", map.TerrainCoordToRealWorld(lastTerrainPointClicked));
                     state = 17;
                     break;
                 case 18:
                     if (FollowPath()) {
                         pointer.SetActive(false);
-                        terrainPosition = map.RealWorldToTerrainCoord(path.endPoint);
                         lastInteractableClicked.SetHighlight(true);
-                        actionConfirmationGUI.Show(lastInteractableClicked.GetActionName(), lastInteractableClicked.GetShortActionName(), Input.mousePosition);
+                        terrainPosition = map.RealWorldToTerrainCoord(path.endPoint);
+                        actionConfirmationGUI.Show(lastInteractableClicked.GetActionName(), lastInteractableClicked.GetShortActionName(), lastInteractableClicked.GetGameObject().transform.position);
                         state = 10;
                     }
                     break;
@@ -182,7 +149,8 @@ namespace BaD.Modules.Terrain {
                         if (res.Interactable) {
                             //Everything works out, do the thing
                             interactable.SetHighlight(true);
-                            actionConfirmationGUI.Show(interactable.GetActionName(), interactable.GetShortActionName(), Input.mousePosition);
+                            
+                            actionConfirmationGUI.Show(interactable.GetActionName(), interactable.GetShortActionName(), interactable.GetGameObject().transform.position);
                             state = 10;
                         } else if (!res.Interactable && res.FailReason == InteractResult.Reason.TooFar) {
                             //Set up for a navigation
@@ -215,7 +183,6 @@ namespace BaD.Modules.Terrain {
 
         public void PathFound ( PathResult result ) {
             //This is technically state 5
-            Debug.Log("Pathfinding returned! " + state);
             if (result.result) {
                 //Path was found!
                 
@@ -249,13 +216,14 @@ namespace BaD.Modules.Terrain {
             if (state == 7) {
                 //Move somewhere
                 if (result) {
+                    Data.ActionsTaken++;
                     state = 8;
                 } else {
                     state = -1;
                 }
             } else if (state == 10) {
                 if (result) {
-                    //Interact with something
+                    Data.ActionsTaken++;
                     lastInteractableClicked.Interact(this);
                     state = 11;
                 } else {
@@ -263,6 +231,7 @@ namespace BaD.Modules.Terrain {
                 }
             } else if (state == 17) {
                 if (result) {
+                    Data.ActionsTaken++;
                     state = 18;
                 } else {
                     state = -1;
@@ -332,3 +301,37 @@ namespace BaD.Modules.Terrain {
 
     }
 }
+
+/** Since the state machine isn't fully sequential, I will do my best to map the states out here.
+       -1 - a general error and reset state
+        0 - waiting for the user to click on something on the map.
+
+            All about moving on the map
+        from 0 to 5 - user has clicked on the terrain
+        5 - waiting for pathfinding result
+        from 5 to 6 - path was successfully found, move to state 6 (because this is incremented in a thread, it needs to be called from update)
+        from 5 to -1 - no path was found return to waiting
+        6 - show the action confirmation gui
+        from 6 to 7 - action confirmation gui is showing
+        7 - waiting for action confirmation gui response
+        from 7 to 8 - action was confirmed
+        from 7 to -1 - action was cancelled
+        8 - moving player to targeted destination, waiting for path to complete
+        from 7 to -1 - path was completed, resetting for next request
+
+            All about interacting with something
+        from 0 to 10 - interactable was found, show action confirmation gui
+        10 - waiting for interaction confirmation to close
+        from 10 to 11 - action was confirmed, interacting with object
+        from 10 to -1 - action was cancelled
+        11 - waiting for object interaction to complete
+        from 11 to -1 - interaction was completed, resetting for next request
+
+        15 - 20 is for moving closer to interactables
+        Actions now need to deal with getting the player close enough
+            if the player is close enough skip the move part
+                else
+            tell the player they must move to the selected location (as close as possible)
+            then allow the player to interact
+
+ */

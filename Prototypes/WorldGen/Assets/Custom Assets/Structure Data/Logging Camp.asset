@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6f39671f39f0046be5f5594c9a24b6, type: 3}
-  m_Name: Temple
+  m_Name: Logging Camp
   m_EditorClassIdentifier: 
-  autoUpdate: 0
-  texelSize: {x: 14, y: 14}
-  radius: 9
+  radius: 7
   maximumSlope: 0.744
   alignToSlope: 1
   flattenTerrain: 1
-  numberToSpawn: 5
+  numberToSpawn: 1
   structurePrefabs:
-  - {fileID: 4328292645622524436, guid: 3abce7e7b74a41e48afeb26c82d83df8, type: 3}
+  - {fileID: 9077271668174930115, guid: e2673504ed60742409a2ac800b84656c, type: 3}

@@ -10,6 +10,7 @@ namespace BaD.Modules.Terrain {
 
         public ShopData shopData;
         public string DisplayName;
+        public float structureRadius;
 
         [HideInInspector]
         public NetInventory shopInventory;
@@ -36,6 +37,7 @@ namespace BaD.Modules.Terrain {
             if (PhotonNetwork.IsMasterClient) {
                 Invoke("AddStartItems", 0.1f);
             }
+            structureRadius = GetComponent<StructureDataLink>().structureData.radius;
         }
 
         private void AddStartItems() {
@@ -71,7 +73,16 @@ namespace BaD.Modules.Terrain {
         }
 
         public InteractResult TryInteract ( Player player ) {
-            return new InteractResult(true);
+            Map map = OverworldControl.Instance.Map;
+            Vector2 playerGP = map.RealWorldToTerrainCoord(player.transform.position);
+            Vector2 shopGP = map.RealWorldToTerrainCoord(transform.position);
+            float rad = map.terrainData.uniformScale * structureRadius;
+            float dist = ( playerGP - shopGP ).sqrMagnitude - ( rad * rad );
+            //Check if the player is close enough to interact.
+            if (dist <= 0) {
+                return new InteractResult(true);
+            }
+            return new InteractResult(false, InteractResult.Reason.TooFar);
         }
 
         public void SetHighlight ( bool state ) {
@@ -106,13 +117,44 @@ namespace BaD.Modules.Terrain {
             return "Trade";
         }
 
+        public void OnDrawGizmos () {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, OverworldControl.Instance.Map.terrainData.uniformScale * structureRadius);
+        }
+
         public void OnPhotonSerializeView ( PhotonStream stream, PhotonMessageInfo info ) {
             if (stream.IsWriting) {//Only send the data if the instance is miine????
                 stream.SendNext(DisplayName);
+                stream.SendNext(structureRadius);
             } else {
                 //if ()
                 DisplayName = (string) stream.ReceiveNext();
+                structureRadius = (float) stream.ReceiveNext();
+                
             }
+        }
+
+        public Vector2 GetClosestPoint ( Player player ) {
+            float count = (structureRadius + 1) * 4f;
+            float step = ( Mathf.PI * 4f ) / count;
+            float rads = 0;
+            Vector2 gp = OverworldControl.Instance.Map.RealWorldToTerrainCoord(transform.position);
+            for (int i = 0; i < count; i++) {
+                float x = (structureRadius + 1) * Mathf.Cos(rads);
+                float y = (structureRadius + 1) * Mathf.Sin(rads);
+                rads += step;
+                Tile t = OverworldControl.Instance.Map.tileManager.GetTile(gp + new Vector2(x, y));
+                if (t != null) {
+                    if (!t.Blocked) {
+                        return t.gridPosition;
+                    }
+                }
+            }
+            return Vector3.one * -1;
+        }
+
+        public GameObject GetGameObject () {
+            return gameObject;
         }
     }
 }

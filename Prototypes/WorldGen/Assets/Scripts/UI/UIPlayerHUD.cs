@@ -20,6 +20,9 @@ namespace BaD.UI.DumpA {
         [SerializeField]
 #pragma warning disable 0649
         private Text PlayerGoldText;
+        [SerializeField]
+#pragma warning disable 0649
+        private Text PlayerActions;
 
         public PlayerData associatedPlayer;
 
@@ -37,6 +40,7 @@ namespace BaD.UI.DumpA {
                     if (associatedPlayer != null) {
                         associatedPlayer.OnPlayerGoldChanged += OnGoldChanged;
                         associatedPlayer.OnPlayernameChanged += OnNameChanged;
+                        associatedPlayer.OnActionsTakenChanged += OnActionsChanged;
                         OnGoldChanged(associatedPlayer);
                         OnNameChanged(associatedPlayer);
                         MenuButton.onClick.AddListener(OnMenuButtonClicked);
@@ -52,6 +56,10 @@ namespace BaD.UI.DumpA {
 
         void OnNameChanged(PlayerData player) {
             PlayerNameText.text = player.Name;
+        }
+        
+        void OnActionsChanged(PlayerData player) {
+            PlayerActions.text = string.Format("Remaining Actions\n {0} of {1}", player.MaxActions - player.ActionsTaken, player.MaxActions);
         }
 
         void OnMenuButtonClicked() {

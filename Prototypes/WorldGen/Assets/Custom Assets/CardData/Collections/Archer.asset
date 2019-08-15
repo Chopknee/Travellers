@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35674389b2fb51a40bdeb0fa3bb4a921, type: 3}
   m_Name: Archer
   m_EditorClassIdentifier: 
+  autoUpdate: 0
   collectionName: Archer
   displayColor: {r: 0.7075472, g: 0.19023673, b: 0.19023673, a: 1}

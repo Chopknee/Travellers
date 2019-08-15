@@ -58,5 +58,9 @@ namespace BaD.Modules.Terrain {
         public Vector2 GetClosestPoint ( Player player ) {
             throw new System.NotImplementedException();
         }
+
+        public GameObject GetGameObject () {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using BaD.Modules.Networking;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerData {
-
-    public static int MaxBaseInventory = 10;
 
     public GameObject playerGameobjectRef { get; private set; }
     public NetInventory Inventory {
@@ -18,8 +17,18 @@ public class PlayerData {
     public delegate void PlayerNameChanged(PlayerData player);
     public PlayerNameChanged OnPlayernameChanged;
 
-    public PlayerData(GameObject playerRef) {
+    public delegate void PlayerActionsTakenChanged ( PlayerData player );
+    public PlayerActionsTakenChanged OnActionsTakenChanged;
+
+    private string name;
+    private int takenActions = 0;
+    private int heldGold = 0;
+    private Collection[] actionIncreaseFilter;
+
+    public PlayerData(GameObject playerRef, Collection[] actionIncreaseFilter) {
         playerGameobjectRef = playerRef;
+        Inventory.OnItemsUpdated += OnInventoryChanged;
+        this.actionIncreaseFilter = actionIncreaseFilter;
     }
 
     //Generic class holding information about a player.
@@ -28,30 +37,53 @@ public class PlayerData {
             return heldGold;
         }
         set {
-            //Do some extra things here I guess.
-            OnPlayerGoldChanged?.Invoke(this);
             heldGold = value;
+            OnPlayerGoldChanged?.Invoke(this);
         }
     }
-    private int heldGold = 0;
-
-    public int maxInventory {
-        get {
-            return MaxBaseInventory;
-        }
-    }
-
+    
     public string Name {
         get {
             return name;
         }
         set {
-            OnPlayernameChanged?.Invoke(this);
             name = value;
+            OnPlayernameChanged?.Invoke(this);
+            
         }
     }
 
-    private string name;
+    private int maxActions = 0;
 
+    public int MaxActions {
+        get {
+            Item[] filtered = BaD.Modules.Inventory.Inventory.GetItemsByGroup(Inventory.Items, actionIncreaseFilter);
+
+            if (2 + filtered.Length > maxActions) {
+                maxActions = 2 + filtered.Length;
+            }
+            return maxActions;
+        }
+    }
+
+    public int ActionsTaken {
+        get {
+            return takenActions;
+        }
+        set {
+            takenActions = value;
+            OnActionsTakenChanged?.Invoke(this);
+        }
+    }
+    
+    private void OnInventoryChanged( int originalRequestID, Item[] addedItems, Item[] removedItems ) {
+        OnActionsTakenChanged?.Invoke(this);
+    }
+
+    public void ResetTurn() {
+        takenActions = 0;
+        maxActions = 0;
+        OnActionsTakenChanged?.Invoke(this);
+    }
 
 }

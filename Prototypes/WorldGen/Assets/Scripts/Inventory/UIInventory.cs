@@ -1,4 +1,5 @@
 ﻿using BaD.Chopknee.Utilities;
+using BaD.Modules.Inventory;
 using BaD.Modules.Networking;
 using System.Collections;
 using System.Collections.Generic;

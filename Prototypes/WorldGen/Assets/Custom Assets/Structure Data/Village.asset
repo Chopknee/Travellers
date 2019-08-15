@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6f39671f39f0046be5f5594c9a24b6, type: 3}
-  m_Name: Market
+  m_Name: Village
   m_EditorClassIdentifier: 
-  autoUpdate: 0
-  texelSize: {x: 6, y: 14}
-  radius: 6
-  maximumSlope: 0.037
-  alignToSlope: 0
+  radius: 9
+  maximumSlope: 0.106
+  alignToSlope: 1
   flattenTerrain: 1
-  numberToSpawn: 5
+  numberToSpawn: 1
   structurePrefabs:
-  - {fileID: 7271999018955811790, guid: ea09cd268aeba62488b28dda2f5c0abc, type: 3}
+  - {fileID: 9077271668174930115, guid: 8cf05f01347095846b3928036e848fab, type: 3}
