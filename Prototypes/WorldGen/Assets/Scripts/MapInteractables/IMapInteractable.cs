@@ -1,4 +1,6 @@
-﻿namespace BaD.Modules.Terrain {
+﻿using UnityEngine;
+
+namespace BaD.Modules.Terrain {
     public interface IMapInteractable {
         //Defines an object that can be interacted with on the map
 
@@ -12,19 +14,19 @@
 
         bool InteractionComplete ( Player player );
 
+        Vector2 GetClosestPoint ( Player player );
+        GameObject GetGameObject();
     }
 
     public class InteractResult {
         //Return some basic information about the interaction
-        public bool Interactable {
-            get {
-                return interactable;
-            }
-        }
-        private bool interactable = false;
+        public bool Interactable { get; private set; }
+        public enum Reason { None, TooFar, Occupied };
+        public Reason FailReason { get; private set; }
 
-        public InteractResult ( bool canInteract ) {
-            interactable = canInteract;
+        public InteractResult ( bool canInteract, Reason reason = Reason.None ) {
+            Interactable = canInteract;
+            FailReason = reason;
         }
 
 

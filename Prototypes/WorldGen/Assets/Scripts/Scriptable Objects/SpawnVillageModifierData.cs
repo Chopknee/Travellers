@@ -7,43 +7,60 @@ using UnityEngine;
 namespace BaD.Modules.Terrain.Modifiers {
     [CreateAssetMenu()]
     public class SpawnVillageModifierData: AModifierData {
-
+        public Structure villageCenter;
         public Structure[] structures;
-        private Map mapGen;
-        private TileManager tileManager;
         public float structureRadius;
         private List<GameObject> instantiatedStructures;
 
         public int maximumSpawnAttempts = 20;
 
+        private Vector2 sampleRegionSize;
+        private int seed;
+        private float cellSize;
+        List<Vector2> points;
+        List<Vector2> spawnPoints;
+        int[,] poissonGrid;
         public override void Execute ( Map map ) {
-            mapGen = map;
-            tileManager = mapGen.tileManager;
 
-            //Using a poisson style distrobution, spawn in a village.
+            TileManager tileManager = map.tileManager;
+            sampleRegionSize = new Vector2(map.mapChunkSize, map.mapChunkSize);
+            seed = map.noiseData.seed + 1;
+            cellSize = structureRadius / Mathf.Sqrt(2);
+
+            poissonGrid = new int[Mathf.CeilToInt(sampleRegionSize.x / cellSize), Mathf.CeilToInt(sampleRegionSize.y / cellSize)];
+            points = new List<Vector2>();
+            spawnPoints = new List<Vector2>();
+
+            bool spawned = false;
+            GameObject centralVillageGameObject;
+            Vector2 villageCenterPosition = Vector2.zero;
+            int attempts = 0;
+
+            while (spawned != true) {
+                villageCenterPosition = new Vector2(Noise.GetRandomRange(seed, sampleRegionSize.x), Noise.GetRandomRange(seed, sampleRegionSize.y));
+                if (( centralVillageGameObject = TrySpawn(villageCenterPosition, this.villageCenter, map)) != null) {
+                    spawned = true;
+                }
+                attempts++;
+                if (attempts > maximumSpawnAttempts) {
+                    Debug.LogError("Could not spawn a village, the maximum number of spawn attempts has been exceeded.");
+                    return;
+                }
+            }
+
             //  Generate a list of buildings that need to be spawned in
             List<Structure> structuresToSpawn = new List<Structure>();
             foreach (Structure s in structures) {
                 for (int i = 0; i < s.numberToSpawn; i++) {
-                    //Selects a random building prefab to add into this list. (Each building will be guarenteed to be spawned)
                     structuresToSpawn.Add(s);
                 }
             }
 
-            int attempts = 0;
-            //I want this to be independent of other things, so create a new seed.
-            int seed = map.noiseData.seed + 1;
-            Vector2 sampleRegionSize = new Vector2(map.mapChunkSize, map.mapChunkSize);
+            attempts = 0;
+
             while (structuresToSpawn.Count > 0 || attempts < maximumSpawnAttempts) {
-                //Spawning in buildings.
 
-                //This is where the poisson disk should be set up.
-                float cellSize = structureRadius / Mathf.Sqrt(2);
-                int[,] poissonGrid = new int[Mathf.CeilToInt(sampleRegionSize.x / cellSize), Mathf.CeilToInt(sampleRegionSize.y / cellSize)];
-                List<Vector2> points = new List<Vector2>();
-                List<Vector2> spawnPoints = new List<Vector2>();
-
-                spawnPoints.Add(new Vector2(Noise.GetRandomRange(seed, sampleRegionSize.x), Noise.GetRandomRange(seed, sampleRegionSize.y)));
+                spawnPoints.Add(villageCenterPosition);
                 while (spawnPoints.Count > 0 && structuresToSpawn.Count > 0) {
                     int spawnIndex = Noise.GetRandomRange(seed, 0, spawnPoints.Count);
 
@@ -55,50 +72,13 @@ namespace BaD.Modules.Terrain.Modifiers {
                         Vector2 candidate = spawnCenter + dir * Noise.GetRandomRange(seed, structureRadius, 2 * structureRadius);
 
                         //Get a random structure to spawn from the list.
-                        int structureIndex = Mathf.FloorToInt(Noise.GetRandomRange(map.noiseData.seed, structuresToSpawn.Count));
-                        //Get a random rotation
-                        float rotation = Noise.GetRandomRange(map.noiseData.seed, 360);
-                        Tile[,] tilesUnderStructure = map.GetTilesFromRadius(candidate, structuresToSpawn[structureIndex].radius);
-                        if (IsValid(candidate, sampleRegionSize, cellSize, structureRadius, points, poissonGrid) && IsSlopeGood(tilesUnderStructure, map, structuresToSpawn[structureIndex])) {
-                            //Extra conditions include if the gradient/slope of the location is able to support the structure
-                            //Also need to figure out how the mapping converts
+                        int structureIndex = Mathf.FloorToInt(Noise.GetRandomRange(seed, structuresToSpawn.Count));
+                        GameObject go;
+                        if ((go = TrySpawn(candidate, structuresToSpawn[structureIndex], map)) != null) {
                             points.Add(candidate);
                             spawnPoints.Add(candidate);
                             poissonGrid[(int) ( candidate.x / cellSize ), (int) ( candidate.y / cellSize )] = points.Count;
                             candidateAccepted = true;
-                            //Create the structure at the proper position
-                            GameObject prefab = structuresToSpawn[structureIndex].GetRandomPrefab(map.noiseData.seed);
-                            GameObject building = null;
-
-                            if (prefab.GetComponent<PhotonView>() != null) {
-                                //Then we need to execute a photon instantiate!
-                                if (PhotonNetwork.IsMasterClient) {
-                                    building = NetworkInstantiation.Instance.Instantiate(prefab, false, Photon.Realtime.ReceiverGroup.All, Photon.Realtime.EventCaching.AddToRoomCache);
-                                }
-                            } else {
-                                building = Instantiate(prefab);
-                            }
-
-                            if (building != null) {
-                                building.transform.SetParent(map.transform);
-                                building.transform.position = map.TerrainCoordToRealWorld(candidate);
-                                building.transform.rotation = Quaternion.Euler(new Vector3(0, rotation, 0));
-                            }
-
-                            //Flatten out the terrain under this structure
-
-                            float h = tileManager.tiles[Mathf.RoundToInt(candidate.x), Mathf.RoundToInt(candidate.y)].unscaledHeight;
-
-
-                            foreach (Tile t in tilesUnderStructure) {
-                                if (t == null)
-                                    continue;
-                                t.Blocked = true;
-                                map.pathMap[(int) t.gridPosition.x, (int) t.gridPosition.y] = 1;
-                                t.unscaledHeight = h;
-                            }
-
-                            //Remove the structure from the spawn list.
                             structuresToSpawn.RemoveAt(structureIndex);
                             break;
                         }
@@ -109,6 +89,42 @@ namespace BaD.Modules.Terrain.Modifiers {
                 }
                 attempts++;
             }
+        }
+
+        public GameObject TrySpawn(Vector2 position, Structure structure, Map map) {
+            //Random rotation of the structure
+            float rotation = Noise.GetRandomRange(map.noiseData.seed, 360);
+            //An array filled with all tiles underneath this structure
+            Tile[,] tilesUnderStructure = map.GetTilesFromRadius(position, structure.radius);
+            //Checking if the position selected is a valid place to spawn this structure
+            if (IsValid(position, sampleRegionSize, cellSize, structureRadius, points, poissonGrid) && IsSlopeGood(tilesUnderStructure, map, structure)) {
+                //Instantiate a random prefab of this structure
+                GameObject building = Instantiate(structure.GetRandomPrefab(seed));                
+                building.transform.SetParent(map.transform);
+                Vector2 exactoPositiono = new Vector2(Mathf.Round(position.x), Mathf.Round(position.y));
+                building.transform.position = map.TerrainCoordToRealWorld(exactoPositiono);
+                building.transform.rotation = Quaternion.Euler(new Vector3(0, rotation, 0));
+                //Give the structure a link to it's spawn information
+                building.AddComponent<StructureDataLink>().structureData = structure;
+
+                //Get the height of the tile directly under this structure
+                float h = map.tileManager.tiles[Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)].unscaledHeight;
+
+                //Go through each tile under this structure and flatten it out.
+                foreach (Tile t in tilesUnderStructure) {
+                    if (t == null)
+                        continue;
+                    //Also make sure the tile cannot be travelled in
+                    t.Blocked = true;
+                    //Make the space under the structure into a path
+                    map.pathMap[(int) t.gridPosition.x, (int) t.gridPosition.y] = 1;
+                    t.unscaledHeight = h;
+                }
+
+                //Remove the structure from the spawn list.
+                return building;
+            }
+            return null;
         }
 
         private readonly float PI2 = Mathf.PI * 2;
@@ -123,7 +139,7 @@ namespace BaD.Modules.Terrain.Modifiers {
             }
         }
 
-        //For the poisson distrobusion
+        //For the poisson distribution
         bool IsValid ( Vector2 candidate, Vector2 sampleRegionSize, float cellsize, float radius, List<Vector2> points, int[,] grid ) {
             if (candidate.x >= 0 && candidate.x < sampleRegionSize.x && candidate.y >= 0 && candidate.y < sampleRegionSize.y) {
                 int cellX = (int) ( candidate.x / cellsize );

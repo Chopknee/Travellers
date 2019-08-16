@@ -35,6 +35,8 @@ public class Map : MonoBehaviour {
     public bool UpdateInEditor = false;
     public TileManager tileManager;
     public PathfindingGrid pathfinder;
+    [SerializeField]
+    private bool DrawGridGizmos = false;
 
     public bool BlurPath = true;
     [Range(0, 15)]
@@ -160,34 +162,35 @@ public class Map : MonoBehaviour {
     }
 
     public float GetHeight(Vector2 pos) {
-        return heights[(int) pos.x, (int) pos.y];
+        return heights[Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y)];
     }
 
     public void SetHeight(Vector2 pos, float value) {
-        heights[(int) pos.x, (int) pos.y] = value;
+        heights[Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y)] = value;
     }
 
     public float GetScaledHeight(Vector2 pos) {
-        float height = heights[(int) pos.x, (int) pos.y];
+        float height = heights[Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y)];
         height = terrainData.meshHeightCurve.Evaluate(height) * height * heightScale;
         return height;
     }
 
     public void SetScaledHeight ( Vector2 pos, float value ) {
-        heights[(int) pos.x, (int) pos.y] = value;
+        heights[Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y)] = value;
     }
 
     public Tile[,] GetTilesFromRadius(Vector2 center, float radius) {
+        int radiusRounded = Mathf.RoundToInt(radius);
         float radSquared = radius * radius;
-        Tile[,] tiles = new Tile[(int)radius*2+1, (int)radius*2+1];//There is always a center point
-        for (int x = -(int)radius; x < (int)radius+1; x ++) {
-            for (int y = -(int)radius; y < (int)radius+1; y++) {
+        Tile[,] tiles = new Tile[radiusRounded * 2+1, radiusRounded * 2 + 1];//There is always a center point
+        for (int x = -radiusRounded; x < radiusRounded + 1; x ++) {
+            for (int y = -radiusRounded; y < radiusRounded + 1; y++) {
                 Tile t = tileManager.GetTile(new Vector2(center.x + x, center.y + y));
                 if (t != null) {//If in range of the array.
                     Vector2 pos = center + new Vector2(x, y);
                     pos = pos - center;
                     if (pos.sqrMagnitude <= radSquared)
-                        tiles[x+(int)radius, y+(int)radius] = t;
+                        tiles[x + radiusRounded, y + radiusRounded] = t;
                 }
             }
         }
@@ -197,7 +200,7 @@ public class Map : MonoBehaviour {
     public Tile[,] GetTilesTransformed(Vector2 position, Vector2 center, Vector2 size, float angle) {
         //The rotation matrix
         float[,] rotationMatrix = Get2DRotationMatrix(angle);
-        Tile[,] rotatedHeights = new Tile[(int) size.x, (int) size.y];
+        Tile[,] rotatedHeights = new Tile[Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y)];
         for (int x = 0; x < size.x; x ++) {
             for (int y = 0; y < size.y; y++) {
                 //Do the matrix math here. It is entirely possible to get invalid coordinates from this
@@ -216,13 +219,13 @@ public class Map : MonoBehaviour {
     public float[,] GetHeightsTransformed(Vector2 position, Vector2 center, Vector2 size, float angle) {
         //The rotation matrix
         float[,] rotationMatrix = Get2DRotationMatrix(angle);
-        float[,] rotatedHeights = new float[(int) size.x, (int) size.y];
+        float[,] rotatedHeights = new float[Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y)];
         for (int x = 0; x < size.x; x ++) {
             for (int y = 0; y < size.y; y++) {
                 //Do the matrix math here. It is entirely possible to get invalid coordinates from this
                 Vector2 rotatedCoord = position + GetRotatedCoords(new Vector2(x, y)+center, rotationMatrix);
                 if (rotatedCoord.x > -1 && rotatedCoord.x < heights.GetLength(0) && rotatedCoord.y > -1 && rotatedCoord.y < heights.GetLength(1)) {
-                    rotatedHeights[x, y] = heights[(int)rotatedCoord.x, (int)rotatedCoord.y];
+                    rotatedHeights[x, y] = heights[Mathf.RoundToInt(rotatedCoord.x), Mathf.RoundToInt(rotatedCoord.y)];
                 } else {
                     //For any values outside the edge of the map
                     rotatedHeights[x, y] = -1;
@@ -290,6 +293,28 @@ public class Map : MonoBehaviour {
             }
         }
         return res;
+    }
+
+    public void OnDrawGizmos () {
+
+        if (tileManager == null || !DrawGridGizmos) { return; }
+        Gizmos.color = Color.red;
+        Vector2 pos = Vector2.zero;
+        for (int x = 0; x < heights.GetLength(0); x++) {
+            for (int y = 0; y < heights.GetLength(1); y++) {
+                pos.x = x;pos.y = y;
+                Tile t = tileManager.GetTile(pos);
+                if (t != null) {
+                    if (t.Blocked) {
+                        Gizmos.color = Color.red;
+                    } else {
+                        Gizmos.color = Color.blue;
+                    }
+                    Gizmos.DrawCube(t.position, Vector3.one);
+                }
+            }
+        }
+        
     }
 
     public static Vector2 GetAverageGradient(float[,] map) {

@@ -54,5 +54,13 @@ namespace BaD.Modules.Terrain {
         public InteractResult TryInteract ( Player player ) {
             return new InteractResult(true);
         }
+
+        public Vector2 GetClosestPoint ( Player player ) {
+            throw new System.NotImplementedException();
+        }
+
+        public GameObject GetGameObject () {
+            throw new System.NotImplementedException();
+        }
     }
 }

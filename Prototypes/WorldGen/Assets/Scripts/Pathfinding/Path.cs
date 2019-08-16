@@ -7,11 +7,13 @@ public class Path {
     public readonly Line[] turnBoundaries;
     public readonly int finishLineIndex;
     public readonly int slowDownIndex;
+    public readonly Vector3 endPoint;
 
     public Path(Vector3[] waypoints, Vector3 startPos, float turnDst, float stoppingDst) {
         lookPoints = waypoints;
         turnBoundaries = new Line[lookPoints.Length];
         finishLineIndex = turnBoundaries.Length - 1;
+        endPoint = waypoints[waypoints.Length - 1];
 
         Vector2 previousPoint = V3ToV2(startPos);
         for (int i = 0; i < lookPoints.Length; i++) {

@@ -25,6 +25,7 @@ namespace BaD.Modules.Networking {
         private int[] AcceptedRequests;
         private int lastRequestIndex = 0;
 
+        //A special data type that is used for the messaging class
         public static bool RegisteredMM = false;
 
         public int ViewID {
@@ -37,7 +38,7 @@ namespace BaD.Modules.Networking {
         }
 
 
-        public void Awake () {
+        public virtual void Awake () {
             AcceptedRequests = new int[RequestNumberCacheLength];
             for (int i = 0; i < AcceptedRequests.Length; i++) {
                 AcceptedRequests[i] = -1;
@@ -86,7 +87,7 @@ namespace BaD.Modules.Networking {
 
         public abstract void MessageReceived ( object[] messageData );
 
-        public bool AcceptRequest ( int requestNumber ) {
+        private bool AcceptRequest ( int requestNumber ) {
             foreach (int req in AcceptedRequests) {
                 if (requestNumber == req) {
                     return false;//This request was already accepted.

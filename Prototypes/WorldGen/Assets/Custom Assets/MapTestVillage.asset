@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80c4d3a1908b024b872053ffe4df7c3, type: 3}
   m_Name: MapTestVillage
   m_EditorClassIdentifier: 
+  villageCenter: {fileID: 11400000, guid: e639630e0f29cd4489ebe414046de8e7, type: 2}
   structures:
-  - {fileID: 11400000, guid: be66acf4f64e13a4394c1440994c060d, type: 2}
-  - {fileID: 11400000, guid: 8bd4da2d35e62fe4aac8f83d7dae71ef, type: 2}
-  - {fileID: 11400000, guid: eb81930bf4ee884489b7a6d970c04ef3, type: 2}
-  structureRadius: 6
+  - {fileID: 11400000, guid: a6349756571f31e45bcb581ae47d9576, type: 2}
+  - {fileID: 11400000, guid: 6236ea38c9496d847bb9f7b6ba87d639, type: 2}
+  structureRadius: 15
   maximumSpawnAttempts: 20

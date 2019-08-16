@@ -78,9 +78,9 @@ namespace BaD.Modules {
                 Instance = this;
                 if (PhotonNetwork.IsMasterClient) {
                     //Only the master should spawn an instance of the map. (All other players will spawn this automatically thanks to the network.)
-                    NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false, ReceiverGroup.Others, EventCaching.AddToRoomCache);
+                    NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
                 }
-                LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true, ReceiverGroup.Others, EventCaching.AddToRoomCache);
+                LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
             }
         }
     }

@@ -14,23 +14,25 @@ public class ActionConfirmation : MonoBehaviour {
     public Button btnCancel;
 
     public RectTransform baseTransform;
+    private Vector3 worldPos;
 
     public void Start() {
         gameObject.SetActive(false);
     }
 
-    public void Show(string longText, string shortText, Vector2 pos) {
+    public void Show(string longText, string shortText, Vector3 pos) {
         gameObject.SetActive(true);
         txtShortText.text = shortText;
         txtLongText.text = longText;
         btnConfirm.onClick.AddListener(Confirm);
         btnCancel.onClick.AddListener(Cancel);
-        baseTransform.position = pos;
+        baseTransform.position = Camera.main.WorldToScreenPoint(pos);
+        worldPos = pos;
     }
 
     public void Update() {
         //While active, keep the dialog on screen and locked to it's relative position
-        
+        baseTransform.position = Camera.main.WorldToScreenPoint(worldPos);
     }
 
     public void Confirm() {

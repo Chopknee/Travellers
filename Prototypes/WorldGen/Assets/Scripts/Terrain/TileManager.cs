@@ -34,18 +34,20 @@ public class TileManager {
             //Invalid position.
             throw new IndexOutOfRangeException("Specified texel coordinates is outside of the valid range." + position + " " + size);
         }
-        Tile[,] texel = new Tile[(int) size.x, (int) size.y];
+        Tile[,] texel = new Tile[Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y)];
         for (int x = 0; x < size.x; x++) {
             for (int y = 0; y < size.y; y++) {
-                texel[x, y] = tiles[(int) position.x + x, (int) position.y + y];
+                texel[x, y] = tiles[Mathf.RoundToInt(position.x) + x, Mathf.RoundToInt(position.y) + y];
             }
         }
         return texel;
     }
 
     public Tile GetTile(Vector2 position) {
-        if ((int) position.x >= 0 && (int)position.x < tiles.GetLength(0) && (int) position.y >= 0 && (int)position.y < tiles.GetLength(1)) {
-            return tiles[(int) position.x, (int) position.y];
+        int x = Mathf.RoundToInt(position.x);
+        int y = Mathf.RoundToInt(position.y);
+        if (x >= 0 && x < tiles.GetLength(0) && y >= 0 && y < tiles.GetLength(1)) {
+            return tiles[x, y];
         }
         return null;
     }
