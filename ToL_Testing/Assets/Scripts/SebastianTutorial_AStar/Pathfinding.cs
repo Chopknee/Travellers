@@ -18,7 +18,6 @@ public class Pathfinding : MonoBehaviour
 
     private void Awake()
     {
-        
         r1 = Mathf.Round(Random.Range(3, 6));
         r2 = Mathf.Round(Random.Range(5, 9));
         grid = GetComponent<Grid>();
@@ -50,17 +49,11 @@ public class Pathfinding : MonoBehaviour
 
         startNode.start = true;
         targetNode.end = true;
-        
-        
-        
 
         while (openSet.Count > 0)
         {
             currentRoomCount = openSet.Count;
             Node currentNode = openSet[0];
-
-            
-            
 
             for (int i = 1; i < openSet.Count; i++)
             {
@@ -116,9 +109,6 @@ public class Pathfinding : MonoBehaviour
                     }
                 }
             }
-
-            
-
         }
     }
 
@@ -147,9 +137,9 @@ public class Pathfinding : MonoBehaviour
             {
                 //destroy the current gameobject that currentnode is referencing
                 Destroy(currentNode.room);
-                
 
-                currentNode.room = Instantiate(rooms.rooms[Random.Range(0, rooms.rooms.Length)], currentNode.worldPosition, Quaternion.identity);
+                //currentNode.room.transform.localRotation = ;
+                currentNode.room = Instantiate(rooms.rooms[Random.Range(0, rooms.rooms.Length)], currentNode.worldPosition, Quaternion.Euler(currentNode.rotation));
 
 
                 currentNode.dungeonTile = true;

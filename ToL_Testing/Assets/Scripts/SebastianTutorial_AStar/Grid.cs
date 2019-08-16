@@ -33,8 +33,9 @@ public class Grid : MonoBehaviour
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 bool start = false, end = false;
-                
-                grid[x, y] = new Node(walkable, worldPoint, x, y, 0, start, end); // GENERATING NODE HERE, default direction of north.
+                int[] rots = { 0, 90, 180, 360 };
+                int rS = (Random.Range(0, 2) - 1) * rots[Mathf.RoundToInt(Random.Range(0, rots.Length))];
+                grid[x, y] = new Node(walkable, worldPoint, new Vector3(0, rS, 0), x, y, 0, start, end); // GENERATING NODE HERE, default direction of north.
 
             }
         }
