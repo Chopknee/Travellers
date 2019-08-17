@@ -63,14 +63,8 @@ public class PlayerMovement : MonoBehaviour
 
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layer_mask))
                 {
-                    string t = hit.collider.transform.root.tag;
-                    string[] tSplit = { };
-                    if (t.Contains("Untagged"))
-                    {
-                        tSplit = t.Split(' ');
-
-                    }
-                    if (t.Contains("Room"))
+                    string t = hit.collider.tag;
+                    if (t == ("Room"))
                     {
 
                         Debug.Log("Found a room...?");

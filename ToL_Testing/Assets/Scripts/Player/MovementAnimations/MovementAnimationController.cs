@@ -22,7 +22,7 @@ public class MovementAnimationController : MonoBehaviour
 
     private void Start()
     {
-        if (transform.root.CompareTag("Player"))
+        if (transform.CompareTag("Player"))
             anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         else
             anim = transform.GetChild(0).GetComponent<Animator>();
@@ -34,7 +34,7 @@ public class MovementAnimationController : MonoBehaviour
     void FixedUpdate()
     {
 
-        speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
+        if(transform.CompareTag("Player")) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
         anim.SetFloat("Runspeed", speed);
 
         //anim.speed = speed;
