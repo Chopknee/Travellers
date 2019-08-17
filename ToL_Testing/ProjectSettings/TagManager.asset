@@ -14,6 +14,7 @@ TagManager:
   - DestroyerRoom
   - Room
   - PortalOut
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - FXPost
   - Wall
   - Unwalkable
-  - 
+  - Enemy
   - 
   - 
   - 

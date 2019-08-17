@@ -22,7 +22,10 @@ public class MovementAnimationController : MonoBehaviour
 
     private void Start()
     {
-        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        if (transform.root.CompareTag("Player"))
+            anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        else
+            anim = transform.GetChild(0).GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -30,14 +33,22 @@ public class MovementAnimationController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        speed = agent.velocity.normalized.magnitude;
 
-        if (agent.isStopped || agent.velocity.magnitude < .9f)
-        {
-            nextState = state.Idle;
-        }
-        else nextState = state.Walk;
-        
+        speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
+        anim.SetFloat("Runspeed", speed);
+
+        //anim.speed = speed;
+        //if (agent.isStopped || speed < .1f)
+        //{
+        //    nextState = state.Idle;
+        //}
+
+        //if(speed > .1f)
+        //{
+        //    nextState = state.Walk;
+        //}
+
+
         SetAnimation();
     }
 
@@ -46,7 +57,7 @@ public class MovementAnimationController : MonoBehaviour
     {
 
         if (lastState == nextState) return;
-        
+
 
         Debug.Log("Transitioning from " + lastState.ToString() + " to " + nextState.ToString());
         anim.SetTrigger(nextState.ToString());

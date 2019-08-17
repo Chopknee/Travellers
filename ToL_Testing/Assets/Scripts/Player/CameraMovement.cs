@@ -16,15 +16,17 @@ public class CameraMovement : MonoBehaviour
     public bool followPlayer = true;
     public float distanceToPlayer = 2f;
     public float horizontalDistanceToPlayer = 3f;
+    public float mouseSensitivity = 1.5f;
     Vector3 targetPos = Vector3.zero;
-    
+    float velocity = 0, maxVelocity = 5f;
+
     Vector3 playerPrevPos, playerMoveDir;
 
     private void Start()
     {
         camOffset = new Vector3(offset, verticalOffset, offset);
         playerPrevPos = targetPos;
-        
+
     }
     private void LateUpdate()
     {
@@ -41,8 +43,25 @@ public class CameraMovement : MonoBehaviour
 
 
 
-        //rotation offset of camera (camera physically moves around the player)
-        camOffset = Quaternion.AngleAxis(-Input.GetAxis("Horizontal") * turnSpeed, Vector3.up) * camOffset;
+
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            //rotation offset of camera (camera physically moves around the player)
+            camOffset = Quaternion.AngleAxis(-Input.GetAxis("Horizontal") * turnSpeed, Vector3.up) * camOffset;
+        }
+
+        if (velocity < maxVelocity) velocity += turnSpeed * Input.GetAxis("Mouse X");
+        if (Input.GetMouseButton(2))
+        {
+            camOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * mouseSensitivity * turnSpeed, Vector3.up) * camOffset;
+        }
+        else
+        {
+            if (velocity > 0) velocity -= .01f;
+            else velocity = 0;
+        }
+
+
 
         //rotation of camera
         var heading = targetPos - transform.position;
@@ -60,12 +79,13 @@ public class CameraMovement : MonoBehaviour
         {
             offset -= Input.mouseScrollDelta.y * zoomSensitivity;
             verticalOffset -= Input.mouseScrollDelta.y * zoomSensitivity; // this should be based on ground 0 instead of player's location.
-        } 
-        
-        
+        }
+
+
+
     }
 
-    
+
 
 
 
