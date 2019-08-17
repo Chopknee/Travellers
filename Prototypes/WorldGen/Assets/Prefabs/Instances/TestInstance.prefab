@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &952034977924148992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 952034977924148993}
+  - component: {fileID: 952034977924149118}
+  m_Layer: 0
+  m_Name: TestInstance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &952034977924148993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952034977924148992}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &952034977924149118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952034977924148992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ca6e9d089f9b6c46ad60cb7df7136dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartTile: {fileID: 3775774599634668053, guid: 63fe6b2f64bfde9478c7c0763164c7a3,
+    type: 3}
+  EndTile: {fileID: 3775774599634668053, guid: 65b5f17ce59ce884490ce3d889fcd3bf, type: 3}
+  BasicTiles:
+  - {fileID: 3775774599634668053, guid: e5702ecbc09193f469907f935872dd72, type: 3}
+  SpawnSpecialTilesOnce: 1
+  SpecialTiles:
+  - {fileID: 3775774599634668053, guid: 404e28a11c8fc4340b2998a585880fce, type: 3}
+  - {fileID: 3775774599634668053, guid: 677baab17965e9547a444dfd39ff52d7, type: 3}
+  - {fileID: 3775774599634668053, guid: e5702ecbc09193f469907f935872dd72, type: 3}
+  ImpassableTiles:
+  - {fileID: 3775774599634668053, guid: 801f15ee468cb1e4293f5d98d6f2c657, type: 3}
+  AlignBorderTilesToEdge: 0
+  BorderTiles:
+  - {fileID: 3775774599634668053, guid: 801f15ee468cb1e4293f5d98d6f2c657, type: 3}
+  navMeshHeight: 8
+  GeneratorSeed: 10
+  GridSize: {x: 6, y: 6}
+  GridScale: {x: 14, y: 14}
+  PathNodeCount: 30
+  HallLengths: 1
+  NodeTwist: 3.141
+  BranchChance: 0.054
+  BranchDeathChance: 0.25
+  BranchMaximumNodes: 3

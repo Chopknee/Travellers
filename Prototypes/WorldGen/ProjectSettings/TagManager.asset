@@ -8,6 +8,10 @@ TagManager:
   - ShopGUI
   - Structure
   - Map
+  - Room
+  - PortalOut
+  - DestinationArrowTmp
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

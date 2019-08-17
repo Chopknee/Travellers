@@ -9,6 +9,7 @@ namespace BaD.Chopknee.Utilities {
             foreach (GameObject go in gos) {
                 GameObject.Destroy(go);
             }
+            gos.Clear();
         }
 
         public static short ByteToShort(byte byte1, byte byte2) {

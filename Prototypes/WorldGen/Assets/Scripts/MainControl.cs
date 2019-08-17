@@ -1,4 +1,5 @@
-﻿using BaD.Modules.Networking;
+﻿using BaD.Chopknee.Utilities;
+using BaD.Modules.Networking;
 using BaD.UI.DumpA;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -38,6 +39,7 @@ namespace BaD.Modules {
         public GameObject HudUI { get { return hudUI; } }
 
         public GameObject LocalPlayerObjectInstance { get; private set; }
+        public GameObject MapControlObjectInstance { get; private set; }
 
         [SerializeField]
 #pragma warning disable 0649
@@ -45,6 +47,9 @@ namespace BaD.Modules {
         [SerializeField]
 #pragma warning disable 0649
         private GameObject OverworldPlayerPrefab;
+
+
+        public GameObject DungeonPlayerPrefab;
 
         void Awake () {
             //Warning messages about missing objects.
@@ -78,10 +83,33 @@ namespace BaD.Modules {
                 Instance = this;
                 if (PhotonNetwork.IsMasterClient) {
                     //Only the master should spawn an instance of the map. (All other players will spawn this automatically thanks to the network.)
-                    NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
+                    MapControlObjectInstance = NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
                 }
                 LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
+                Camera.main.GetComponent<CameraFollow>().currentTarget = LocalPlayerObjectInstance.transform;
             }
+        }
+
+        public void EnterInstance() {
+            //Hides all overworld stuff
+            LocalPlayerObjectInstance.SetActive(false);
+            OverworldControl.Instance.HideOverworld();
+            //Camera.main.gameObject.SetActive(false);
+        }
+
+        public void ExitInstance() {
+            LocalPlayerObjectInstance.SetActive(true);
+            OverworldControl.Instance.ShowOverworld();
+            CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
+            cf.currentTarget = LocalPlayerObjectInstance.transform;
+            cf.pan = 5;
+            cf.offset = 5;
+            cf.verticalOffset = 5;
+            cf.zoomSensitivity = 1f;
+            cf.distanceToPlayer = 2;
+            cf.horizontalDistanceToPlayer = 3;
+            cf.verticalLimits = new Vector2(2f, 12);
+            cf.offsetLimits = new Vector2(2f, 10);
         }
     }
 }

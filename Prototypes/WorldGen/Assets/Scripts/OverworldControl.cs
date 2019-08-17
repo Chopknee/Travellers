@@ -96,6 +96,28 @@ namespace BaD.Modules {
                 return bp;
             }
         }
+        GameObject[] structures;
+
+        public void HideOverworld() {
+            Map.terrainMeshObject.SetActive(false);
+            //Hide all other objects like buildings?
+            structures = GameObject.FindGameObjectsWithTag("Structure");
+            foreach (GameObject go in structures) {
+                go.SetActive(false);
+            }
+            BuildingPointer.SetActive(false);
+        }
+
+        public void ShowOverworld() {
+            //The map
+            Map.terrainMeshObject.SetActive(true);
+            //The structures
+            foreach (GameObject go in structures) {
+                go.SetActive(true);
+            }
+            BuildingPointer.SetActive(true);
+            //The light as well
+        }
 
         private GameObject bp;
     }

@@ -290,7 +290,7 @@ namespace BaD.Modules.Terrain {
         }
 
         public void SetupNav(Vector2 start, Vector2 end) {
-            map.pathfinder.RequestPath(start, end, map.GetPathfindingTileCost, map.TileIsPassable, true, PathFound, true);
+            map.pathfinder.RequestPathAsync(start, end, map.GetPathfindingTileCost, map.TileIsPassable, true, PathFound, true);
         }
 
         public void OnDrawGizmos () {

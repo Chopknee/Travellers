@@ -110,6 +110,9 @@ public static class Noise {
     }
 
     public static void Reset(int seed) {
+        if (randoms == null) {
+            randoms = new Dictionary<int, System.Random>();
+        }
         randoms.Remove(seed);
         randoms.Add(seed, new System.Random(seed));
     }

@@ -401,7 +401,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9077271668174930115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 232.73499, y: 272.87054, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5540377857742360334}
@@ -439,3 +439,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointer: {fileID: 0}
   pointerLocation: {fileID: 5620250787261186216}
+  VillageInstanceManager: {fileID: 952034977924148992, guid: 786e3b47d86f3bf4a84410047bd0613c,
+    type: 3}

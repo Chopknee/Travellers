@@ -7,9 +7,9 @@ using System;
 
 public class PathfindingGrid {
 
-    public delegate int TileCost(Vector2 currentGridPosition, Vector2 nextGridPosition);
-    public delegate bool TilePassable(Vector2 position);
-    public delegate void PathRequestComplete(PathResult result);
+    public delegate int TileCost ( Vector2 currentGridPosition, Vector2 nextGridPosition );
+    public delegate bool TilePassable ( Vector2 position );
+    public delegate void PathRequestComplete ( PathResult result );
 
     public int Width {
         get {
@@ -32,7 +32,7 @@ public class PathfindingGrid {
 
     int width;
     int height;
-    public PathfindingGrid(int width, int height) {
+    public PathfindingGrid ( int width, int height ) {
         this.width = width;
         this.height = height;
         grid = new Node[width, height];
@@ -43,11 +43,35 @@ public class PathfindingGrid {
         }
     }
 
-    public Thread RequestPath(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, PathRequestComplete reuqestCompleteFunction, bool simplify) {
-        PathRequest pr = new PathRequest(start, end, tileCost, tilePassable, grid, reuqestCompleteFunction, useSubCardinals, simplify);
+    Node[,] MakeGrid ( int width, int height ) {
+        Node[,] gr = new Node[width, height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                gr[x, y] = new Node(null, new Vector2(x, y), 0, 0);
+            }
+        }
+        return gr;
+    }
+
+    public Thread RequestPathAsync ( Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, PathRequestComplete reuqestCompleteFunction, bool simplify ) {
+        PathRequest pr = new PathRequest(start, end, tileCost, tilePassable, MakeGrid(width, height), reuqestCompleteFunction, useSubCardinals, simplify);
         Thread t = new Thread(pr.FindPath);
+        t.IsBackground = true;
         t.Start();
         return t;
+    }
+
+    PathResult lastResult;
+
+    public PathResult RequestPath(Vector2 start, Vector2 end, TileCost tileCost, TilePassable tilePassable, bool useSubCardinals, bool simplify) {
+        PathRequest pr = new PathRequest(start, end, tileCost, tilePassable, grid, PathCompleted, useSubCardinals, simplify);
+        pr.FindPath();
+        //The call path completed will be run before this next line is executed.
+        return lastResult;
+    }
+
+    public void PathCompleted(PathResult res) {
+        lastResult = res;
     }
 
     class PathRequest {
@@ -80,9 +104,7 @@ public class PathfindingGrid {
             TilePassable tilePassable - the function that blocks a tile from being moved into
             bool useSubCardinals - if true, then the algorythm will be allowed to make diagonal movments, otherwise it will not
         */
-        public void FindPath() {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+        public void FindPath () {
 
             Vector2[] waypoints = new Vector2[0];
             bool pathSuccess = false;
@@ -126,18 +148,16 @@ public class PathfindingGrid {
                             }
                         }
                     }
-                    
+
                 }
             }
 
             if (pathSuccess) {
                 waypoints = RetracePath(startNode, endNode, simplify);
+
+                requestComplete(new PathResult(waypoints, pathSuccess));
+                //return new PathResult(waypoints, pathSuccess);
             }
-            //UnityEngine.Debug.Log("Path found in " + (sw.ElapsedMilliseconds / 1000f) + " seconds. Total path length is " + waypoints.Length + " nodes.");
-            sw.Stop();
-            
-            requestComplete(new PathResult(waypoints, pathSuccess));
-            //return new PathResult(waypoints, pathSuccess);
         }
 
         Vector2[] RetracePath(Node start, Node end, bool simplifyPath) {

@@ -1,7 +1,16 @@
-﻿using BaD.Modules.Terrain;
+﻿using BaD.Modules;
+using BaD.Modules.Terrain;
 using UnityEngine;
 
 public class VillageInteractable : MapInteractable {
+
+    public GameObject VillageInstanceManager;
+    public bool returnToOverworld = false;
+    private GameObject villageInstance;
+    private DungeonManager dm;
+    public void Start () {
+        villageInstance = Instantiate(VillageInstanceManager);
+    }
 
     public override string GetActionName () {
         return "Enter " + GetDisplayName();
@@ -17,10 +26,16 @@ public class VillageInteractable : MapInteractable {
 
     public override void Interact ( Player player ) {
         Debug.Log("Entering village instance!");
+
+        int instanceSeed = Mathf.RoundToInt(transform.position.x + transform.position.y + transform.position.z);//Seed based on position?
+        dm = villageInstance.GetComponent<DungeonManager>();
+        dm.GeneratorSeed = instanceSeed;
+        dm.EnterInstance();
+        returnToOverworld = false;
     }
 
     public override bool InteractionComplete ( Player player ) {
-        return true;
+        return !dm.Showing;
     }
 
 }

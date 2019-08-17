@@ -16,7 +16,6 @@ namespace BaD.Chopknee.Utilities {
         public Vector2 offsetLimits = new Vector2 (0, 10);
         [Range(.01f, 1f)]
         public float zoomSensitivity = 1f;
-        public bool followPlayer = true;
         public float distanceToPlayer = 2f;
         public float horizontalDistanceToPlayer = 3f;
         Vector3 targetPos = Vector3.zero;
@@ -30,17 +29,17 @@ namespace BaD.Chopknee.Utilities {
         }
 
         private void Update () {
-            if (currentTarget == null) {
-                //Attempt to assign the camera to the current player.
-                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-                foreach (GameObject go in players) {
-                    PhotonView pv = go.GetComponent<PhotonView>();
-                    if (pv == null || pv.Owner == null || !pv.Owner.IsLocal) {
-                        continue;
-                    }
-                    currentTarget = go.transform;
-                }
-            }
+            //if (currentTarget == null) {
+            //    //Attempt to assign the camera to the current player.
+            //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            //    foreach (GameObject go in players) {
+            //        PhotonView pv = go.GetComponent<PhotonView>();
+            //        if (pv == null || pv.Owner == null || !pv.Owner.IsLocal) {
+            //            continue;
+            //        }
+            //        currentTarget = go.transform;
+            //    }
+            //}
         }
         private void LateUpdate () {
             if (currentTarget == null) return;
