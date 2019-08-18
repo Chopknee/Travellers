@@ -6513,8 +6513,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1541965003}
-  - component: {fileID: 1541965007}
   - component: {fileID: 1541965004}
+  - component: {fileID: 1541965007}
   - component: {fileID: 1541965005}
   - component: {fileID: 1541965006}
   - component: {fileID: 1541965008}
@@ -6548,15 +6548,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1541965002}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26a23254c944cc54da2b927ef59bc32c, type: 3}
+  m_Script: {fileID: 11500000, guid: 605089ad721934b47ad4eb48b11cde17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lastState: 0
-  nextState: 0
-  speed: 0
-  anim: {fileID: 0}
 --- !u!195 &1541965005
 NavMeshAgent:
   m_ObjectHideFlags: 0
