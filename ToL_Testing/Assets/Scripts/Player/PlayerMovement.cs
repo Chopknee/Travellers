@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 10;
     public float currentRunSpeed;
     public float extraRotationSpeed = 5f;
-    List<WaypointAnimations> arrowsInGame = new List<WaypointAnimations>();
+    GameObject[] arrowsInGame;
     NavMeshAgent agent;
 
     Vector3 lastPos, nextPos;
@@ -35,16 +35,15 @@ public class PlayerMovement : MonoBehaviour
         lastPos = transform.position;
         lastSpd = tmpSpeed;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         //Vector3 lookrotation = agent.steeringTarget - transform.position;
         //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), extraRotationSpeed * Time.deltaTime);
 
 
+        arrowsInGame = GameObject.FindGameObjectsWithTag("DestinationArrowTmp");
 
-
-
-        if (arrowsInGame.Count >= 2)
+        if (arrowsInGame.Length >= 2)
         {
             Destroy(arrowsInGame[1]);
         }
@@ -75,15 +74,15 @@ public class PlayerMovement : MonoBehaviour
                         targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
                         destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z); //ray.GetPoint(hitDist);
 
-                        // transform.LookAt(directionOfTarget);
+                       // transform.LookAt(directionOfTarget);
 
                         if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
                         {
-
+                            
                             currentRunSpeed += .2f;
                             GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
                         }
-                        CreateArrow(destinationPosition);
+                        StartCoroutine(CreateArrow(destinationPosition));
 
                     }
                 }
@@ -91,10 +90,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-
+        
     }
     bool forceArrowGeneration;
-
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -104,48 +103,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        foreach (WaypointAnimations o in arrowsInGame)
-        {
-            if (o != null)
-                Destroy(o.transform.root.gameObject);
-        }
-    }
-    private void OnDisable()
-    {
-        foreach (WaypointAnimations o in arrowsInGame)
-        {
-            if (o != null)
-                Destroy(o.transform.root.gameObject);
-        }
-    }
-    WaypointAnimations currentArrow;
-    float lastTime;
-    void CreateArrow(Vector3 dest)
-    {
-        if (currentArrow != null)
-        {
-            arrowsInGame.Remove(currentArrow);
-            Destroy(currentArrow.transform.root.gameObject);
-        }
 
+    float lastTime;
+    IEnumerator CreateArrow(Vector3 dest)
+    {
+        arrowsInGame = GameObject.FindGameObjectsWithTag("DestinationArrowTmp");
+
+        if (arrowsInGame.Length >= 1)
+        {
+            Destroy(arrowsInGame[0]);
+        }
         float next = 50f;
         lastTime = Time.time + next;
 
 
         GameObject o = null;
-        o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
-        currentArrow = o.transform.Find("wp").GetComponent<WaypointAnimations>();
-        arrowsInGame.Add(currentArrow);
+        { o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0))); }
 
-        Invoke("KillArrow", 4f);
-        KillArrow();
+        yield return new WaitForSeconds(.1f);
 
-    }
+        yield return new WaitUntil(() => Vector3.Distance(transform.position, dest) <= 2);
 
-    void KillArrow()
-    {
-        currentArrow.Die();
+        o.transform.Find("wp").GetComponent<WaypointAnimations>().Die();
+
     }
 }

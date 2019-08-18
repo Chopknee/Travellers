@@ -11,14 +11,11 @@ public class WaypointAnimations : MonoBehaviour
     Color originColor, originColor2;
     float defaultIntensity, defaultIntensity2, defaultRadius, defaultEmission;
     Color defaultColor;
-    float distToPlayer;
-    Transform player;
     Light l, l2;
     public bool decrease, dead, expanded;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         l = GetComponent<Light>();
         l2 = transform.root.GetComponent<Light>();
         decrease = false;
@@ -34,7 +31,6 @@ public class WaypointAnimations : MonoBehaviour
 
     private void Update()
     {
-        distToPlayer = Vector3.Distance(transform.position, player.position);
         l.spotAngle = emission;
         l.GetComponent<HDAdditionalLightData>().shapeRadius = shapeRadius;
         l2.GetComponent<HDAdditionalLightData>().shapeRadius = shapeRadius;
@@ -53,10 +49,6 @@ public class WaypointAnimations : MonoBehaviour
             expanded = true;
         }
 
-        if(distToPlayer <= 3)
-        {
-            dead = true;
-        }
         
         if (dead)
         {
@@ -91,17 +83,22 @@ public class WaypointAnimations : MonoBehaviour
         intensity = l.intensity;
         transform.root.tag = "Untagged";
         Debug.Log("Dead");
-        
-        Invoke("LifeSpan", 4);
-    }
-    void LifeSpan()
-    {
         dead = true;
-        Invoke("Dead", 2);
+        StartCoroutine(LifeSpan());
+        StartCoroutine(Dead());
     }
-
-    void Dead()
+    IEnumerator LifeSpan()
     {
+        yield return new WaitForSeconds(4);
+        dead = true;
+        StartCoroutine(Dead());
+    }
+    IEnumerator Dead()
+    {
+
+        yield return new WaitForSeconds(2);
+        
         Destroy(transform.root.gameObject);
+
     }
 }
