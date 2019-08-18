@@ -3718,32 +3718,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NavMesh Surface
       objectReference: {fileID: 0}
-    - target: {fileID: 3051605124068252997, guid: 38936b067e2dd6449bb4a3c37a55316b,
-        type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: 363818597110ce2449c4dd625cb5eac7,
-        type: 2}
-    - target: {fileID: 3051605124068252997, guid: 38936b067e2dd6449bb4a3c37a55316b,
-        type: 3}
-      propertyPath: m_OverrideVoxelSize
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3051605124068252997, guid: 38936b067e2dd6449bb4a3c37a55316b,
-        type: 3}
-      propertyPath: m_VoxelSize
-      value: 0.1266667
-      objectReference: {fileID: 0}
-    - target: {fileID: 3051605124068252997, guid: 38936b067e2dd6449bb4a3c37a55316b,
-        type: 3}
-      propertyPath: m_OverrideTileSize
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3051605124068252997, guid: 38936b067e2dd6449bb4a3c37a55316b,
-        type: 3}
-      propertyPath: m_TileSize
-      value: 32
-      objectReference: {fileID: 0}
     - target: {fileID: 3051605124068252996, guid: 38936b067e2dd6449bb4a3c37a55316b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5878,31 +5852,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6900906120784880292, guid: 8af72233a8ceab849a238c802ff56c26,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6900906120784880292, guid: 8af72233a8ceab849a238c802ff56c26,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6900906120784880292, guid: 8af72233a8ceab849a238c802ff56c26,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6900906120784880292, guid: 8af72233a8ceab849a238c802ff56c26,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6900906120784880292, guid: 8af72233a8ceab849a238c802ff56c26,
-        type: 3}
-      propertyPath: m_Center.y
-      value: -9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8af72233a8ceab849a238c802ff56c26, type: 3}
