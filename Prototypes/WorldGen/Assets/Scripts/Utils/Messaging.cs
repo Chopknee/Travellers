@@ -6,28 +6,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace BaD.Modules.Networking {
+    /// <summary>
+    /// This class handles sending messages and receiving messages sent by Photon.
+    /// </summary>
     public abstract class Messaging: MonoBehaviourPunCallbacks, IOnEventCallback {
 
-        public enum NetMessageCodes { TextMessage = 15, InventoryMessage = 10 };
+        //
+        //public enum NetMessageCodes { TextMessage = 15, InventoryMessage = 10 };
 
+        /// <summary>
+        /// This byte value will be the first step in filtering out non related messages.
+        /// </summary>
         [Tooltip("The specific code used to filter messages of this type.")]
         public byte MessageCode;
+
+        /// <summary>
+        /// How many received message ids to cache. This system is in place to prevent multiple execution of the same messages.
+        /// If you are expecting a large amount of traffic, it is suggestable to use a larger cache length.
+        /// </summary>
         [Tooltip("How long the buffer for tracking sent messages should be.")]
         public int RequestNumberCacheLength;
+
+        /// <summary>
+        /// If a PhotonView component is also present on the same game object, the messaging class can optionally include a filter
+        /// view ids.
+        /// </summary>
         [Tooltip("If on, will also filter messages by an attatched Photon View Component.")]
         public bool FilterMessagesByView;
 
+        /// <summary>
+        /// An option for setting who can receive the message. Seems to be limited to sending to everyone,
+        /// master client only, or others.
+        /// </summary>
         public ReceiverGroup Receivers;
+
+        /// <summary>
+        /// How the photon server will deal with caching this message.
+        /// </summary>
         public EventCaching CachingOption;
+
+        /// <summary>
+        /// If set, photon will send multiple copies of this message to ensure it is received.
+        /// The messaging class is already set up to ignore subsiquent copies of the same message.
+        /// </summary>
         public bool ReliabilityMode;
+
+        /// <summary>
+        /// Keeps track of how many messages have been sent.
+        /// </summary>
         [SerializeField]
         private int RequestNumber = 0;
+
+        /// <summary>
+        /// An array of all messages that have been received.
+        /// </summary>
         private int[] AcceptedRequests;
+
+        /// <summary>
+        /// The index of the last message id received.
+        /// </summary>
         private int lastRequestIndex = 0;
 
-        //A special data type that is used for the messaging class
+        /// <summary>
+        /// Makes sure that the message meta data type is only registered once.
+        /// </summary>
         public static bool RegisteredMM = false;
 
+        /// <summary>
+        /// If a PhotonView component is present, this returns the View ID of that component.
+        /// </summary>
         public int ViewID {
             get {
                 if (FilterMessagesByView && GetComponent<PhotonView>() != null) {
@@ -36,7 +83,6 @@ namespace BaD.Modules.Networking {
                 return 0;
             }
         }
-
 
         public virtual void Awake () {
             AcceptedRequests = new int[RequestNumberCacheLength];
@@ -54,6 +100,11 @@ namespace BaD.Modules.Networking {
             RequestNumber = baseMessageNumber + ViewID*100;
         }
 
+        /// <summary>
+        /// This is executed when a message is received by photon. This should not be overridden unless that is your intent.
+        /// Override the abstract MessageReceived function if you need to act on received messages.
+        /// </summary>
+        /// <param name="photonEvent">The message data from the event.</param>
         public void OnEvent ( EventData photonEvent ) {
             if (photonEvent.Code != MessageCode) return;//Not an inventory command, skip the remainder of this.
 
@@ -64,7 +115,11 @@ namespace BaD.Modules.Networking {
             MessageReceived(data);
         }
 
-        //inserts the request number to the data, then sends the message to all others listening.
+        /// <summary>
+        /// Sends a message using photon and the set options from the class.
+        /// </summary>
+        /// <param name="data">An array of all message data. Must follow the photon object serialization guidelines.</param>
+        /// <returns>The ID of the network message.</returns>
         public int SendNetMessage ( object[] data ) {
             object[] newData;
             newData = new object[data.Length + 1];

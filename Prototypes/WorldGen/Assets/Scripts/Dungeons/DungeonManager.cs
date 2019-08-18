@@ -1,5 +1,7 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules;
+using BaD.Modules.Networking;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -81,6 +83,10 @@ public abstract class DungeonManager: MonoBehaviour {
                 navSurface.collectObjects = CollectObjects.Volume;
                 navSurface.size = new Vector3(GridSize.x * GridScale.x, navMeshHeight, GridSize.y * GridScale.y);
                 navSurface.center = new Vector3((GridSize.x * GridScale.x)/2-(GridScale.x/2), 0, (GridSize.y * GridScale.y)/2-(GridScale.y/2));
+                navSurface.overrideTileSize = true;
+                navSurface.voxelSize = 0.126667f;
+                navSurface.overrideTileSize = true;
+                navSurface.tileSize = 32;
             }
         }
 
@@ -100,9 +106,15 @@ public abstract class DungeonManager: MonoBehaviour {
 
         //Move the player to the spawn of the dungeon
         GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
-        dungeonPlayer = Instantiate(MainControl.Instance.DungeonPlayerPrefab, spawnPoint.transform.position, Quaternion.identity, null);
-        //dungeonPlayer.transform.position = spawnPoint.transform.position;
-        Debug.Log(spawnPoint.transform.position, spawnPoint);
+
+        //Enable the instance manager and join the instance.
+        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
+        netManager.enabled = true;
+        netManager.JoinInstance(GeneratorSeed);
+        MainControl.Instance.DungeonPlayerPrefab.GetComponent<PlayerMovement>().enabled = false;//Stop this script from causing issues
+        dungeonPlayer = netManager.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        dungeonPlayer.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
+
         CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
         cf.currentTarget = dungeonPlayer.transform;
         cf.pan = 100;
@@ -114,7 +126,6 @@ public abstract class DungeonManager: MonoBehaviour {
         cf.verticalLimits = new Vector2(0.5f, 8);
         cf.offsetLimits = new Vector2(0.5f, 4);
         Showing = true;
-
     }
 
     public void ExitInstance() {
@@ -125,10 +136,14 @@ public abstract class DungeonManager: MonoBehaviour {
         foreach (GameObject go in objs) {
             go.SetActive(false);
         }
-
-        Destroy(dungeonPlayer);
+        PhotonNetwork.Destroy(dungeonPlayer);
+        //Destroy(dungeonPlayer);
         CurrentInstance = null;
         Showing = false;
+        //Shut down the instance manager.
+        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
+        netManager.LeaveInstance();
+        netManager.enabled = false;
     }
 
     GameObject dungeonPlayer;

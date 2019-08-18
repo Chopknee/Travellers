@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 952034977924148993}
   - component: {fileID: 952034977924149118}
+  - component: {fileID: 8335341925825247333}
   m_Layer: 0
   m_Name: TestInstance
   m_TagString: Untagged
@@ -51,8 +52,6 @@ MonoBehaviour:
   SpawnSpecialTilesOnce: 1
   SpecialTiles:
   - {fileID: 3775774599634668053, guid: 404e28a11c8fc4340b2998a585880fce, type: 3}
-  - {fileID: 3775774599634668053, guid: 677baab17965e9547a444dfd39ff52d7, type: 3}
-  - {fileID: 3775774599634668053, guid: e5702ecbc09193f469907f935872dd72, type: 3}
   ImpassableTiles:
   - {fileID: 3775774599634668053, guid: 801f15ee468cb1e4293f5d98d6f2c657, type: 3}
   AlignBorderTilesToEdge: 0
@@ -68,3 +67,25 @@ MonoBehaviour:
   BranchChance: 0.054
   BranchDeathChance: 0.25
   BranchMaximumNodes: 3
+--- !u!114 &8335341925825247333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952034977924148992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638180ea231e12a4faa9f244ecb9ed27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageCode: 32
+  RequestNumberCacheLength: 100
+  FilterMessagesByView: 0
+  Receivers: 0
+  CachingOption: 0
+  ReliabilityMode: 1
+  RequestNumber: 0
+  spawnablesPool:
+  - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
+  joinedPlayers: 
