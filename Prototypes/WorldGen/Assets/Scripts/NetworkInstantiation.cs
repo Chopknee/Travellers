@@ -7,17 +7,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaD.Modules.Networking {
+    /// <summary>
+    /// Class that handles instantiation of gameobjects via RPC messages.
+    /// This is a replacement for Photon's poor excuse for network instantiation.
+    /// </summary>
     public class NetworkInstantiation: Messaging {
 
-        //Much neater than the way I have previously done this.
+        /// <summary>
+        /// The first instance of this object that was loaded in will be stored here.
+        /// </summary>
         public static NetworkInstantiation Instance { get; private set; }
 
+        /// <summary>
+        /// This is a list of objects that can be spawned via the network. All clients should have
+        /// this same list.
+        /// </summary>
         [SerializeField]
 #pragma warning disable 0649
-        private GameObject[] spawnablesPool;//Time to go swimming!
+        private GameObject[] spawnablesPool;
 
-        private Dictionary<int, NetworkInstance> instancePool = new Dictionary<int, NetworkInstance>();
+        /// <summary>
+        /// This is a dictionary of all currently live network gameobject instances.
+        /// </summary>
+        public Dictionary<int, NetworkInstance> instancePool = new Dictionary<int, NetworkInstance>();
 
+        /// <summary>
+        /// Returns an array of all objects that can be spawned via the network.
+        /// </summary>
         public GameObject[] SpawnablesPool {
             get {
                 return spawnablesPool;
@@ -33,13 +49,11 @@ namespace BaD.Modules.Networking {
 
         public override void MessageReceived ( object[] messageData ) {
             MessageMeta messageMeta = (MessageMeta) messageData[0];
-            int viewID = (int) messageData[0];
-            int prefabPoolIndex = (int) messageData[1];
+            int viewID = (int) messageData[1];
+            int prefabPoolIndex = (int) messageData[2];
 
             if (!instancePool.ContainsKey(viewID)) {
-                GameObject go = Instantiate(spawnablesPool[prefabPoolIndex]);
-                go.transform.position = (Vector3) messageData[2];
-                go.transform.rotation = (Quaternion) messageData[3];
+                GameObject go = Instantiate(spawnablesPool[prefabPoolIndex], (Vector3) messageData[3], (Quaternion) messageData[4]);
                 PhotonView view = go.GetComponent<PhotonView>();
                 view.ViewID = viewID;
                 instancePool.Add(view.ViewID, new NetworkInstance(view.ViewID, go));
@@ -62,7 +76,7 @@ namespace BaD.Modules.Networking {
                 return null;
             }
 
-            GameObject go = Instantiate(spawnablesPool[prefabIndex]);
+            GameObject go = Instantiate(spawnablesPool[prefabIndex], position, rotation);
             PhotonView view = go.GetComponent<PhotonView>();
 
             if (view != null) { 
@@ -97,8 +111,9 @@ namespace BaD.Modules.Networking {
             return ind;
         }
 
-        private struct NetworkInstance {
-            public int viewID;
+        public struct NetworkInstance {
+
+            public int viewID { get; private set; }
             public GameObject gameObjectRef;
 
             public NetworkInstance(int viewID, GameObject go) {

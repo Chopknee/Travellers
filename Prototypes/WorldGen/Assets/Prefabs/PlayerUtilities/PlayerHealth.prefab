@@ -234,8 +234,8 @@ GameObject:
   - component: {fileID: 7342315595003860669}
   - component: {fileID: 7342315595003860666}
   - component: {fileID: 7342315595003860667}
+  - component: {fileID: 7342315595003860664}
   - component: {fileID: 7404467659348042042}
-  - component: {fileID: 8129327517706115052}
   m_Layer: 5
   m_Name: PlayerHealth
   m_TagString: Untagged
@@ -252,7 +252,7 @@ RectTransform:
   m_GameObject: {fileID: 7342315595003860665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.989}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.67098, y: 0.67098, z: 0.67098}
   m_Children:
   - {fileID: 6309512726061111312}
   - {fileID: 892954520438631394}
@@ -262,7 +262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.40600586, y: 4.0329895}
+  m_AnchoredPosition: {x: -0.40600586, y: 4.0330048}
   m_SizeDelta: {x: 2, y: 0.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7342315595003860669
@@ -325,6 +325,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7342315595003860664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7342315595003860665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16bfb91bd11e64d47a4784333e5e387d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7404467659348042042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,15 +360,3 @@ MonoBehaviour:
   rate: 0
   next: 0
   closest: 0
---- !u!114 &8129327517706115052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7342315595003860665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc8a6ee426204548a4d1dcddab62a03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

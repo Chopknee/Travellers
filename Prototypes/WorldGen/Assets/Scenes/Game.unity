@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 708652308}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.056549024, g: 0.07540577, b: 0.11335873, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1359,7 +1359,6 @@ MonoBehaviour:
   verticalLimits: {x: 0, y: 10}
   offsetLimits: {x: 0, y: 10}
   zoomSensitivity: 1
-  followPlayer: 1
   distanceToPlayer: 2
   horizontalDistanceToPlayer: 3
 --- !u!1 &708652307
@@ -4230,7 +4229,7 @@ MonoBehaviour:
   spawnablesPool:
   - {fileID: 7941106588625948817, guid: 1fd5e9cd8df7f6a48b1e5ba8fe5adb61, type: 3}
   - {fileID: 4822365178215254495, guid: ee23565a2c6ccef4db6ba8b2ec513a88, type: 3}
-  - {fileID: 7271999018955811790, guid: ea09cd268aeba62488b28dda2f5c0abc, type: 3}
+  - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
 --- !u!114 &1929797921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4588,7 +4587,6 @@ MonoBehaviour:
   verticalLimits: {x: 2, y: 12}
   offsetLimits: {x: 2, y: 10}
   zoomSensitivity: 1
-  followPlayer: 1
   distanceToPlayer: 2
   horizontalDistanceToPlayer: 3
 --- !u!1 &2044033789
