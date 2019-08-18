@@ -40,7 +40,7 @@ public class NPCAgression : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = new Color(255, 0, 0, .2f);
         Gizmos.DrawSphere(transform.position, sightDistance);
     }
 }

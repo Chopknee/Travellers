@@ -231,6 +231,7 @@ Transform:
   - {fileID: 5964342896877872253}
   - {fileID: 6822670101701058707}
   - {fileID: 5576903257974306449}
+  - {fileID: 9212447374038363305}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -246,7 +247,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 14.838462, y: 14, z: 13.743573}
-  m_Center: {x: 0, y: -6.33, z: 0}
+  m_Center: {x: 0, y: -6.3, z: 0}
 --- !u!1 &7465079461285952737
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,6 +648,101 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 874479831339255469, guid: efff1ca6dd5b31643b17ed84ab38acb4,
     type: 3}
   m_PrefabInstance: {fileID: 874479831339654189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1376143703875546026
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7234369909646462827}
+    m_Modifications:
+    - target: {fileID: 4218544757271564381, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_Name
+      value: cobble-plate
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.99999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.99999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 517096081787095436, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffcb518e1d113304880422a39c2841e4, type: 2}
+    - target: {fileID: 5025928200695444886, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ffcb518e1d113304880422a39c2841e4, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3f9de02dd44ece443b11f2758b29f8c4, type: 3}
+--- !u!4 &9212447374038363305 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7836328755066636035, guid: 3f9de02dd44ece443b11f2758b29f8c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1376143703875546026}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5309401197891401159
 PrefabInstance:

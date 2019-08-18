@@ -7349,6 +7349,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3775774599634668053, guid: ef982f1c34593a645b6733583e90564e,
         type: 3}
+    - target: {fileID: 4037746421197433953, guid: 93d4290f3bc8df441b6931fcf7b81867,
+        type: 3}
+      propertyPath: endRoom
+      value: 
+      objectReference: {fileID: 3775774599634668053, guid: 8af72233a8ceab849a238c802ff56c26,
+        type: 3}
+    - target: {fileID: 4037746421197433953, guid: 93d4290f3bc8df441b6931fcf7b81867,
+        type: 3}
+      propertyPath: closedRoom
+      value: 
+      objectReference: {fileID: 3775774599634668053, guid: 8af72233a8ceab849a238c802ff56c26,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93d4290f3bc8df441b6931fcf7b81867, type: 3}
 --- !u!23 &4041231736383143958

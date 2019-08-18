@@ -13,40 +13,50 @@ public class MovementAnimationController : MonoBehaviour
     public state lastState, nextState;
 
     public float speed;
+    bool player;
     private Vector3 velocity;
 
     public Animator anim;
 
     AnimationClip lastClip;
     NavMeshAgent agent;
-
+    Vector3 lastPos, nextPos;
     private void Start()
     {
+        lastPos = transform.position;
         if (transform.CompareTag("Player"))
-            anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+            player = true;
+
+        if(player)
+            anim = transform.GetComponent<Animator>();
         else
-            anim = transform.GetChild(0).GetComponent<Animator>();
+            anim = transform.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
 
+
+    float smoothVel = 0;
+    float lastSpd = 0;
+    private void LateUpdate()
+    {
+        nextPos = transform.position;
+        float lv = (nextPos - lastPos).sqrMagnitude / Time.fixedDeltaTime;
+        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .9f);
+        if(!player) speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        lastPos = transform.position;
+        lastSpd = tmpSpeed;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
     {
 
-        if(transform.CompareTag("Player")) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
+        if(player) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
+
+        
+
         anim.SetFloat("Runspeed", speed);
-
-        //anim.speed = speed;
-        //if (agent.isStopped || speed < .1f)
-        //{
-        //    nextState = state.Idle;
-        //}
-
-        //if(speed > .1f)
-        //{
-        //    nextState = state.Walk;
-        //}
+        
 
 
         SetAnimation();
