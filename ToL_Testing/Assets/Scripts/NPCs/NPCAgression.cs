@@ -32,7 +32,7 @@ public class NPCAgression : MonoBehaviour
 
     public void FindTarget()
     {
-        Debug.Log("Finding target..");
+
         int r = Random.Range(0, targets.Length);
         if (targets[r] != null)
             currentTarget = targets[r].transform;

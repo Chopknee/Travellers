@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 public class PlayerMovement : MonoBehaviour
 {
+    
+
+
     public Vector3 destinationPosition;
     Quaternion targetRotation;
     Rigidbody rb;
@@ -17,6 +20,11 @@ public class PlayerMovement : MonoBehaviour
     NavMeshAgent agent;
 
     Vector3 lastPos, nextPos;
+
+    private void Awake()
+    {
+       
+    }
     private void Start()
     {
         lastPos = transform.position;

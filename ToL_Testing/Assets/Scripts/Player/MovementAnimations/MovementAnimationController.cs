@@ -5,6 +5,10 @@ using UnityEngine.AI;
 
 public class MovementAnimationController : MonoBehaviour
 {
+    bool transitioning;
+    public float transitionTime = 2;
+    float fallSpeed = .02f;
+
     public enum state
     {
         Idle, Walk, Run, Attack, Die
@@ -27,10 +31,21 @@ public class MovementAnimationController : MonoBehaviour
         if (transform.CompareTag("Player"))
             player = true;
 
-        if(player)
-            anim = transform.GetComponent<Animator>();
+
+        anim = transform.GetComponent<Animator>();
+
+        if (player)
+        {
+        }
         else
-            anim = transform.GetComponent<Animator>();
+        {
+            transitioning = true;
+            anim.SetBool("RopeClimbing", true);
+            StartCoroutine("Transition", transitionTime);
+        }
+
+
+
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -39,10 +54,15 @@ public class MovementAnimationController : MonoBehaviour
     float lastSpd = 0;
     private void LateUpdate()
     {
+        if (transitioning)
+        {
+            transform.position -= Vector3.up * fallSpeed;
+            return;
+        }
         nextPos = transform.position;
         float lv = (nextPos - lastPos).sqrMagnitude / Time.fixedDeltaTime;
         float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .9f);
-        if(!player) speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        if (!player) speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
     }
@@ -50,16 +70,38 @@ public class MovementAnimationController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (transitioning)
+        {
+            return;
+        }
+        if (player) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
 
-        if(player) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
 
-        
 
         anim.SetFloat("Runspeed", speed);
-        
+
 
 
         SetAnimation();
+    }
+
+
+    Vector3 nMeshPos = Vector3.zero;
+    IEnumerator Transition(float t)
+    {
+        
+        yield return new WaitForSeconds(t);
+        NavMeshHit navMeshHit;
+        Vector3 positionToCheck = gameObject.transform.position;
+        NavMesh.SamplePosition(positionToCheck, out navMeshHit, 2, NavMesh.AllAreas);
+        //nMeshPos = navMeshHit.position;
+
+        yield return new WaitUntil(() => transform.position.y <= 0);
+        Debug.Log("We gettin hot boys the floor is lava bb");
+        anim.SetBool("RopeClimbing", false);
+        transitioning = false;
+        GetComponent<NavMeshAgent>().enabled = true;
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 
 

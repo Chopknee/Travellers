@@ -1,0 +1,7 @@
+NOTES
+
+Reference to the prefab, Is the instance MINE, where and at what rotation.
+
+NetInstanceManager.CurrentManager.Instantiate(<prefab gameobject reference>, false, position, rotation)
+
+when you need to destroy the skele, just use the PhotonNetwork.Destroy
