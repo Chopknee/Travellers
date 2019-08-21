@@ -62,7 +62,7 @@ public class MovementAnimationController : MonoBehaviour
         nextPos = transform.position;
         float lv = (nextPos - lastPos).sqrMagnitude / Time.fixedDeltaTime;
         float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .9f);
-        if (!player) speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
     }
@@ -74,7 +74,7 @@ public class MovementAnimationController : MonoBehaviour
         {
             return;
         }
-        if (player) speed = (float)System.Math.Round(GetComponent<PlayerMovement>().currentRunSpeed, 2);
+        speed = (float)System.Math.Round(speed, 2);
 
 
 

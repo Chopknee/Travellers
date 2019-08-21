@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8240697743828312806}
   - component: {fileID: 283180865735855550}
   - component: {fileID: 2963596516845756484}
-  - component: {fileID: 6570670996066235319}
   - component: {fileID: 899299699948914971}
+  - component: {fileID: 624923639283675366}
   m_Layer: 0
   m_Name: Literal_arrow
   m_TagString: DestinationArrowTmp
@@ -201,19 +201,6 @@ MonoBehaviour:
     format: 0
     data: 
   shadowDatas: []
---- !u!65 &6570670996066235319
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1334023583289725456}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5, y: 5, z: 5}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &899299699948914971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -230,6 +217,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &624923639283675366
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334023583289725456}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1806290757062855748
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decrease: 0
-  dead: 0
+  dead: 1
   expanded: 0
 --- !u!95 &7817953026772108834
 Animator:
