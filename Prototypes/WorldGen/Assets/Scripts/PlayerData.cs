@@ -23,12 +23,10 @@ public class PlayerData {
     private string name;
     private int takenActions = 0;
     private int heldGold = 0;
-    private Collection[] actionIncreaseFilter;
 
-    public PlayerData(GameObject playerRef, Collection[] actionIncreaseFilter) {
+    public PlayerData(GameObject playerRef) {
         playerGameobjectRef = playerRef;
         Inventory.OnItemsUpdated += OnInventoryChanged;
-        this.actionIncreaseFilter = actionIncreaseFilter;
     }
 
     //Generic class holding information about a player.
@@ -57,11 +55,6 @@ public class PlayerData {
 
     public int MaxActions {
         get {
-            Item[] filtered = BaD.Modules.Inventory.Inventory.GetItemsByGroup(Inventory.Items, actionIncreaseFilter);
-
-            if (2 + filtered.Length > maxActions) {
-                maxActions = 2 + filtered.Length;
-            }
             return maxActions;
         }
     }

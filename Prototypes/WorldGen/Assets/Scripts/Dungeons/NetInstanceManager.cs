@@ -92,6 +92,7 @@ public class NetInstanceManager: Messaging {
                 //Also, sync the joined players list.
                 int[] pls = (int[]) messageData[3];
                 joinedPlayers.AddRange(pls);
+
                 break;
             case LeaveInstanceCode:
                 //No matter what, remove the leaving player form the list.

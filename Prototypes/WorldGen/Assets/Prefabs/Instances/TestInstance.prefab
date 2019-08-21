@@ -44,20 +44,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca6e9d089f9b6c46ad60cb7df7136dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartTile: {fileID: 3775774599634668053, guid: 63fe6b2f64bfde9478c7c0763164c7a3,
+  StartTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a,
     type: 3}
-  EndTile: {fileID: 3775774599634668053, guid: 65b5f17ce59ce884490ce3d889fcd3bf, type: 3}
+  EndTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a, type: 3}
   BasicTiles:
-  - {fileID: 3775774599634668053, guid: e5702ecbc09193f469907f935872dd72, type: 3}
+  - {fileID: 4994255060124693510, guid: 3c8ede9fc0d807e42b4c1e28586bf73b, type: 3}
   SpawnSpecialTilesOnce: 1
   SpecialTiles:
-  - {fileID: 3775774599634668053, guid: 404e28a11c8fc4340b2998a585880fce, type: 3}
+  - {fileID: 725584129208779873, guid: 92f9aba43cb910c40ac51d5f2eaa2e5a, type: 3}
+  - {fileID: 725584129208779873, guid: 92f9aba43cb910c40ac51d5f2eaa2e5a, type: 3}
   ImpassableTiles:
-  - {fileID: 3775774599634668053, guid: 801f15ee468cb1e4293f5d98d6f2c657, type: 3}
+  - {fileID: 8422868706217120560, guid: 556d1ca437a010e4eac59e8f4bf72aaf, type: 3}
   AlignBorderTilesToEdge: 0
   BorderTiles:
-  - {fileID: 3775774599634668053, guid: 801f15ee468cb1e4293f5d98d6f2c657, type: 3}
+  - {fileID: 5063352144898810619, guid: cb60ea93ea4256942a95af447b94d13b, type: 3}
   navMeshHeight: 8
+  navMeshLayers:
+    serializedVersion: 2
+    m_Bits: 311
+  StartPathFromCenter: 1
   GeneratorSeed: 10
   GridSize: {x: 6, y: 6}
   GridScale: {x: 14, y: 14}

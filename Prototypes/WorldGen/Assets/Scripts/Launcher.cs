@@ -112,6 +112,11 @@ namespace BaD.Modules.Networking {
         }
 
         public void JoinRoom () {
+            Invoke("JoinRandomRoom", 0.5f);
+            
+        }
+
+        public void JoinRandomRoom() {
             LogMessage("Joining existing room...", false);
             PhotonNetwork.JoinRandomRoom();
         }

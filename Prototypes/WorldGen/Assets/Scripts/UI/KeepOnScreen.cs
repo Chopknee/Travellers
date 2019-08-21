@@ -32,12 +32,15 @@ public class KeepOnScreen : MonoBehaviour {
             myRect.SetParent(canvasRect);
             //Set the 'local space' relative to the main canvas to perform these operations.
 
-            minimum = ( canvasRect.sizeDelta - myRect.sizeDelta ) * -0.5f;
             maximum = ( canvasRect.sizeDelta - myRect.sizeDelta ) * 0.5f;
+            minimum = maximum * -1;
+            
             myRect.localPosition = ClampVector2(myRect.localPosition, minimum, maximum);
 
             //Set the local space back to the mouse offset transform
             myRect.SetParent(offsetTransform);
+
+
         }
     }
 

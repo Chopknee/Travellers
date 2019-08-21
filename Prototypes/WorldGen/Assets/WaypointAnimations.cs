@@ -26,7 +26,6 @@ public class WaypointAnimations : MonoBehaviour
         defaultEmission = l.spotAngle;
         defaultColor = l.color;
         defaultIntensity2 = transform.root.GetComponent<Light>().intensity;
-       
     }
 
     private void Update()
@@ -82,7 +81,6 @@ public class WaypointAnimations : MonoBehaviour
         originColor2 = transform.root.GetComponent<Light>().color;
         intensity = l.intensity;
         transform.root.tag = "Untagged";
-        Debug.Log("Dead");
         dead = true;
         StartCoroutine(LifeSpan());
         StartCoroutine(Dead());
