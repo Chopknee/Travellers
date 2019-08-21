@@ -3,6 +3,7 @@ using UnityEngine;
 using BaD.Modules.Terrain;
 using BaD.Modules;
 using BaD.Modules.Terrain.Modifiers;
+using UnityEngine.AI;
 
 public class Map : MonoBehaviour {
     [Range(0, MeshGenerator.numSupportedChunkSizes - 1)]
@@ -129,6 +130,7 @@ public class Map : MonoBehaviour {
         CreateTerrainMeshObject();
         GenerateTerrain(data);
         CreateMesh();
+        GetComponent<NavMeshSurface>().BuildNavMesh();
         Generated = true;
     }
 

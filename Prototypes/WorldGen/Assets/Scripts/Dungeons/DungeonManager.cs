@@ -44,9 +44,11 @@ public abstract class DungeonManager: MonoBehaviour {
     [Header("Nav Mesh Setting")]
     [Tooltip("The height setting of the nav mesh volume. The width and length are automatically calculated by the size of the dungeon.")]
     public float navMeshHeight;
+    public LayerMask navMeshLayers;
 
-    
     [Header("Generator Settings")]
+    [Tooltip("If set, the generator starts the path from the center of the grid. Otherwise the start position is selected on a random edge.")]
+    public bool StartPathFromCenter;
     [Tooltip("The seed used for the generator.")]
     public int GeneratorSeed = 10;
     [Tooltip("How big the grid for generating the instance should be.")]
@@ -87,6 +89,7 @@ public abstract class DungeonManager: MonoBehaviour {
                 navSurface.voxelSize = 0.126667f;
                 navSurface.overrideTileSize = true;
                 navSurface.tileSize = 32;
+                navSurface.layerMask = navMeshLayers;
             }
         }
 
@@ -169,20 +172,24 @@ public abstract class DungeonManager: MonoBehaviour {
         //This function gets the ball rolling.
         GridSize = new Vector2(Mathf.RoundToInt(GridSize.x), Mathf.RoundToInt(GridSize.y));
         //Two options here, either make an east-west, or north-south dungeon
-        bool plane = Noise.GetRandomNumber(GeneratorSeed) > 0.5f;
-        bool orientation = Noise.GetRandomNumber(GeneratorSeed) > 0.5f;
-        float dir = 0;
-        Vector2 start;
-        if (plane) {
-            //Do north-south
-            start.x = Noise.GetRandomRange(GeneratorSeed, 0, (int) GridSize.x - 1);
-            start.y = ( orientation ) ? 0 : GridSize.y - 1;
-            dir = ( orientation ) ? 0 : Mathf.PI;
-        } else {
-            //Do east-west
-            start.x = ( orientation ) ? 0 : GridSize.x - 1;
-            start.y = Noise.GetRandomRange(GeneratorSeed, 0, (int) GridSize.y - 1);
-            dir = ( orientation ) ? Mathf.PI * 1.5f : Mathf.PI * 0.5f;
+
+        float dir = Noise.GetRandomNumber(GeneratorSeed) * Mathf.PI*2;
+        Vector2 start = new Vector2(GridSize.x/2, GridSize.y/2);
+
+        if (!StartPathFromCenter) {
+            bool plane = Noise.GetRandomNumber(GeneratorSeed) > 0.5f;
+            bool orientation = Noise.GetRandomNumber(GeneratorSeed) > 0.5f;
+            if (plane) {
+                //Do north-south
+                start.x = Noise.GetRandomRange(GeneratorSeed, 0, (int) GridSize.x - 1);
+                start.y = ( orientation ) ? 0 : GridSize.y - 1;
+                dir = ( orientation ) ? 0 : Mathf.PI;
+            } else {
+                //Do east-west
+                start.x = ( orientation ) ? 0 : GridSize.x - 1;
+                start.y = Noise.GetRandomRange(GeneratorSeed, 0, (int) GridSize.y - 1);
+                dir = ( orientation ) ? Mathf.PI * 1.5f : Mathf.PI * 0.5f;
+            }
         }
         startPosition = start;
         allNodes.Add(start);
@@ -191,8 +198,6 @@ public abstract class DungeonManager: MonoBehaviour {
         branches[0].MakePathlet();
         GenerateStructures();
     }
-
-    float delta = 0;
 
     List<Vector2> allNodes = new List<Vector2>();
 
@@ -314,7 +319,6 @@ public abstract class DungeonManager: MonoBehaviour {
         private int nodeNumber;
         private bool isMainBranch;
         private DungeonManager dm;
-        int completeSubs = 0;
         float lastDirection = 0;
         int seedNumber = 0;
 

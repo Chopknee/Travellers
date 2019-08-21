@@ -38,4 +38,14 @@ public class VillageInteractable : MapInteractable {
         return !dm.Showing;
     }
 
+
+    public void OnMouseEnter () {
+        //Show a highlight?
+        SetHighlight(true);
+    }
+
+    public void OnMouseExit () {
+        //Hide a highlight?
+        SetHighlight(true);
+    }
 }

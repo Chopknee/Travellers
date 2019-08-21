@@ -3468,7 +3468,7 @@ GameObject:
   - component: {fileID: 7064207439629486651}
   - component: {fileID: 1164946092}
   - component: {fileID: 1164946091}
-  - component: {fileID: 494098064956805444}
+  - component: {fileID: 4132447902666491130}
   - component: {fileID: 1164946093}
   m_Layer: 0
   m_Name: Player
@@ -3507,12 +3507,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destinationPosition: {x: 0, y: 0, z: 0}
-  arrow: {fileID: 1334023583289725456, guid: 67ff883924f166a449bc2abd77693455, type: 3}
-  walkSpeed: 10
-  turnSpeed: 0.1
-  maxSpeed: 10
+  arrowPrefab: {fileID: 1334023583289725456, guid: 67ff883924f166a449bc2abd77693455,
+    type: 3}
   currentRunSpeed: 0
-  extraRotationSpeed: 5
+  pathfindLayermask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!54 &5741135456754803405
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3575,6 +3575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8760db8288b6a4046b43dc0aca223730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionTime: 2
   lastState: 0
   nextState: 0
   speed: 0
@@ -3599,7 +3600,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5741135456754803403}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.5, z: 0.2}
@@ -3623,7 +3624,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 1164946093}
-  - {fileID: 494098064956805444}
+  - {fileID: 4132447902666491130}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -3646,7 +3647,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &494098064956805444
+--- !u!114 &4132447902666491130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3680,19 +3681,19 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: Attack
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Idle
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Walk
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Run
   - Type: 9
     SynchronizeType: 1
     Name: Die
   - Type: 1
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: Runspeed
   m_SynchronizeLayers:
   - SynchronizeType: 1
