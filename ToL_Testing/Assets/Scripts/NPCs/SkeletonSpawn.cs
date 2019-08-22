@@ -8,25 +8,32 @@ public class SkeletonSpawn : MonoBehaviour
     public GameObject skeletonPrefab;
     public AudioSource skeletonSpawnFX;
 
-    // Start is called before the first frame update
-    void Start()
+    
+    void InitiateSpawn()
     {
         CookieFlipBook c = transform.GetComponentInChildren<CookieFlipBook>();
         c.StartCoroutine(c.SwitchCookie());
         skeletonSpawnFX = GetComponent<AudioSource>();
         Invoke("PlayAudio", .5f);
-        Invoke("Spawn", 3f);
+        Invoke("SpawnGroup", 3f);
     }
+
     void PlayAudio()
     {
         skeletonSpawnFX.Play();
     }
-    void Spawn()
+    void SpawnGroup()
     {
         //spawn here
         //NetInstanceManager.CurrentManager.Instantiate(< prefab gameobject reference >, false, position, rotation)
         GameObject o = Instantiate(skeletonPrefab, spawnPoint.position, Quaternion.identity);
-        
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            InitiateSpawn();
+        }
     }
 }

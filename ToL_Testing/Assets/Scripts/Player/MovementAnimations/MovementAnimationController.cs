@@ -49,7 +49,10 @@ public class MovementAnimationController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    float[] avgSpeedArray = new float[10];
 
+    int indexOfAvg = 0;
+    public float avgSpeed;
     float smoothVel = 0;
     float lastSpd = 0;
     private void LateUpdate()
@@ -59,18 +62,34 @@ public class MovementAnimationController : MonoBehaviour
             transform.position -= Vector3.up * fallSpeed;
             return;
         }
+       
+        
         nextPos = transform.position;
         float lv = (nextPos - lastPos).sqrMagnitude / Time.deltaTime;
         float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .5f);
-        speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        float roundSpeed = Mathf.RoundToInt(speed);
+
+        speed = Mathf.Lerp(lastSpd, avgSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
-    
+
 
         speed = (float)System.Math.Round(speed, 2);
+
         
-        anim.SetFloat("Runspeed", speed);
         
+        avgSpeedArray[indexOfAvg] = speed;
+        indexOfAvg = (indexOfAvg == avgSpeedArray.Length - 1) ? 0 : indexOfAvg + 1;
+        avgSpeed = 0;
+        foreach (float f in avgSpeedArray)
+        {
+            avgSpeed += f;
+        }
+
+        avgSpeed = avgSpeed / (float)avgSpeedArray.Length;
+
+        anim.SetFloat("Runspeed", avgSpeed);
+
 
         SetAnimation();
     }
@@ -81,7 +100,7 @@ public class MovementAnimationController : MonoBehaviour
     // rope animation transition
     IEnumerator Transition(float t)
     {
-        
+
         yield return new WaitForSeconds(t);
         NavMeshHit navMeshHit;
         Vector3 positionToCheck = gameObject.transform.position;
@@ -92,6 +111,7 @@ public class MovementAnimationController : MonoBehaviour
         Debug.Log("We gettin hot boys the floor is lava bb");
         anim.SetBool("RopeClimbing", false);
         transitioning = false;
+        GetComponent<NPCSpawnInitialization>().Initialize();
         GetComponent<NavMeshAgent>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
     }

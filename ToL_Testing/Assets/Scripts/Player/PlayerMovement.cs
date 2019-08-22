@@ -224,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
     }
     
     
-    void CreateArrow(Vector3 dest)
+    public void CreateArrow(Vector3 dest)
     {
 
 
@@ -236,9 +236,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void KillArrow()
+    public void KillArrow()
     {
-        currentArrow.Die();
-        currentArrow = null;
+        if (currentArrow != null)
+        {
+            currentArrow.Die();
+            currentArrow = null;
+        }
     }
 }

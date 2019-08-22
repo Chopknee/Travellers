@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8679492314196460439}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446637900090252915}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.2, z: 0}
+  m_LocalPosition: {x: 0, y: 5.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 89781428076187542}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 1855030850338900931}
   - component: {fileID: 8098135819016462108}
   - component: {fileID: 4138664037203263454}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -603,7 +603,8 @@ GameObject:
   - component: {fileID: 89781428076187542}
   - component: {fileID: 1029158443479082961}
   - component: {fileID: 1694601685546110335}
-  m_Layer: 0
+  - component: {fileID: 967292241}
+  m_Layer: 10
   m_Name: SpawnInstance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -737,9 +738,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 8679492314196460439}
-  skeletonPrefab: {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+  skeletonPrefab: {fileID: 3095012952720214502, guid: e471637bac4a8064e82e6b86f2496144,
     type: 3}
   skeletonSpawnFX: {fileID: 0}
+--- !u!65 &967292241
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6018472138440499837}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 14, y: 14, z: 14}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7465079461285952737
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2072928577120613472}
   - component: {fileID: 5203074479608992506}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Density Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1005,7 +1019,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3077545439361167048}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EndAnimationPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

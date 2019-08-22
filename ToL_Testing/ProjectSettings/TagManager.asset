@@ -15,6 +15,7 @@ TagManager:
   - Room
   - PortalOut
   - Enemy
+  - SwingingWeapon
   layers:
   - Default
   - TransparentFX

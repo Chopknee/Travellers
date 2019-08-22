@@ -4,15 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerHealth : Health
+public class NPCHealth : Health
 {
-
+    
 
     private void FixedUpdate()
     {
         
     }
-
-
-
+    
+    
 }
