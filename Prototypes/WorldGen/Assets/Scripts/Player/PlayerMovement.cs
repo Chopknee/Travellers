@@ -11,27 +11,13 @@ public class PlayerMovement : MonoBehaviour {
     public float currentRunSpeed;
     public LayerMask pathfindLayermask;
 
-    Vector3 lastPos, nextPos;
     GameObject currentArrow;
     NavMeshAgent agent;
 
 
     private void Start() {
-        lastPos = transform.position;
         destinationPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
-    }
-
-    float smoothVel = 0;
-    float lastSpd = 0;
-
-    private void LateUpdate() {
-        nextPos = transform.position;
-        float lv = (nextPos - lastPos).sqrMagnitude / Time.fixedDeltaTime;
-        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .9f);
-        currentRunSpeed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
-        lastPos = transform.position;
-        lastSpd = tmpSpeed;
     }
 
     private void Update() {

@@ -3580,6 +3580,7 @@ MonoBehaviour:
   nextState: 0
   speed: 0
   anim: {fileID: 0}
+  speedMultiplier: 1.7
 --- !u!114 &1361012558
 MonoBehaviour:
   m_ObjectHideFlags: 0

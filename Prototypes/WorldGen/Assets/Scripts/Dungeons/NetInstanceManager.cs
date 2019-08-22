@@ -25,7 +25,18 @@ public class NetInstanceManager: Messaging {
 
 
     public Dictionary<int, NetworkInstance> instancesPool = new Dictionary<int, NetworkInstance>();
-    public List<int> joinedPlayers;
+    public List<int> joinedPlayers = new List<int>();
+
+    public static void CloneSettings(NetInstanceManager from, NetInstanceManager to) {
+        //Copying only the settings here.
+        to.MessageCode = from.MessageCode;
+        to.RequestNumberCacheLength = from.RequestNumberCacheLength;
+        to.FilterMessagesByView = from.FilterMessagesByView;
+        to.Receivers = from.Receivers;
+        to.CachingOption = from.CachingOption;
+        to.ReliabilityMode = from.ReliabilityMode;
+        to.spawnablesPool = from.spawnablesPool;
+    }
 
     public new void Awake () {
         base.Awake();

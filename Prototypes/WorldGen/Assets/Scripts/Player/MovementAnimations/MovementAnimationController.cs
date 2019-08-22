@@ -1,19 +1,15 @@
-﻿using BaD.Modules.Terrain;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MovementAnimationController : MonoBehaviour
-{
+public class MovementAnimationController: MonoBehaviour {
     bool transitioning;
     public float transitionTime = 2;
     float fallSpeed = .02f;
-    public float speedAnimationRatio = 2;
 
-    public enum state
-    {
-        Idle, Walk, Run, Attack, Die
+    public enum state {
+        Attack, Die
     }
 
     public state lastState, nextState;
@@ -27,8 +23,10 @@ public class MovementAnimationController : MonoBehaviour
     AnimationClip lastClip;
     NavMeshAgent agent;
     Vector3 lastPos, nextPos;
-    private void Start()
-    {
+
+    public float speedMultiplier = 1.7f;
+
+    private void Start () {
         lastPos = transform.position;
         if (transform.CompareTag("Player"))
             player = true;
@@ -36,11 +34,8 @@ public class MovementAnimationController : MonoBehaviour
 
         anim = transform.GetComponent<Animator>();
 
-        if (player)
-        {
-        }
-        else
-        {
+        if (player) {
+        } else {
             transitioning = true;
             anim.SetBool("RopeClimbing", true);
             StartCoroutine("Transition", transitionTime);
@@ -54,42 +49,44 @@ public class MovementAnimationController : MonoBehaviour
 
     float smoothVel = 0;
     float lastSpd = 0;
-    private void LateUpdate()
-    {
-        if (transitioning)
-        {
+
+    float[] smoothArray = new float[10];
+    int pos = 0;
+
+    private void LateUpdate () {
+        if (transitioning) {
             transform.position -= Vector3.up * fallSpeed;
             return;
         }
         nextPos = transform.position;
-        float lv = ( nextPos - lastPos ).sqrMagnitude / Time.deltaTime;
-        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float) System.Math.Round(lv, 1), ref smoothVel, .9f);
-        if (!player) speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        float lv = ( nextPos - lastPos ).magnitude / Time.deltaTime;
+        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float) System.Math.Round(lv, 1), ref smoothVel, .5f);
+        speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
 
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (transitioning)
-        {
-            return;
+        smoothArray[pos] = speed;
+        pos = ( pos == smoothArray.Length - 1 ) ? 0 : pos + 1;
+        float avgSpeed = 0;
+        foreach (float val in smoothArray) {
+            avgSpeed += val;
         }
+        avgSpeed = avgSpeed / (float) smoothArray.Length;
 
-        speed = agent.velocity.magnitude * speedAnimationRatio;
+        avgSpeed = (float) System.Math.Round(avgSpeed, 2);
 
-        anim.SetFloat("Runspeed", speed);
+        anim.SetFloat("Runspeed", avgSpeed * speedMultiplier);
+
 
         SetAnimation();
     }
 
 
     Vector3 nMeshPos = Vector3.zero;
-    IEnumerator Transition(float t)
-    {
-        
+
+    // rope animation transition
+    IEnumerator Transition ( float t ) {
+
         yield return new WaitForSeconds(t);
         NavMeshHit navMeshHit;
         Vector3 positionToCheck = gameObject.transform.position;
@@ -105,8 +102,7 @@ public class MovementAnimationController : MonoBehaviour
     }
 
 
-    void SetAnimation()
-    {
+    void SetAnimation () {
 
         if (lastState == nextState) return;
 
