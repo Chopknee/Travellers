@@ -11,7 +11,7 @@ public class MovementAnimationController : MonoBehaviour
 
     public enum state
     {
-        Idle, Walk, Run, Attack, Die
+        Attack, Die
     }
 
     public state lastState, nextState;
@@ -60,33 +60,25 @@ public class MovementAnimationController : MonoBehaviour
             return;
         }
         nextPos = transform.position;
-        float lv = (nextPos - lastPos).sqrMagnitude / Time.fixedDeltaTime;
-        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .9f);
+        float lv = (nextPos - lastPos).sqrMagnitude / Time.deltaTime;
+        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .5f);
         speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
-    }
+    
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (transitioning)
-        {
-            return;
-        }
         speed = (float)System.Math.Round(speed, 2);
-
-
-
+        
         anim.SetFloat("Runspeed", speed);
-
-
+        
 
         SetAnimation();
     }
 
 
     Vector3 nMeshPos = Vector3.zero;
+
+    // rope animation transition
     IEnumerator Transition(float t)
     {
         

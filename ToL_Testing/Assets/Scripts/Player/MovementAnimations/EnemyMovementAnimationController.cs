@@ -19,37 +19,37 @@ public class EnemyMovementAnimationController : MovementAnimationController
   
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (transitioning)
-        {
-            transform.position -= Vector3.up * fallSpeed;
-        }
-        else
-        {
+    //void FixedUpdate()
+    //{
+    //    if (transitioning)
+    //    {
+    //        transform.position -= Vector3.up * fallSpeed;
+    //    }
+    //    else
+    //    {
 
-            speed = GetComponent<NavMeshAgent>().velocity.normalized.magnitude;
+    //        speed = GetComponent<NavMeshAgent>().velocity.normalized.magnitude;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                anim.SetTrigger("Attack");
-            }
-            if (speed <= .8f)
-            {
-                nextState = state.Idle;
-            }
-            else if (speed > .8f)
-            {
-                nextState = state.Walk;
-                if (speed > 3f)
-                {
-                    nextState = state.Run;
-                }
-            }
-            SetAnimation();
-        }
+    //        if (Input.GetKeyDown(KeyCode.Space))
+    //        {
+    //            anim.SetTrigger("Attack");
+    //        }
+    //        if (speed <= .8f)
+    //        {
+    //            nextState = state.Idle;
+    //        }
+    //        else if (speed > .8f)
+    //        {
+    //            nextState = state.Walk;
+    //            if (speed > 3f)
+    //            {
+    //                nextState = state.Run;
+    //            }
+    //        }
+    //        SetAnimation();
+    //    }
 
-    }
+    //}
 
     Vector3 nMeshPos = Vector3.zero;
     IEnumerator Transition(float t)

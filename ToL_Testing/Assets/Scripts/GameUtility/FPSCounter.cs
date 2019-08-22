@@ -6,13 +6,18 @@ using TMPro;
 
 public class FPSCounter : MonoBehaviour
 {
-    public float fps;
-    public float avgFPS;
-    public TextMeshProUGUI fpsText, avgFpsText;
+    public float fps, avgFPS, animSpeed;
+    public TextMeshProUGUI fpsText, avgFpsText, animSpeedTxt;
 
     private void Awake()
     {
         StartCoroutine(CountFPS());
+    }
+
+    private void FixedUpdate()
+    {
+        animSpeed = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().GetFloat("Runspeed");
+        animSpeedTxt.text = animSpeed.ToString("0.00");
     }
 
     int c = 0;
