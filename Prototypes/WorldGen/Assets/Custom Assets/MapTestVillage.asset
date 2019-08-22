@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   villageCenter: {fileID: 11400000, guid: e639630e0f29cd4489ebe414046de8e7, type: 2}
   structures:
-  - {fileID: 11400000, guid: a6349756571f31e45bcb581ae47d9576, type: 2}
-  - {fileID: 11400000, guid: 6236ea38c9496d847bb9f7b6ba87d639, type: 2}
+  - {fileID: 11400000, guid: 56d96f492b2889343ae41fe4f5e2e8d1, type: 2}
   structureRadius: 15
   maximumSpawnAttempts: 20

@@ -90,26 +90,37 @@ namespace BaD.Modules {
             }
         }
 
-        public void EnterInstance() {
-            //Hides all overworld stuff
-            LocalPlayerObjectInstance.SetActive(false);
-            OverworldControl.Instance.HideOverworld();
-            //Camera.main.gameObject.SetActive(false);
+        public List<DungeonManager> areaStack = new List<DungeonManager>();
+
+        public void EnterArea(DungeonManager area) {
+            if (areaStack.Count == 0) {//0 means we aren't in an area
+                //Hides all overworld stuff
+                LocalPlayerObjectInstance.SetActive(false);
+                OverworldControl.Instance.HideOverworld();
+
+            } else {
+                //Just hide the previously generated instance
+                //Assuming the previously generated area is still around.
+                areaStack[areaStack.Count - 1].HideArea();
+            }
+            areaStack.Add(area);
         }
 
-        public void ExitInstance() {
-            LocalPlayerObjectInstance.SetActive(true);
-            OverworldControl.Instance.ShowOverworld();
-            CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
-            cf.currentTarget = LocalPlayerObjectInstance.transform;
-            cf.pan = 5;
-            cf.offset = 5;
-            cf.verticalOffset = 5;
-            cf.zoomSensitivity = 1f;
-            cf.distanceToPlayer = 2;
-            cf.horizontalDistanceToPlayer = 3;
-            cf.verticalLimits = new Vector2(2f, 12);
-            cf.offsetLimits = new Vector2(2f, 10);
+        public void ExitArea(DungeonManager area) {
+            if (areaStack.Count == 0) {//Move back to the overworld.
+                LocalPlayerObjectInstance.SetActive(true);
+                OverworldControl.Instance.ShowOverworld();
+                CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
+                cf.currentTarget = LocalPlayerObjectInstance.transform;
+                cf.pan = 5;
+                cf.offset = 5;
+                cf.verticalOffset = 5;
+                cf.zoomSensitivity = 1f;
+                cf.distanceToPlayer = 2;
+                cf.horizontalDistanceToPlayer = 3;
+                cf.verticalLimits = new Vector2(2f, 12);
+                cf.offsetLimits = new Vector2(2f, 10);
+            }
         }
     }
 }

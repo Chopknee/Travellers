@@ -8,7 +8,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class DungeonManager: MonoBehaviour {
+[RequireComponent(typeof(NetInstanceManager))]
+public class DungeonManager: MonoBehaviour {
 
     public static DungeonManager CurrentInstance { get; private set; }
 
@@ -60,27 +61,61 @@ public abstract class DungeonManager: MonoBehaviour {
     [Tooltip("Generally how long the distance between nodes will be.")]
     public float HallLengths;
     [Tooltip("The range of how much a node will turn before generating the next hall. Unit is in radians, so Mathf.PI = half a circle.")]
+    [Range(0, Mathf.PI*2)]
     public float NodeTwist;
-    [Range(0, 1)]
     [Tooltip("The chance of a branch to spawn off the main branch.")]
+    [Range(0, 1)]
     public float BranchChance;
     [Tooltip("The chance of a branch ending before the maximum allowed number of branch nodes has been reached.")]
+    [Range(0, 1)]
     public float BranchDeathChance;
     [Tooltip("The maximum number of nodes a branch is allowed to generate.")]
     public int BranchMaximumNodes;
 
     public bool Showing { get; private set; }
 
-    //Automatically hides everything and generates the dungeon instance
-    public void EnterInstance() {
+    public GameObject playerInstance { get; private set; }
 
-        //Hide the rest of the world
-        MainControl.Instance.EnterInstance();
+    //Private fields
+    List<GameObject> areaObjects = new List<GameObject>();
+
+    //Remainder of these are for generating and other purposes
+    List<Branch> branches = new List<Branch>();
+    Vector2 startPosition;
+    private PathfindingGrid pathfinder;
+    private bool generated = false;
+    private NavMeshSurface navSurface;
+
+    /**
+     * Entering an instance is as follows;
+     * Hide the map. -- will need to set up for instance to instance transfer
+     * Make the dungeon manager object, if it does not already exist.
+     * Make the nav mesh surface with settings, if it does not already exist
+     * Generate the instance
+     * Generate the navmesh
+     * Spawn the player object and position it in the world
+     * Set up camera for instances
+     */
+
+    //Automatically hides everything and generates the dungeon instance
+    public void EnterArea() {
+
+        MainControl.Instance.EnterArea(this);
+
+        NetInstanceManager netManagerSettings = GetComponent<NetInstanceManager>();
+        //Making a clone to prevent the current an varied issues with using the direct structure object.
+        //if (NetManager == null) {
+        //    NetManager = new GameObject("Instance Manager " + GeneratorSeed);
+        //    NetInstanceManager dmim = NetManager.AddComponent<NetInstanceManager>();
+        //    NetInstanceManager.CloneSettings(netManagerSettings, dmim);
+        //    netManagerSettings = dmim;
+        //    netManagerSettings.Awake();//
+        //}
 
         //Generate the nav mesh - add the nav mesh component if it is not already present.
         if (navSurface == null) {
             navSurface = GetComponent<NavMeshSurface>();
-            if (GetComponent<NavMeshSurface>() == null) {
+            if (navSurface == null) {
                 navSurface = gameObject.AddComponent<NavMeshSurface>();
                 navSurface.collectObjects = CollectObjects.Volume;
                 navSurface.size = new Vector3(GridSize.x * GridScale.x, navMeshHeight, GridSize.y * GridScale.y);
@@ -100,7 +135,7 @@ public abstract class DungeonManager: MonoBehaviour {
             //Only update the nav mesh if needed.
             navSurface.BuildNavMesh();
         } else {
-            foreach (GameObject go in objs) {
+            foreach (GameObject go in areaObjects) {
                 go.SetActive(true);
             }
         }
@@ -111,15 +146,15 @@ public abstract class DungeonManager: MonoBehaviour {
         GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
 
         //Enable the instance manager and join the instance.
-        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
-        netManager.enabled = true;
-        netManager.JoinInstance(GeneratorSeed);
+        netManagerSettings.enabled = true;
+        netManagerSettings.JoinInstance(GeneratorSeed);
+
         MainControl.Instance.DungeonPlayerPrefab.GetComponent<PlayerMovement>().enabled = false;//Stop this script from causing issues
-        dungeonPlayer = netManager.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
-        dungeonPlayer.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
+        playerInstance = netManagerSettings.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        playerInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
 
         CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
-        cf.currentTarget = dungeonPlayer.transform;
+        cf.currentTarget = playerInstance.transform;
         cf.pan = 100;
         cf.offset = 2;
         cf.verticalOffset = 4;
@@ -131,15 +166,15 @@ public abstract class DungeonManager: MonoBehaviour {
         Showing = true;
     }
 
-    public void ExitInstance() {
+    public void ExitArea() {
 
-        MainControl.Instance.ExitInstance();
+        MainControl.Instance.ExitArea(this);
 
         //Hides all gameobjects and disables the instance
-        foreach (GameObject go in objs) {
+        foreach (GameObject go in areaObjects) {
             go.SetActive(false);
         }
-        PhotonNetwork.Destroy(dungeonPlayer);
+        PhotonNetwork.Destroy(playerInstance);
         //Destroy(dungeonPlayer);
         CurrentInstance = null;
         Showing = false;
@@ -149,22 +184,28 @@ public abstract class DungeonManager: MonoBehaviour {
         netManager.enabled = false;
     }
 
-    GameObject dungeonPlayer;
-
-    //Private fields
-    List<GameObject> objs = new List<GameObject>();
-    List<Branch> branches = new List<Branch>();
-    Vector2 startPosition;
-    private PathfindingGrid pathfinder;
-    private bool generated = false;
-    private NavMeshSurface navSurface;
+    //Exits the area without running the world stuff
+    public void HideArea() {
+        //Hides all gameobjects and disables the instance
+        foreach (GameObject go in areaObjects) {
+            go.SetActive(false);
+        }
+        PhotonNetwork.Destroy(playerInstance);
+        //Destroy(dungeonPlayer);
+        CurrentInstance = null;
+        Showing = false;
+        //Shut down the instance manager.
+        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
+        netManager.LeaveInstance();
+        netManager.enabled = false;
+    }
 
     private void Generate () {
         allNodes.Clear();
         Noise.Reset(GeneratorSeed);
         branches = new List<Branch>();
-        Choptilities.DestroyList(objs);
-        objs = new List<GameObject>();
+        Choptilities.DestroyList(areaObjects);
+        areaObjects = new List<GameObject>();
         MakeDungeon();
     }
 
@@ -218,7 +259,7 @@ public abstract class DungeonManager: MonoBehaviour {
                 if (!allNodes.Contains(new Vector2(x, y))) {
                     Vector3 pos = new Vector3(x * GridScale.x, 0, y * GridScale.y);
                     //spawn an impasse gameobject
-                    objs.Add(InstantiateRandom(ImpassableTiles, roomsSeed, pos, Quaternion.identity));
+                    areaObjects.Add(InstantiateRandom(ImpassableTiles, roomsSeed, pos, Quaternion.identity));
                 }
             }
         }
@@ -227,17 +268,17 @@ public abstract class DungeonManager: MonoBehaviour {
         for (int x = 0; x < GridSize.x; x++) {
             //Do the horizontal borders
             Vector3 pos = new Vector3(x * GridScale.x, 0, -1 * GridScale.y);//Spawning 1 below the bottom?
-            objs.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
+            areaObjects.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
             pos = new Vector3(x * GridScale.x, 0, ( GridSize.y ) * GridScale.y);//Spawning 1 above the top
-            objs.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
+            areaObjects.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
 
         }
         for (int y = -1; y < GridSize.y + 1; y++) {
             //Do the vertical borders
             Vector3 pos = new Vector3(-1 * GridScale.x, 0, y * GridScale.y);//Spawning 1 above the top
-            objs.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
+            areaObjects.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
             pos = new Vector3(( GridSize.x ) * GridScale.x, 0, y * GridScale.y);//Spawning 1 above the top
-            objs.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
+            areaObjects.Add(InstantiateRandom(BorderTiles, roomsSeed, pos, Quaternion.identity));
         }
 
         //Build the filler that is the dungeon itself
@@ -273,7 +314,8 @@ public abstract class DungeonManager: MonoBehaviour {
 
             GameObject go = Instantiate(prefabToSpawn);
             go.transform.position = new Vector3(node.x * GridScale.x, 0, node.y * GridScale.y);
-            objs.Add(go);
+            go.transform.SetParent(transform);
+            areaObjects.Add(go);
             pathNumber++;
             progress = (0.0f + pathNumber) / (0.0f + allNodes.Count);
         }
@@ -305,6 +347,7 @@ public abstract class DungeonManager: MonoBehaviour {
     private GameObject InstantiateRandom(GameObject[] prefabs, int seed, Vector3 position, Quaternion rotation) {
         int ind = Noise.GetRandomRange(seed, 0, prefabs.Length);
         GameObject go = Instantiate(prefabs[ind]);
+        go.transform.SetParent(transform);
         go.transform.position = position;
         go.transform.rotation = rotation;
         return go;

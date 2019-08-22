@@ -3,6 +3,7 @@ using BaD.UI.DumpA;
 using Photon.Pun;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BaD.Modules {
     public class OverworldControl: MonoBehaviourPunCallbacks, IPunObservable {
@@ -99,6 +100,7 @@ namespace BaD.Modules {
         GameObject[] structures;
 
         public void HideOverworld() {
+            GetComponent<NavMeshSurface>().enabled = false;
             Map.terrainMeshObject.SetActive(false);
             //Hide all other objects like buildings?
             structures = GameObject.FindGameObjectsWithTag("Structure");
@@ -109,6 +111,7 @@ namespace BaD.Modules {
         }
 
         public void ShowOverworld() {
+            GetComponent<NavMeshSurface>().enabled = true;
             //The map
             Map.terrainMeshObject.SetActive(true);
             //The structures
