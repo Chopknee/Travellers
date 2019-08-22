@@ -5,7 +5,6 @@ using UnityEngine;
 public class NPC : MonoBehaviour
 {
     public NPCAttributes attributes;
-    
 
     private void Awake()
     {

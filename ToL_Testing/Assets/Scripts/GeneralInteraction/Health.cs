@@ -4,6 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+
+/*
+ * the health is already set up to kill the object IF both the mesh and death obj have been set. 
+ * If so, then it disables "mesh" (which is the reference to the original character MESH (not root)... 
+ * then it spawns the death obj in its place (this can be anything -- I'm using bones with rigidbodies 
+ * for the skeleton, but could be a ragdoll). Leave these empty if you don't want to have that functionality yet. 
+ * Add this script to any possible NPC or player
+*/
+
 public class Health : MonoBehaviour
 {
     public float health = 200, maxHealth = 200;
@@ -33,30 +43,46 @@ public class Health : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Health h = GetComponent<Health>();
+
+        if (transform.CompareTag("Player"))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) // 1 is remove 15 health immediately.
+            {
+                h.ChangeHealth(false, 100f, true, 2f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2)) // 2 is remove 15 health over time at a rate of .15f.
+            {
+                h.ChangeHealth(false, 600f, true, 4f);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) // 3 is remove 50 health immediately.
+            {
+                h.ChangeHealth(false, 50f, false, 1f);
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha4)) // 1 is remove 15 health immediately.
+            {
+                h.ChangeHealth(false, 100f, true, 2f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha5)) // 2 is remove 15 health over time at a rate of .15f.
+            {
+                h.ChangeHealth(false, 600f, true, 4f);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6)) // 3 is remove 50 health immediately.
+            {
+                h.ChangeHealth(false, 50f, false, 1f);
+            }
+        }
 
 
         hpImg.fillAmount = health / maxHealth;
         hpUI.text = health.ToString() + " / " + maxHealth.ToString();
 
-        hpSubImg.fillAmount = Mathf.Lerp(hpSubImg.fillAmount, health / maxHealth, .8f * Time.deltaTime);
-
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) // 1 is remove 15 health immediately.
-        {
-            ChangeHealth(false, 100f, true, 2f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2)) // 2 is remove 15 health over time at a rate of .15f.
-        {
-            ChangeHealth(false, 600f, true, 4f);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) // 3 is remove 50 health immediately.
-        {
-            ChangeHealth(false, 50f, false, 1f);
-        }
-
-
+        hpSubImg.fillAmount = Mathf.Lerp(hpSubImg.fillAmount, GetHealth / maxHealth, .8f * Time.deltaTime);
 
         if (dotActivated)
         {
@@ -65,7 +91,7 @@ public class Health : MonoBehaviour
 
         GetHealth = Mathf.Clamp(GetHealth, 0, maxHealth);
 
-        if(GetHealth <= 0 && deathObj != null && mesh != null)
+        if (GetHealth <= 0 && deathObj != null && mesh != null)
         {
             Instantiate(deathObj, transform.position, Quaternion.identity);
             mesh.SetActive(false);

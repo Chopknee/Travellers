@@ -145,27 +145,19 @@ public class PlayerMovement : MonoBehaviour
 
                     targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
                     destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-                    
-                    if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
-                    {
-                        if(currentArrow != null)
-                        {
-                            KillArrow();
-                        }
-                        GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
-                        CreateArrow(destinationPosition);
-                    }
+
+                    SetDestination(destinationPosition, true);
                 }
             }
         }
 
-        if(currentArrow != null)
+        if (currentArrow != null)
         {
             if (!agent.pathPending)
             {
-                if(agent.remainingDistance <= agent.stoppingDistance)
+                if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    if(!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0)
+                    if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0)
                     {
                         KillArrow();
                         particles.GetComponent<ParticleSystem>().Play();
@@ -186,9 +178,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        if(currentArrow != null && followingArrow)
+        if (currentArrow != null && followingArrow)
         {
-            if(Vector3.Distance(transform.position, currentArrow.transform.position) < .1f)
+            if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f)
             {
                 KillArrow();
             }
@@ -208,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(currentArrow != null)
+        if (currentArrow != null)
         {
             currentArrow.Die();
             currentArrow = null;
@@ -216,14 +208,30 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnDisable()
     {
-        if(currentArrow != null)
+        if (currentArrow != null)
         {
             currentArrow.Die();
             currentArrow = null;
         }
     }
-    
-    
+
+    public void SetDestination(Vector3 dest, bool hasArrow) // location to move to, does it have an arrow with it
+    {
+        if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
+        {
+            if (currentArrow != null)
+            {
+                KillArrow();
+            }
+
+            GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
+
+            if (hasArrow)
+                CreateArrow(destinationPosition);
+        }
+    }
+
+
     public void CreateArrow(Vector3 dest)
     {
 

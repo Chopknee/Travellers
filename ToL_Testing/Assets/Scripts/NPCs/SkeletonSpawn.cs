@@ -7,7 +7,7 @@ public class SkeletonSpawn : MonoBehaviour
     public Transform spawnPoint;
     public GameObject skeletonPrefab;
     public AudioSource skeletonSpawnFX;
-
+    bool spawned;
     
     void InitiateSpawn()
     {
@@ -31,8 +31,9 @@ public class SkeletonSpawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !spawned)
         {
+            spawned = true;
             InitiateSpawn();
         }
     }

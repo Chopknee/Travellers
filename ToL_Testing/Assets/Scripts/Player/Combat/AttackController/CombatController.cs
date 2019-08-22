@@ -20,6 +20,7 @@ public class CombatController : MonoBehaviour
         anim = GetComponent<Animator>();
         hitbox = currentWeapon.transform.Find("Hitbox").GetComponent<Collider>();
     }
+
     // Update is called once per frame
     void Update()
     {
