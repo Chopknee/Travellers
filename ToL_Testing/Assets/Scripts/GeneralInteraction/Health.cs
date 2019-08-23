@@ -82,7 +82,7 @@ public class Health : MonoBehaviour
         hpImg.fillAmount = health / maxHealth;
         hpUI.text = health.ToString() + " / " + maxHealth.ToString();
 
-        hpSubImg.fillAmount = Mathf.Lerp(hpSubImg.fillAmount, GetHealth / maxHealth, .8f * Time.deltaTime);
+        hpSubImg.fillAmount = Mathf.Lerp(hpSubImg.fillAmount, health / maxHealth, .8f * Time.fixedDeltaTime);
 
         if (dotActivated)
         {
