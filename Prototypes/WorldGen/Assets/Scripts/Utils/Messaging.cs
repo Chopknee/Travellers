@@ -54,7 +54,6 @@ namespace BaD.Modules.Networking {
         /// <summary>
         /// Keeps track of how many messages have been sent.
         /// </summary>
-        [SerializeField]
         private int RequestNumber = 0;
 
         /// <summary>

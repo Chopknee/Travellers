@@ -290,7 +290,9 @@ MonoBehaviour:
     type: 3}
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 632a3eaffdeb2e54bb8fc0550968bccc,
     type: 3}
-  activationRadius: 2.4
+  activationRadius: 3.15
+  isCurrentNavTarget: 0
+  isHighlighted: 0
 --- !u!1 &580371147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1434,7 +1436,6 @@ MonoBehaviour:
   Receivers: 1
   CachingOption: 0
   ReliabilityMode: 1
-  RequestNumber: 0
 --- !u!1001 &8531513867671873974
 PrefabInstance:
   m_ObjectHideFlags: 0

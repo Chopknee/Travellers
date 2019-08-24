@@ -36,5 +36,12 @@ namespace BaD.Chopknee.Utilities {
             }
             return RectTransformUtility.WorldToScreenPoint(camera, worldPos);
         }
+
+        public static int Vector3ToID(Vector3 vec) {
+            int sign = (int)(Mathf.Sign(vec.x) * Mathf.Sign(vec.y) * Mathf.Sign(vec.z));
+            string thing = Mathf.Abs(Mathf.RoundToInt(vec.x * 10)) + "" + Mathf.Abs(Mathf.RoundToInt(vec.y * 10)) + "" + Mathf.Abs(Mathf.RoundToInt(vec.z * 10));
+            int.TryParse(thing, out int res);
+            return res * sign;
+        }
     }
 }

@@ -9,7 +9,7 @@ public class NetInstanceManager: Messaging {
     public static NetInstanceManager CurrentManager { get; private set; }
 
     public int instanceID { get; private set;}
-    public bool isInstanceMaster { get; private set; }
+    public bool isInstanceMaster;
 
     //Some sub-code information;
     //  byte 0 - 
@@ -18,6 +18,7 @@ public class NetInstanceManager: Messaging {
     private const byte NotMaster = 2;
     private const byte LeaveInstanceCode = 3;
     private const byte InstantiateRequest = 4;
+    private const byte DestroyGORequest = 5;
 
     [SerializeField]
 #pragma warning disable 0649
@@ -59,7 +60,9 @@ public class NetInstanceManager: Messaging {
                 SendNetMessage(new object[] { instanceID, LeaveInstanceCode, isInstanceMaster, PhotonNetwork.LocalPlayer.ActorNumber, joinedPlayers[0] });
                 //Move the ownership of all objects to the newly selected player
                 foreach (KeyValuePair<int, NetworkInstance> entry in instancesPool) {
-                    entry.Value.gameObjectRef.GetComponent<PhotonView>().TransferOwnership(joinedPlayers[0]);
+                    if (entry.Value.gameObjectRef.GetComponent<PhotonView>().IsMine) {
+                        entry.Value.gameObjectRef.GetComponent<PhotonView>().TransferOwnership(joinedPlayers[0]);
+                    }
                 }
             } else {
                 //Just send my actor number so the others can remove me
@@ -67,7 +70,33 @@ public class NetInstanceManager: Messaging {
             }
             
         }
+
+        foreach (KeyValuePair<int, NetworkInstance> entry in instancesPool) {
+            Destroy(entry.Value.gameObjectRef);
+        }
+        instancesPool.Clear();
         CurrentManager = null;
+    }
+
+    public void DestroyObject(GameObject go) {
+        int ind = -1;
+        foreach (KeyValuePair<int, NetworkInstance> kvp in instancesPool) {
+            if (kvp.Value.gameObjectRef == go) {
+                ind = kvp.Key;
+                break;
+            }
+        }
+        
+        SendNetMessage(new object[] { instanceID, DestroyGORequest, ind });
+        instancesPool.Remove(ind);
+        Destroy(go);
+    }
+
+    private void OnDestroyReceived(int ind) {
+        if (instancesPool.ContainsKey(ind)) {
+            Destroy(instancesPool[ind].gameObjectRef);
+            instancesPool.Remove(ind);
+        }
     }
 
     public override void MessageReceived ( object[] messageData ) {
@@ -127,6 +156,9 @@ public class NetInstanceManager: Messaging {
                     //Got a request to instantiate something, do it now.
                     Instantiate(spawnablesPool[(int)messageData[3]], true, (Vector3)messageData[4], (Quaternion) messageData[5]);
                 }
+                break;
+            case DestroyGORequest:
+                OnDestroyReceived((int) messageData[3]);
                 break;
         }
     }

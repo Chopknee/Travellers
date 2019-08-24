@@ -39,6 +39,7 @@ namespace BaD.Modules {
         public GameObject HudUI { get { return hudUI; } }
 
         public GameObject LocalPlayerObjectInstance { get; private set; }
+        public PlayerData LocalPlayerData { get; private set; }
         public GameObject MapControlObjectInstance { get; private set; }
 
         [SerializeField]
@@ -86,6 +87,7 @@ namespace BaD.Modules {
                     MapControlObjectInstance = NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
                 }
                 LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
+                LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
                 Camera.main.GetComponent<CameraFollow>().currentTarget = LocalPlayerObjectInstance.transform;
             }
         }
@@ -121,6 +123,14 @@ namespace BaD.Modules {
                 cf.verticalLimits = new Vector2(2f, 12);
                 cf.offsetLimits = new Vector2(2f, 10);
             }
+        }
+
+        public int GetStackSeed() {//Generates a lovely seed based on the current stack.
+            int seed = 0;
+            foreach (DungeonManager dm in areaStack) {
+                seed += dm.GeneratorSeed;//Choptilities.Vector3ToID(dm.transform.position);
+            }
+            return seed;
         }
     }
 }
