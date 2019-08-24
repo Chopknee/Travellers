@@ -13,7 +13,10 @@ public class CombatController : MonoBehaviour
 
     float lastHit;
 
-
+    /*
+     * make movement and attack the same button, and only attack if clicking on an enemy.
+     * 
+     */
 
     private void Start()
     {
