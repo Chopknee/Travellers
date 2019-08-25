@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layer_mask))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask))
             {
                 string t = hit.collider.tag;
                 if (t == ("Room"))
@@ -227,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
 
             if (hasArrow)
-                CreateArrow(destinationPosition);
+                CreateArrow(dest);
         }
     }
 
@@ -238,6 +238,11 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject o = null;
         o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        if(Physics.Raycast(o.transform.position, Vector3.down, out RaycastHit hit, 500, layer_mask))
+        {
+            o.transform.position = hit.point + Vector3.up * 3.14f;
+        }
+
         currentArrow = o.transform.Find("wp").GetComponent<WaypointAnimations>();
 
         followingArrow = true;
