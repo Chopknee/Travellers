@@ -156,16 +156,19 @@ public class DungeonManager: MonoBehaviour {
         playerInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
         playerInstance.transform.SetParent(transform);
 
-        CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
+        CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
         cf.currentTarget = playerInstance.transform;
+        cf.smoothness = 5;
         cf.pan = 100;
+        cf.turnSpeed = 2;
         cf.offset = 2;
         cf.verticalOffset = 4;
         cf.zoomSensitivity = 0.2f;
         cf.distanceToPlayer = 5;
         cf.horizontalDistanceToPlayer = 3;
-        cf.verticalLimits = new Vector2(0.5f, 8);
-        cf.offsetLimits = new Vector2(0.5f, 4);
+        cf.mouseSensitivity = 1.5f;
+        //cf.verticalLimits = new Vector2(0.5f, 8);
+        //cf.offsetLimits = new Vector2(0.5f, 4);
         Showing = true;
     }
 

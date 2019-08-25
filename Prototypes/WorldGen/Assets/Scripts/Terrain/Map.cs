@@ -112,7 +112,7 @@ public class Map : MonoBehaviour {
             go.AddComponent<MeshFilter>();
             go.AddComponent<MeshRenderer>();
             go.AddComponent<MeshCollider>();
-            go.tag = "Map";
+            go.tag = "Room";
             go.layer = 8;
             terrainMeshObject = go;
             Vector3 scl = new Vector3(1, 1, -1);

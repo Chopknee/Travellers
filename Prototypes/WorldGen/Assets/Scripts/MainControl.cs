@@ -87,9 +87,10 @@ namespace BaD.Modules {
                     MapControlObjectInstance = NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
                 }
                 LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
+                LocalPlayerObjectInstance.transform.position += Vector3.up * 10;
                 LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
                 //LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
-                Camera.main.GetComponent<CameraFollow>().currentTarget = LocalPlayerObjectInstance.transform;
+                Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
             }
         }
 
@@ -113,16 +114,17 @@ namespace BaD.Modules {
             if (areaStack.Count == 0) {//Move back to the overworld.
                 LocalPlayerObjectInstance.SetActive(true);
                 OverworldControl.Instance.ShowOverworld();
-                CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
+                CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
                 cf.currentTarget = LocalPlayerObjectInstance.transform;
-                cf.pan = 5;
+                cf.smoothness = 5;
+                cf.pan = 50;
+                cf.turnSpeed = 2;
                 cf.offset = 5;
                 cf.verticalOffset = 5;
                 cf.zoomSensitivity = 1f;
                 cf.distanceToPlayer = 2;
                 cf.horizontalDistanceToPlayer = 3;
-                cf.verticalLimits = new Vector2(2f, 12);
-                cf.offsetLimits = new Vector2(2f, 10);
+                cf.mouseSensitivity = 1.5f;
             }
         }
 

@@ -114,7 +114,7 @@ namespace BaD.Modules.Terrain {
                 ActivateInstance();
             } else {
                 isCurrentNavTarget = true;
-                playerInst.GetComponent<PlayerMovement>().SetDestination(transform.position);
+                playerInst.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
 
                 //Move to this thing, then activate it.
             }

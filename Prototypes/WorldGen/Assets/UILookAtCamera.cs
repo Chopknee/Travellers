@@ -5,8 +5,11 @@ using UnityEngine;
 public class UILookAtCamera : MonoBehaviour
 {
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
-        transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+        Vector3 dir = transform.position - Camera.main.transform.position;
+        dir = new Vector3(dir.x, 0, dir.z);
+        transform.rotation = Quaternion.LookRotation(dir);
+        
     }
 }

@@ -714,6 +714,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 245460a489e50ea4e9122d7929aaf921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonManagerPrefab: {fileID: 0}
-  HoverInfoWindowPrefab: {fileID: 0}
-  activationRadius: 12.3
+  dungeonManagerPrefab: {fileID: 5869443905751087349, guid: aec6e6039a871d54c9f9832d20e07681,
+    type: 3}
+  HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
+    type: 3}
+  activationRadius: 9.95
+  isCurrentNavTarget: 0
+  isHighlighted: 0

@@ -66,9 +66,10 @@ public class InstanceActivation : MonoBehaviour {
             // - unless the player clicks elsewhere.
             isCurrentNavTarget = true;
             if (DungeonManager.CurrentInstance == null) {
-                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<Player>().SetDestination(transform.position);
+                Debug.Log("Navigating.");
+                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             } else {
-                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position);
+                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             }
             
         }
