@@ -46,6 +46,7 @@ public class InstanceActivation : MonoBehaviour {
             }
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Interact with the thing.
+                isCurrentNavTarget = false;
                 DoInteraction();
             }
         }

@@ -16,11 +16,11 @@ namespace BaD.Modules.Terrain {
         GameObject currentArrow;
         NavMeshAgent agent;
 
-        public PlayerData Data;
+        //public PlayerData Data;
 
 
         private void Start () {
-            Data = new PlayerData(gameObject);
+            //Data = new PlayerData(gameObject);
             destinationPosition = transform.position;
             agent = GetComponent<NavMeshAgent>();
         }

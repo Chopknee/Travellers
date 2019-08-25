@@ -15,7 +15,7 @@ namespace BaD.Modules.Networking {
         public Dictionary<int, GameObject> masterInventories;
         public Dictionary<int, GameObject> inventories = new Dictionary<int, GameObject>();
 
-        public delegate void InventoryRequestCallback ( GameObject reference );
+        public delegate void InventoryRequestCallback ( GameObject reference, bool needsInitialize );
         public Dictionary<int, InventoryRequestCallback> requestCallbacks = new Dictionary<int, InventoryRequestCallback>();
 
         private int nextNetworkItemId = 0;
@@ -39,47 +39,49 @@ namespace BaD.Modules.Networking {
                 int messID = SendNetMessage(new object[] { (byte) 0, id });
                 requestCallbacks.Add(messID, onRequestFulfilled);
             } else {
-                onRequestFulfilled?.Invoke(inventories[id]);
+                onRequestFulfilled?.Invoke(inventories[id], false);
             }
         }
 
         //This is the response to the request from the server to the clients
-        private void InventoryRequestResponse ( int id ) {
+        private void InventoryRequestResponse ( int id, int originatingMessageID ) {
+            bool existingAlready = false; ;
             GameObject invgo;
             if (masterInventories.ContainsKey(id)) {
                 //Respond with the spawn data from the existing object
                 invgo = masterInventories[id];
+                existingAlready = true;
             } else {
                 invgo = SpawnInventory(id);
                 masterInventories.Add(id, invgo);
             }
-            SendNetMessage(new object[] { (byte) 1, id, invgo.GetComponent<PhotonView>().ViewID });
+            SendNetMessage(new object[] { (byte) 1, id, invgo.GetComponent<PhotonView>().ViewID, existingAlready, originatingMessageID });
         }
 
         //This is the response of the client to the message from the server with the inventory view id
-        private void InventoryRequestResponseResponse ( int messageID, int id, int viewID ) {
+        private void InventoryRequestResponseResponse ( int messageID, int id, int viewID, bool shouldInitialize ) {
             if (!inventories.ContainsKey(id)) {
                 GameObject invGO = SpawnInventory(id, ViewID);
                 inventories.Add(id, invGO);
                 if (requestCallbacks.ContainsKey(messageID)) {
-                    requestCallbacks[messageID]?.Invoke(invGO);
+                    requestCallbacks[messageID]?.Invoke(invGO, true);
                     requestCallbacks.Remove(messageID);
                 }
             }
         }
 
         public override void MessageReceived ( object[] messageData ) {
+            MessageMeta mm = (MessageMeta) messageData[0];
             switch ((byte) messageData[1]) {
                 case 0:
                     //Requesting an inventory
                     if (PhotonNetwork.IsMasterClient) {
                         //Fulfill the request.
-                        InventoryRequestResponse((int) messageData[2]);
+                        InventoryRequestResponse((int) messageData[2], mm.MessageID);
                     }
                     break;
                 case 1:
-                    MessageMeta mm = (MessageMeta) messageData[0];
-                    InventoryRequestResponseResponse(mm.MessageID, (int) messageData[2], (int) messageData[3]);
+                    InventoryRequestResponseResponse((int)messageData[5], (int) messageData[2], (int) messageData[3], (bool) messageData[4]);
                     break;
             }
 
@@ -113,6 +115,7 @@ namespace BaD.Modules.Networking {
             inv.Receivers = Photon.Realtime.ReceiverGroup.All;
             inv.CachingOption = Photon.Realtime.EventCaching.DoNotCache;
             inv.ReliabilityMode = true;
+            inv.Awake();
             return invGo;
             //ph.ViewID
         }

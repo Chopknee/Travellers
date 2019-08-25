@@ -87,7 +87,8 @@ namespace BaD.Modules {
                     MapControlObjectInstance = NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
                 }
                 LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
-                LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
+                LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
+                //LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
                 Camera.main.GetComponent<CameraFollow>().currentTarget = LocalPlayerObjectInstance.transform;
             }
         }

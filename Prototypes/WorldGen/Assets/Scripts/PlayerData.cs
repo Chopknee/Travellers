@@ -37,7 +37,8 @@ public class PlayerData {
         NetworkedInventoryManager.Instance.RequestInventory(PhotonNetwork.LocalPlayer.ActorNumber, OnInventoryRequestFulfilled);
     }
 
-    public void OnInventoryRequestFulfilled(GameObject go) {
+    public void OnInventoryRequestFulfilled(GameObject go, bool needsInitialize) {
+        //In this case needs initialize can be ignored.
         playerInventoryGameobjectRef = go;
         Inventory.OnItemsUpdated += OnInventoryChanged;
     }
