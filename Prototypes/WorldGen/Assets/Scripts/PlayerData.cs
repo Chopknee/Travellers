@@ -1,4 +1,5 @@
 ﻿using BaD.Modules.Networking;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,16 @@ using UnityEngine;
 public class PlayerData {
 
     public GameObject playerGameobjectRef { get; private set; }
+
+    public GameObject playerInventoryGameobjectRef { get; private set; }
+
     public NetInventory Inventory {
         get {
-            return playerGameobjectRef.GetComponent<NetInventory>();
+            if (playerInventoryGameobjectRef != null) {
+                return playerInventoryGameobjectRef.GetComponent<NetInventory>();
+            } else {
+                return null;
+            }
         }
     }
     public delegate void PlayerGoldChanged(PlayerData player);
@@ -26,6 +34,12 @@ public class PlayerData {
 
     public PlayerData(GameObject playerRef) {
         playerGameobjectRef = playerRef;
+        NetworkedInventoryManager.Instance.RequestInventory(PhotonNetwork.LocalPlayer.ActorNumber, OnInventoryRequestFulfilled);
+    }
+
+    public void OnInventoryRequestFulfilled(GameObject go, bool needsInitialize) {
+        //In this case needs initialize can be ignored.
+        playerInventoryGameobjectRef = go;
         Inventory.OnItemsUpdated += OnInventoryChanged;
     }
 

@@ -1,4 +1,5 @@
-﻿using BaD.Modules;
+﻿using BaD.Chopknee.Utilities;
+using BaD.Modules;
 using BaD.Modules.Terrain;
 using UnityEngine;
 
@@ -37,27 +38,47 @@ public class InstanceActivation : MonoBehaviour {
         }
 
         if (isCurrentNavTarget) {
-            if (( MainControl.Instance.LocalPlayerObjectInstance.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
+            GameObject playerInst;
+            if (DungeonManager.CurrentInstance == null) {
+                playerInst = MainControl.Instance.LocalPlayerObjectInstance;
+            } else {
+                playerInst = DungeonManager.CurrentInstance.playerInstance;
+            }
+            if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Interact with the thing.
+                isCurrentNavTarget = false;
                 DoInteraction();
             }
         }
     }
 
     public void OnMouseDown () {
-        if (( MainControl.Instance.LocalPlayerObjectInstance.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
+        GameObject playerInst;
+        if (DungeonManager.CurrentInstance == null) {
+            playerInst = MainControl.Instance.LocalPlayerObjectInstance;
+        } else {
+            playerInst = DungeonManager.CurrentInstance.playerInstance;
+        }
+        if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
             DoInteraction();
         } else {
             //Set this as the target and somehow make a callback to this when the player is close enough?
             // - unless the player clicks elsewhere.
             isCurrentNavTarget = true;
-            MainControl.Instance.LocalPlayerObjectInstance.GetComponent<Player>().SetDestination(transform.position);
+            if (DungeonManager.CurrentInstance == null) {
+                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<Player>().SetDestination(transform.position);
+            } else {
+                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position);
+            }
+            
         }
     }
 
     public void DoInteraction() {
         Debug.Log("Entering village instance!");
-        int instanceSeed = Mathf.RoundToInt(transform.position.x + transform.position.y + transform.position.z);//Seed based on position?
+        //Generating a seed based on the position and current seed stack. (meaning there is a limit to how many levels deep we can go)
+        int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
+        //int instanceSeed = //Seed based on position?
         if (dungeonManagerPrefab != null) {
             GameObject dungeonManagerInst = Instantiate(dungeonManagerPrefab);
             dungeonManagerInst.transform.position = Vector3.zero;

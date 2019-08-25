@@ -2929,16 +2929,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
-        type: 3}
-      propertyPath: m_Name
-      value: SkeletonEnemy (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4361055677394805556, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2994,6 +2984,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_Name
+      value: SkeletonEnemy (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4361055677394805548, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: viewIdField
@@ -3003,17 +3003,17 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 984528177}
-    - target: {fileID: 892954521086084494, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.005499959
-      objectReference: {fileID: 0}
     - target: {fileID: 797212699639888643, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.005499959
       objectReference: {fileID: 0}
     - target: {fileID: 6309512727493965436, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.005499959
+      objectReference: {fileID: 0}
+    - target: {fileID: 892954521086084494, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.005499959

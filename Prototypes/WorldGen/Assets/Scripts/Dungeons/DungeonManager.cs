@@ -125,6 +125,8 @@ public class DungeonManager: MonoBehaviour {
                 navSurface.overrideTileSize = true;
                 navSurface.tileSize = 32;
                 navSurface.layerMask = navMeshLayers;
+            } else {
+                navSurface.enabled = true;
             }
         }
 
@@ -152,6 +154,7 @@ public class DungeonManager: MonoBehaviour {
         MainControl.Instance.DungeonPlayerPrefab.GetComponent<PlayerMovement>().enabled = false;//Stop this script from causing issues
         playerInstance = netManagerSettings.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
         playerInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
+        playerInstance.transform.SetParent(transform);
 
         CameraFollow cf = Camera.main.GetComponent<CameraFollow>();
         cf.currentTarget = playerInstance.transform;
@@ -167,37 +170,27 @@ public class DungeonManager: MonoBehaviour {
     }
 
     public void ExitArea() {
-
         MainControl.Instance.ExitArea(this);
-
-        //Hides all gameobjects and disables the instance
-        foreach (GameObject go in areaObjects) {
-            go.SetActive(false);
-        }
-        PhotonNetwork.Destroy(playerInstance);
-        //Destroy(dungeonPlayer);
-        CurrentInstance = null;
-        Showing = false;
-        //Shut down the instance manager.
-        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
-        netManager.LeaveInstance();
-        netManager.enabled = false;
+        HideArea();
     }
 
-    //Exits the area without running the world stuff
+    //Exits the area without running the world exit area code.
     public void HideArea() {
         //Hides all gameobjects and disables the instance
         foreach (GameObject go in areaObjects) {
             go.SetActive(false);
         }
-        PhotonNetwork.Destroy(playerInstance);
-        //Destroy(dungeonPlayer);
-        CurrentInstance = null;
-        Showing = false;
-        //Shut down the instance manager.
+
+        //PhotonNetwork.Destroy(playerInstance);
         NetInstanceManager netManager = GetComponent<NetInstanceManager>();
+        netManager.DestroyObject(playerInstance);
+        //Shut down the instance manager.
         netManager.LeaveInstance();
         netManager.enabled = false;
+        navSurface.enabled = false;
+
+        CurrentInstance = null;
+        Showing = false;
     }
 
     private void Generate () {

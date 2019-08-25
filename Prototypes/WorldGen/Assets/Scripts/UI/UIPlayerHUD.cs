@@ -36,7 +36,7 @@ namespace BaD.UI.DumpA {
             if (associatedPlayer == null) {
                 if (MainControl.Instance != null && MainControl.Instance.LocalPlayerObjectInstance != null) {
                     //Get the player data from the player object
-                    associatedPlayer = MainControl.Instance.LocalPlayerObjectInstance.GetComponent<Player>().Data;
+                    associatedPlayer = MainControl.Instance.LocalPlayerData;
                     if (associatedPlayer != null) {
                         associatedPlayer.OnPlayerGoldChanged += OnGoldChanged;
                         associatedPlayer.OnPlayernameChanged += OnNameChanged;
