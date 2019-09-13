@@ -72,9 +72,6 @@ MonoBehaviour:
   EndTile: {fileID: 3775774599634668053, guid: 8af72233a8ceab849a238c802ff56c26, type: 3}
   BasicTiles:
   - {fileID: 3775774599634668053, guid: e5702ecbc09193f469907f935872dd72, type: 3}
-  - {fileID: 3775774599634668053, guid: 404e28a11c8fc4340b2998a585880fce, type: 3}
-  - {fileID: 3775774599634668053, guid: 677baab17965e9547a444dfd39ff52d7, type: 3}
-  - {fileID: 3775774599634668053, guid: ef982f1c34593a645b6733583e90564e, type: 3}
   SpawnSpecialTilesOnce: 1
   SpecialTiles:
   - {fileID: 3775774599634668053, guid: 3599190dde183014a99e00f40d521286, type: 3}

@@ -8445,8 +8445,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 1164946093}
+  - {fileID: 2445594148722356665}
   - {fileID: 4132447902666491130}
+  - {fileID: 1164946093}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -8553,6 +8554,33 @@ PrefabInstance:
       propertyPath: m_FillMethod
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3086224653399727035, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c0e0a57a225c2fa4ab63f645be952cea,
+        type: 3}
+    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 7342315595003860668, guid: 3473bd66b44ed654592b1a383bb31888,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8713,6 +8741,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 109.28998
       objectReference: {fileID: 0}
+    - target: {fileID: 4205132099177743775, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 3165724309657783291, guid: 3473bd66b44ed654592b1a383bb31888,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -8753,6 +8786,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 109.28998
       objectReference: {fileID: 0}
+    - target: {fileID: 2571040645414375621, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6309512726061111312, guid: 3473bd66b44ed654592b1a383bb31888,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -8792,6 +8830,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 109.28998
+      objectReference: {fileID: 0}
+    - target: {fileID: 5934895708478618451, guid: 3473bd66b44ed654592b1a383bb31888,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8138095745329488969, guid: 3473bd66b44ed654592b1a383bb31888,
         type: 3}
@@ -8893,48 +8936,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 672.27
       objectReference: {fileID: 0}
-    - target: {fileID: 4205132099177743775, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 3086224653399727035, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: c0e0a57a225c2fa4ab63f645be952cea,
-        type: 3}
-    - target: {fileID: 2571040645414375621, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5934895708478618451, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_firstOverflowCharacterIndex
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-    - target: {fileID: 7710899396715542048, guid: 3473bd66b44ed654592b1a383bb31888,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
-        type: 2}
     - target: {fileID: 7342315595003860669, guid: 3473bd66b44ed654592b1a383bb31888,
         type: 3}
       propertyPath: m_RenderMode
@@ -9254,6 +9255,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5741135456754803407}
     m_Modifications:
+    - target: {fileID: 9181936858947072161, guid: 048d9ea9925cde34095e177f7ca01eb5,
+        type: 3}
+      propertyPath: m_Name
+      value: great-sword-01
+      objectReference: {fileID: 0}
+    - target: {fileID: 9181936858947072161, guid: 048d9ea9925cde34095e177f7ca01eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 5275847340908724914, guid: 048d9ea9925cde34095e177f7ca01eb5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9308,16 +9319,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9181936858947072161, guid: 048d9ea9925cde34095e177f7ca01eb5,
-        type: 3}
-      propertyPath: m_Name
-      value: great-sword-01
-      objectReference: {fileID: 0}
-    - target: {fileID: 9181936858947072161, guid: 048d9ea9925cde34095e177f7ca01eb5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6872149687186100583, guid: 048d9ea9925cde34095e177f7ca01eb5,
         type: 3}

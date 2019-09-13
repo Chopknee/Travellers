@@ -371,6 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4293eadb1b3f1b4cb27a6d5a05af253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radiusForAttacking: 1.31
 --- !u!114 &3916833212642744026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +494,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 4361055677394805549}
+  - {fileID: 214620401168946354}
   - {fileID: 4361055677394805555}
   viewIdField: 0
   InstantiationId: 2
@@ -546,7 +548,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: Runspeed
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: RopeClimbing
   m_SynchronizeLayers:
   - SynchronizeType: 1
@@ -619,6 +621,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c0e0a57a225c2fa4ab63f645be952cea,
         type: 3}
+    - target: {fileID: 7710899396715542048, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 7710899396715542048, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 7342315595003860668, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -754,6 +767,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1231240127465677999, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 1231240127465677999, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 4987678406067440177, guid: 9d3dfe6addfbc1c4abf9d3ad6c8da1f9,
         type: 3}
       propertyPath: m_Sprite

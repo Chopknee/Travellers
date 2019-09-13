@@ -13,15 +13,14 @@ public class NPCAgression : MonoBehaviour
 
     private void Awake()
     {
-        if (!NetInstanceManager.CurrentManager.isInstanceMaster) {
-            enabled = false;
-            return;
-        }
         agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
+        if (!NetInstanceManager.CurrentManager.isActiveAndEnabled)
+            return;
+
         targets = GameObject.FindGameObjectsWithTag("Player");
         if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) < sightDistance)
         {

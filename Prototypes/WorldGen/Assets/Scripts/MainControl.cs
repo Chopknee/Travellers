@@ -112,6 +112,7 @@ namespace BaD.Modules {
 
         public void ExitArea(DungeonManager area) {
             if (areaStack.Count == 0) {//Move back to the overworld.
+                Debug.Log("Reentering the overworld!!");
                 LocalPlayerObjectInstance.SetActive(true);
                 OverworldControl.Instance.ShowOverworld();
                 CameraMovement cf = Camera.main.GetComponent<CameraMovement>();

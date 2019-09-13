@@ -8,12 +8,13 @@ public class WeaponDetector : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("SwingingWeapon"))
-        {
-            MeleeWeapon w = other.transform.parent.GetComponent<MeleeWeapon>();
-            Debug.Log("Weapon: " + w.weapon + " hit " + gameObject.name + " with " + w.baseDamage);
-            h.ChangeHealth(false, w.baseDamage, false, 1);
-            other.enabled = false;
+        if (NetInstanceManager.CurrentManager.isInstanceMaster) {
+            if (other.CompareTag("SwingingWeapon")) {
+                MeleeWeapon w = other.transform.parent.GetComponent<MeleeWeapon>();
+                Debug.Log("Weapon: " + w.weapon + " hit " + gameObject.name + " with " + w.baseDamage);
+                h.ChangeHealth(false, w.baseDamage, false, 1);
+                other.enabled = false;
+            }
         }
     }
 }

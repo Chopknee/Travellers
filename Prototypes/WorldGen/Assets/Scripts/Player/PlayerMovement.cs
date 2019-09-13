@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (currentArrow != null)
         {
-            if (!agent.pathPending)
+            if (!agent.pathPending && agent.isOnNavMesh)
             {
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
@@ -116,8 +116,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 KillArrow();
             }
-
-            GetComponent<NavMeshAgent>().SetDestination(dest);
+            if (GetComponent<NavMeshAgent>().isOnNavMesh) {
+                GetComponent<NavMeshAgent>().SetDestination(dest);
+            }
 
             if (hasArrow)
                 CreateArrow(dest);

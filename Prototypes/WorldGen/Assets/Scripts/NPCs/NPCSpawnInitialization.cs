@@ -10,7 +10,7 @@ public class NPCSpawnInitialization : MonoBehaviour
         GetComponent<NavMeshAgent>().enabled = true;
         GetComponent<NPCAgression>().enabled = true;
         GetComponent<WeaponDetector>().enabled = true;
-        GetComponent<Rigidbody>().isKinematic = false;
+        //GetComponent<Rigidbody>().isKinematic = false;
     }
 
 }

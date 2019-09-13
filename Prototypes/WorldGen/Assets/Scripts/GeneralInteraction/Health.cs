@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
 
 
@@ -14,8 +15,8 @@ using TMPro;
  * Add this script to any possible NPC or player
 */
 
-public class Health : MonoBehaviour
-{
+public class Health : MonoBehaviour, IPunObservable {
+
     public float health = 200, maxHealth = 200;
     public TextMeshProUGUI hpUI;
     public Image hpImg, hpSubImg;
@@ -107,7 +108,8 @@ public class Health : MonoBehaviour
 
     public void Die()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        NetInstanceManager.CurrentManager.DestroyObject(gameObject);
     }
 
     public void ChangeHealth(bool heal, float hp, bool dot, float rate) // health as of calling the function, add or remove, how much to change, over time, rate
@@ -152,5 +154,11 @@ public class Health : MonoBehaviour
         else dotActivated = false;
     }
 
-
+    public void OnPhotonSerializeView ( PhotonStream stream, PhotonMessageInfo info ) {
+        if (NetInstanceManager.CurrentManager.isInstanceMaster) {
+            stream.SendNext(health);
+        } else {
+            health = (float) stream.ReceiveNext();
+        }
+    }
 }

@@ -108,7 +108,7 @@ public class MovementAnimationController : MonoBehaviour
         //nMeshPos = navMeshHit.position;
 
         yield return new WaitUntil(() => transform.position.y <= 0);
-        Debug.Log("We gettin hot boys the floor is lava bb");
+        //Debug.Log("We gettin hot boys the floor is lava bb");
         anim.SetBool("RopeClimbing", false);
         transitioning = false;
         GetComponent<NPCSpawnInitialization>().Initialize();
