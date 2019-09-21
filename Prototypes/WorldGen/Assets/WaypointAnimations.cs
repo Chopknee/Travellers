@@ -142,6 +142,8 @@ public class WaypointAnimations : MonoBehaviour
 
     private void Update()
     {
+        if (player == null) { Destroy(gameObject); return; }
+
         distToPlayer = Vector3.Distance(transform.position, player.position);
         l.spotAngle = emission;
         l.GetComponent<HDAdditionalLightData>().shapeRadius = shapeRadius;

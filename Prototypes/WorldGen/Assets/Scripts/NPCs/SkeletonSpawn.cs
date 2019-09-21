@@ -24,7 +24,7 @@ public class SkeletonSpawn : MonoBehaviour
 
     void SpawnGroup() {
         //Only trigger the spawn if we are the master
-        if (NetInstanceManager.CurrentManager.isInstanceMaster) {
+        if (NetInstanceManager.CurrentManager != null && NetInstanceManager.CurrentManager.isInstanceMaster) {
             //spawn here
             //NetInstanceManager.CurrentManager.Instantiate(< prefab gameobject reference >, false, position, rotation)
             //GameObject o = Instantiate(skeletonPrefab, spawnPoint.position, Quaternion.identity);

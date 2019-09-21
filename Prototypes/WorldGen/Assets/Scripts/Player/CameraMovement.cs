@@ -30,6 +30,8 @@ public class CameraMovement : MonoBehaviour
     }
     private void LateUpdate()
     {
+        if (currentTarget == null) return;
+
         targetPos = currentTarget.position;
 
         //offset is equal to target pos, plus the vector containing the offset of camoffset x and y, multiplied by the offset float (5f);
@@ -74,6 +76,7 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (currentTarget == null) return;
         //zoom on scroll
         if (Input.mouseScrollDelta != Vector2.zero)
         {
