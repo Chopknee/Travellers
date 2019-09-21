@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 272353435852515704}
   - component: {fileID: 517096081787095436}
   - component: {fileID: 8434307155384635677}
+  - component: {fileID: 6811082716006840334}
   m_Layer: 0
   m_Name: cobble-plate
   m_TagString: Untagged
@@ -172,3 +173,16 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: -0.03}
   m_TimeToStationary: 0.5
+--- !u!65 &6811082716006840334
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4218544757271564381}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 9.005971, y: 9.00597, z: 1.21}
+  m_Center: {x: 0, y: 0, z: 0.08484649}

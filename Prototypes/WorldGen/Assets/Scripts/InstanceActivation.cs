@@ -66,16 +66,16 @@ public class InstanceActivation : MonoBehaviour {
             // - unless the player clicks elsewhere.
             isCurrentNavTarget = true;
             if (DungeonManager.CurrentInstance == null) {
-                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<Player>().SetDestination(transform.position);
+                Debug.Log("Navigating.");
+                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             } else {
-                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position);
+                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             }
             
         }
     }
 
     public void DoInteraction() {
-        Debug.Log("Entering village instance!");
         //Generating a seed based on the position and current seed stack. (meaning there is a limit to how many levels deep we can go)
         int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
         //int instanceSeed = //Seed based on position?
@@ -87,6 +87,9 @@ public class InstanceActivation : MonoBehaviour {
             dungeonManager.name = "Instance Manager " + instanceSeed;
             dungeonManager.GeneratorSeed = instanceSeed;
             dungeonManager.EnterArea();
+        } else {
+            //If no dungeon manager is set, assume the player wishes to exit.
+            DungeonManager.CurrentInstance.ExitArea();
         }
     }
 

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MovementAnimationController: MonoBehaviour {
+public class MovementAnimationController : MonoBehaviour
+{
     bool transitioning;
     public float transitionTime = 2;
     float fallSpeed = .02f;
 
-    public enum state {
+    public enum state
+    {
         Attack, Die
     }
 
@@ -23,10 +25,8 @@ public class MovementAnimationController: MonoBehaviour {
     AnimationClip lastClip;
     NavMeshAgent agent;
     Vector3 lastPos, nextPos;
-
-    public float speedMultiplier = 1.7f;
-
-    private void Start () {
+    private void Start()
+    {
         lastPos = transform.position;
         if (transform.CompareTag("Player"))
             player = true;
@@ -34,8 +34,11 @@ public class MovementAnimationController: MonoBehaviour {
 
         anim = transform.GetComponent<Animator>();
 
-        if (player) {
-        } else {
+        if (player)
+        {
+        }
+        else
+        {
             transitioning = true;
             anim.SetBool("RopeClimbing", true);
             StartCoroutine("Transition", transitionTime);
@@ -46,36 +49,46 @@ public class MovementAnimationController: MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
     }
 
+    float[] avgSpeedArray = new float[10];
 
+    int indexOfAvg = 0;
+    public float avgSpeed;
     float smoothVel = 0;
     float lastSpd = 0;
-
-    float[] smoothArray = new float[10];
-    int pos = 0;
-
-    private void LateUpdate () {
-        if (transitioning) {
+    private void LateUpdate()
+    {
+        if (transitioning)
+        {
             transform.position -= Vector3.up * fallSpeed;
             return;
         }
+       
+        
         nextPos = transform.position;
-        float lv = ( nextPos - lastPos ).magnitude / Time.deltaTime;
-        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float) System.Math.Round(lv, 1), ref smoothVel, .5f);
-        speed = Mathf.Lerp(lastSpd, tmpSpeed, .3f);
+        float lv = (nextPos - lastPos).sqrMagnitude / Time.deltaTime;
+        float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float)System.Math.Round(lv, 1), ref smoothVel, .5f);
+        float roundSpeed = Mathf.RoundToInt(speed);
+
+        speed = Mathf.Lerp(lastSpd, avgSpeed, .3f);
         lastPos = transform.position;
         lastSpd = tmpSpeed;
 
-        smoothArray[pos] = speed;
-        pos = ( pos == smoothArray.Length - 1 ) ? 0 : pos + 1;
-        float avgSpeed = 0;
-        foreach (float val in smoothArray) {
-            avgSpeed += val;
+
+        speed = (float)System.Math.Round(speed, 2);
+
+        
+        
+        avgSpeedArray[indexOfAvg] = speed;
+        indexOfAvg = (indexOfAvg == avgSpeedArray.Length - 1) ? 0 : indexOfAvg + 1;
+        avgSpeed = 0;
+        foreach (float f in avgSpeedArray)
+        {
+            avgSpeed += f;
         }
-        avgSpeed = avgSpeed / (float) smoothArray.Length;
 
-        avgSpeed = (float) System.Math.Round(avgSpeed, 2);
+        avgSpeed = avgSpeed / (float)avgSpeedArray.Length;
 
-        anim.SetFloat("Runspeed", avgSpeed * speedMultiplier);
+        anim.SetFloat("Runspeed", avgSpeed);
 
 
         SetAnimation();
@@ -85,7 +98,8 @@ public class MovementAnimationController: MonoBehaviour {
     Vector3 nMeshPos = Vector3.zero;
 
     // rope animation transition
-    IEnumerator Transition ( float t ) {
+    IEnumerator Transition(float t)
+    {
 
         yield return new WaitForSeconds(t);
         NavMeshHit navMeshHit;
@@ -94,15 +108,17 @@ public class MovementAnimationController: MonoBehaviour {
         //nMeshPos = navMeshHit.position;
 
         yield return new WaitUntil(() => transform.position.y <= 0);
-        Debug.Log("We gettin hot boys the floor is lava bb");
+        //Debug.Log("We gettin hot boys the floor is lava bb");
         anim.SetBool("RopeClimbing", false);
         transitioning = false;
+        GetComponent<NPCSpawnInitialization>().Initialize();
         GetComponent<NavMeshAgent>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
     }
 
 
-    void SetAnimation () {
+    void SetAnimation()
+    {
 
         if (lastState == nextState) return;
 
