@@ -25,8 +25,9 @@ public class HandFollow : MonoBehaviour
         {
             rightHand = transform.Find("mixamorig:RightHand");
         }
+
         transform.position = rightHand.position + positionOffset;
-        Vector3 er = rightHand.rotation.eulerAngles + rotationOffset;
+        Vector3 er = rightHand.rotation.eulerAngles + transform.localRotation.eulerAngles;
         transform.rotation = Quaternion.Euler(er);
         transform.parent = rightHand;
     }

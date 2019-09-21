@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeWeapon : MonoBehaviour
+public class MeleeWeapon : AttackStyle
 {
     public enum WeaponType
     {
@@ -11,7 +11,7 @@ public class MeleeWeapon : MonoBehaviour
 
     public WeaponType weapon = WeaponType.Dagger;
 
-    public float attackRate = 1;
-
     public float baseDamage = 100f;
+    public float knockbackPower = 5;
+    public float attackRate = .2f;
 }
