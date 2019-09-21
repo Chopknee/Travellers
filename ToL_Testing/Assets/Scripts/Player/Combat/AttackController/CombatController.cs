@@ -98,7 +98,9 @@ public class CombatController : MonoBehaviour
             foreach (GameObject g in nearbyEnemies)
             {
                 MeleeWeapon wp = currentWeapon.GetComponent<MeleeWeapon>();
+                Vector3 dir = -(g.transform.position - transform.position);
 
+                g.GetComponent<Rigidbody>().AddForce(dir.normalized * wp.knockbackPower);
                 g.GetComponent<Health>().ChangeHealth(false, wp.baseDamage, false, 1);
             }
             Invoke("ClearNearbyList", 1);

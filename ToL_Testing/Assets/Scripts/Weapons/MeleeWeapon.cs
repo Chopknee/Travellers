@@ -12,6 +12,6 @@ public class MeleeWeapon : AttackStyle
     public WeaponType weapon = WeaponType.Dagger;
 
     public float baseDamage = 100f;
-
+    public float knockbackPower = 5;
     public float attackRate = .2f;
 }
