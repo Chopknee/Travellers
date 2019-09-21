@@ -373,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4293eadb1b3f1b4cb27a6d5a05af253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityName: SkeletonEnemy
 --- !u!114 &3916833212642744026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,9 +580,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackStyle: 1
-  attackRate: 1
   weapon: 0
   baseDamage: 100
+  attackRate: 1
 --- !u!1 &8527518325748440599
 GameObject:
   m_ObjectHideFlags: 0
