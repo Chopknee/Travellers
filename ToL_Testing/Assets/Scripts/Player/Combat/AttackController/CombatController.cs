@@ -9,45 +9,121 @@ public class CombatController : MonoBehaviour
     public TextMeshProUGUI t;
 
     public GameObject currentWeapon;
+    public Transform currentTarget;
+    AttackStyle style;
     Collider hitbox;
+    public float reach;
+    public List<GameObject> nearbyEnemies;
+
 
     float lastHit;
-
+    float nextHit;
+   
     /*
      * make movement and attack the same button, and only attack if clicking on an enemy.
      * 
      */
+    Transform s = null;
+    Vector3 sRest;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        hitbox = currentWeapon.transform.Find("Hitbox").GetComponent<Collider>();
+        style = GetComponent<AttackStyle>();
+        if (style.attackStyle == AttackStyle.AttackType.Ranged)
+        {
+            s = currentWeapon.transform.Find("String.Bone");
+            //sRest = s.localPosition;
+        }
     }
-
+    
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Attack") && Time.time - lastHit > hitbox.transform.parent.GetComponent<MeleeWeapon>().attackRate)
-        {
-            t.text = "Attacking";
 
-            if (hitbox != null)
+
+        if (Input.GetButtonDown("Attack") && Time.time > lastHit)
+        {
+            
+            GameObject o = new GameObject("Dmg");
+            o.transform.position = transform.position + transform.forward * 1;
+            Collider[] hitColliders = Physics.OverlapSphere(o.transform.position, reach);
+
+            foreach (Collider c in hitColliders)
             {
-                Invoke("BeginCollision", .7f);
+                if (c.gameObject.GetComponent<Health>() != null)
+                {
+                    if (!nearbyEnemies.Contains(c.gameObject) && c.CompareTag("Enemy"))
+                        nearbyEnemies.Add(c.gameObject);
+                }
+                else
+                {
+                    //Debug.Log("null" + c.name);
+                }
             }
+            Destroy(o);
             anim.SetTrigger("Attack");
+
+            if (GetComponent<AttackStyle>().attackStyle == AttackStyle.AttackType.Melee)
+            {
+                waitingForHit = true;
+                nextHit = Time.time + currentWeapon.GetComponent<MeleeWeapon>().attackRate;
+                lastHit = Time.time + anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+                WaitForHit();
+
+            }
+            else if (style.attackStyle == AttackStyle.AttackType.Ranged) //not broken but not good
+            {
+                s = currentWeapon.transform.Find("String.Bone");
+                s.parent = GetComponent<HandFollow>().rightHand;
+                s.localPosition = Vector3.zero;
+                Invoke("LetGo", anim.GetCurrentAnimatorClipInfo(0)[1].clip.length);
+
+                currentWeapon.GetComponent<Animator>().SetTrigger("Fire");
+            }
+            
+        }
+        if (waitingForHit)
+        {
+            WaitForHit();
+        }
+        
+    }
+    bool waitingForHit;
+
+    void WaitForHit()
+    {
+        if (Time.time >= nextHit)
+        {
+            foreach (GameObject g in nearbyEnemies)
+            {
+                MeleeWeapon wp = currentWeapon.GetComponent<MeleeWeapon>();
+
+                g.GetComponent<Health>().ChangeHealth(false, wp.baseDamage, false, 1);
+            }
+            Invoke("ClearNearbyList", 1);
+            waitingForHit = false;
+            nextHit = Time.time * 2;
         }
     }
+    
 
-    void BeginCollision()
+    void ClearNearbyList()
     {
-        hitbox.enabled = true;
-        Invoke("EndCollision", .5f);
+        nearbyEnemies.Clear();
     }
-    void EndCollision()
+
+
+
+
+
+
+
+
+
+    void LetGo()
     {
-        t.text = "";
-        if (hitbox != null)
-            hitbox.enabled = false;
+        s.parent = currentWeapon.transform.Find("Main.Bone");
+        s.localPosition = sRest;
     }
 }

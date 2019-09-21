@@ -192,8 +192,8 @@ public class DungeonManager: MonoBehaviour {
         CurrentInstance = null;
         Showing = false;
     }
-
-    private void Generate () {
+   
+    public void Generate () {
         allNodes.Clear();
         Noise.Reset(GeneratorSeed);
         branches = new List<Branch>();
