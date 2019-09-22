@@ -107,14 +107,21 @@ namespace BaD.Modules {
                 //Assuming the previously generated area is still around.
                 areaStack[areaStack.Count - 1].HideArea();
             }
+
             areaStack.Add(area);
         }
 
         public void ExitArea(DungeonManager area) {
+            Debug.Log("Area stack as it is now; " + areaStack.Count);
+
+            int ind = areaStack.IndexOf(area);
+            areaStack.RemoveRange(ind, areaStack.Count - ind);
+            Debug.Log("Area stack after moving; " + areaStack.Count);
             if (areaStack.Count == 0) {//Move back to the overworld.
                 Debug.Log("Reentering the overworld!!");
                 LocalPlayerObjectInstance.SetActive(true);
                 OverworldControl.Instance.ShowOverworld();
+
                 CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
                 cf.currentTarget = LocalPlayerObjectInstance.transform;
                 cf.smoothness = 5;

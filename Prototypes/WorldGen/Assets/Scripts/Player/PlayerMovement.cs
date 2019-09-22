@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class PlayerMovement : MonoBehaviour
-{
+public class PlayerMovement: MonoBehaviour {
     public LayerMask layer_mask;
     public Vector3 destinationPosition;
     Quaternion targetRotation;
@@ -14,24 +13,19 @@ public class PlayerMovement : MonoBehaviour
     public GameObject particles;
 
 
-    private void Start()
-    {
+    private void Start () {
         destinationPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
     }
-    private void Update()
-    {
-        if (Input.GetButtonDown("Interact"))
-        {
+    private void Update () {
+        if (Input.GetButtonDown("Interact")) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask))
-            {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask)) {
                 string t = hit.collider.tag;
-                if (t == ("Room"))
-                {
+                if (t == ( "Room" )) {
                     Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
                     targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
@@ -42,14 +36,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (currentArrow != null)
-        {
-            if (!agent.pathPending && agent.isOnNavMesh)
-            {
-                if (agent.remainingDistance <= agent.stoppingDistance)
-                {
-                    if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0)
-                    {
+        if (currentArrow != null) {
+            if (!agent.pathPending && agent.isOnNavMesh) {
+                if (agent.remainingDistance <= agent.stoppingDistance) {
+                    if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0) {
                         KillArrow();
                         if (particles != null) {
                             particles.GetComponent<ParticleSystem>().Play();
@@ -58,23 +48,18 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (!agent.pathPending && !agent.hasPath)
-            {
+            if (!agent.pathPending && !agent.hasPath) {
                 timeSincePathfinding += .1f;
-            }
-            else timeSincePathfinding = 0;
+            } else timeSincePathfinding = 0;
 
-            if (timeSincePathfinding >= 5f)
-            {
+            if (timeSincePathfinding >= 5f) {
                 KillArrow();
             }
         }
 
 
-        if (currentArrow != null && followingArrow)
-        {
-            if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f)
-            {
+        if (currentArrow != null && followingArrow) {
+            if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f) {
                 KillArrow();
             }
         }
@@ -83,37 +68,24 @@ public class PlayerMovement : MonoBehaviour
 
     float timeSincePathfinding = 0;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("PortalOut"))
-        {
-            Debug.LogError("----------------------Exited----------------------");
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (currentArrow != null)
-        {
+    private void OnDestroy () {
+        if (currentArrow != null) {
             currentArrow.Die();
             currentArrow = null;
         }
     }
-    private void OnDisable()
-    {
-        if (currentArrow != null)
-        {
+    private void OnDisable () {
+        if (currentArrow != null) {
             currentArrow.Die();
             currentArrow = null;
         }
     }
 
-    public void SetDestination(Vector3 dest, bool hasArrow) // location to move to, does it have an arrow with it
+    public void SetDestination ( Vector3 dest, bool hasArrow ) // location to move to, does it have an arrow with it
     {
-        if (dest != null && targetRotation != null && dest != transform.position)
-        {
-            if (currentArrow != null)
-            {
+        Debug.Log("Player has new destination.");
+        if (dest != null && targetRotation != null && dest != transform.position) {
+            if (currentArrow != null) {
                 KillArrow();
             }
             if (GetComponent<NavMeshAgent>().isOnNavMesh) {
@@ -126,8 +98,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    public void CreateArrow(Vector3 dest)
-    {
+    public void CreateArrow ( Vector3 dest ) {
 
 
         GameObject o = null;
@@ -141,10 +112,8 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public void KillArrow()
-    {
-        if (currentArrow != null)
-        {
+    public void KillArrow () {
+        if (currentArrow != null) {
             currentArrow.Die();
             currentArrow = null;
         }

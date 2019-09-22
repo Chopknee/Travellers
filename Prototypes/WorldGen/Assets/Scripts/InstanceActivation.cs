@@ -2,6 +2,7 @@
 using BaD.Modules;
 using BaD.Modules.Terrain;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class InstanceActivation : MonoBehaviour {
     [SerializeField]
@@ -67,7 +68,10 @@ public class InstanceActivation : MonoBehaviour {
             isCurrentNavTarget = true;
             if (DungeonManager.CurrentInstance == null) {
                 Debug.Log("Navigating.");
-                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
+                NavMesh.SamplePosition(transform.position, out NavMeshHit hit, activationRadius+8, 0);
+                if (!hit.hit) { Debug.Log("No point found!"); return; }
+                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+
             } else {
                 DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             }
@@ -80,6 +84,7 @@ public class InstanceActivation : MonoBehaviour {
         int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
         //int instanceSeed = //Seed based on position?
         if (dungeonManagerPrefab != null) {
+            Debug.Log("Entering new area; " + instanceSeed);
             GameObject dungeonManagerInst = Instantiate(dungeonManagerPrefab);
             dungeonManagerInst.transform.position = Vector3.zero;
             dungeonManagerInst.transform.localScale = Vector3.one;
@@ -89,6 +94,7 @@ public class InstanceActivation : MonoBehaviour {
             dungeonManager.EnterArea();
         } else {
             //If no dungeon manager is set, assume the player wishes to exit.
+            Debug.Log("Exiting area.");
             DungeonManager.CurrentInstance.ExitArea();
         }
     }

@@ -13,6 +13,8 @@ TagManager:
   - DestinationArrowTmp
   - SpawnPoint
   - RoofFader
+  - SwingingWeapon
+  - Enemy
   layers:
   - Default
   - TransparentFX

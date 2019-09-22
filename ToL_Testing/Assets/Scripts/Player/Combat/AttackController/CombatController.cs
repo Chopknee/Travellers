@@ -3,129 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CombatController : MonoBehaviour
-{
+public class CombatController: MonoBehaviour {
     Animator anim;
-    public TextMeshProUGUI t;
 
     public GameObject currentWeapon;
-    public Transform currentTarget;
-    AttackStyle style;
+    AttackStyle weaponScript;
     Collider hitbox;
-    public float reach;
-    public List<GameObject> nearbyEnemies;
 
 
-    float lastHit;
-    float nextHit;
-   
-    /*
-     * make movement and attack the same button, and only attack if clicking on an enemy.
-     * 
-     */
-    Transform s = null;
-    Vector3 sRest;
 
-    private void Start()
-    {
-        anim = GetComponent<Animator>();
-        style = GetComponent<AttackStyle>();
-        if (style.attackStyle == AttackStyle.AttackType.Ranged)
-        {
-            s = currentWeapon.transform.Find("String.Bone");
-            //sRest = s.localPosition;
+    private void Start () {
+        if (currentWeapon.GetComponent<AttackStyle>() == null) {
+            Debug.Log("Cannot use current weapon gameobject. It does not have an attack style or derivative script.");
+            return;
         }
+        SetWeapon(currentWeapon.GetComponent<AttackStyle>());
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
 
-
-        if (Input.GetButtonDown("Attack") && Time.time > lastHit)
-        {
-            
-            GameObject o = new GameObject("Dmg");
-            o.transform.position = transform.position + transform.forward * 1;
-            Collider[] hitColliders = Physics.OverlapSphere(o.transform.position, reach);
-
-            foreach (Collider c in hitColliders)
-            {
-                if (c.gameObject.GetComponent<Health>() != null)
-                {
-                    if (!nearbyEnemies.Contains(c.gameObject) && c.CompareTag("Enemy"))
-                        nearbyEnemies.Add(c.gameObject);
+    void Update () {
+        if (currentWeapon != null) {
+            if (Input.GetButtonDown("Attack")) {
+                if (!weaponScript.IsAttacking) {
+                    weaponScript.DoAttack();
+                    //Debug.Log("Attacking!!");
+                } else {
+                    //Debug.Log("Can't attack, already attacking.");
                 }
-                else
-                {
-                    //Debug.Log("null" + c.name);
-                }
-            }
-            Destroy(o);
-            anim.SetTrigger("Attack");
-
-            if (GetComponent<AttackStyle>().attackStyle == AttackStyle.AttackType.Melee)
-            {
-                waitingForHit = true;
-                nextHit = Time.time + currentWeapon.GetComponent<MeleeWeapon>().attackRate;
-                lastHit = Time.time + anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
-                WaitForHit();
-
-            }
-            else if (style.attackStyle == AttackStyle.AttackType.Ranged) //not broken but not good
-            {
-                s = currentWeapon.transform.Find("String.Bone");
-                s.parent = GetComponent<HandFollow>().rightHand;
-                s.localPosition = Vector3.zero;
-                Invoke("LetGo", anim.GetCurrentAnimatorClipInfo(0)[1].clip.length);
-
-                currentWeapon.GetComponent<Animator>().SetTrigger("Fire");
-            }
-            
-        }
-        if (waitingForHit)
-        {
-            WaitForHit();
-        }
-        
-    }
-    bool waitingForHit;
-
-    void WaitForHit()
-    {
-        if (Time.time >= nextHit)
-        {
-            foreach (GameObject g in nearbyEnemies)
-            {
-                MeleeWeapon wp = currentWeapon.GetComponent<MeleeWeapon>();
-                Vector3 dir = -(g.transform.position - transform.position);
-
-                g.GetComponent<Rigidbody>().AddForce(dir.normalized * wp.knockbackPower);
-                g.GetComponent<Health>().ChangeHealth(false, wp.baseDamage, false, 1);
-            }
-            Invoke("ClearNearbyList", 1);
-            waitingForHit = false;
-            nextHit = Time.time * 2;
+            } 
         }
     }
-    
 
-    void ClearNearbyList()
-    {
-        nearbyEnemies.Clear();
-    }
-
-
-
-
-
-
-
-
-
-    void LetGo()
-    {
-        s.parent = currentWeapon.transform.Find("Main.Bone");
-        s.localPosition = sRest;
+    public void SetWeapon ( AttackStyle weapon ) {
+        currentWeapon = weapon.gameObject;
+        weaponScript = weapon;
+        weaponScript.wielder = gameObject;
     }
 }
