@@ -457,6 +457,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8706878908818697898, guid: fce67fb694566b843b9519ecaf3a5350,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164946092, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6427579329789287573, guid: fce67fb694566b843b9519ecaf3a5350,
         type: 3}
       propertyPath: startT
@@ -472,11 +481,18 @@ PrefabInstance:
       propertyPath: powerBall
       value: 
       objectReference: {fileID: 823995469}
-    - target: {fileID: 1164946092, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
-      propertyPath: viewIdField
-      value: 1
+    - target: {fileID: 8885458748295044954, guid: fce67fb694566b843b9519ecaf3a5350,
+        type: 3}
+      propertyPath: baseDamage
+      value: 10
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8885458748295044954, guid: fce67fb694566b843b9519ecaf3a5350,
+        type: 3}
+      propertyPath: knockbackPower
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1772461042, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
 --- !u!1 &137905011
 GameObject:
@@ -947,6 +963,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -987,7 +1013,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1 &200735344
 GameObject:
@@ -1157,6 +1184,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1197,7 +1234,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1001 &328057106
 PrefabInstance:
@@ -1276,6 +1314,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1316,7 +1364,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1 &364177646 stripped
 GameObject:
@@ -1610,6 +1659,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1650,7 +1709,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1001 &492761486
 PrefabInstance:
@@ -1729,6 +1789,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1769,7 +1839,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1 &723239969
 GameObject:
@@ -2104,6 +2175,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2144,7 +2225,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1 &1250125483
 GameObject:
@@ -2322,6 +2404,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2362,7 +2454,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1 &1312580802
 GameObject:
@@ -3365,6 +3458,16 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3405,7 +3508,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!4 &2122274762 stripped
 Transform:
@@ -3490,6 +3594,16 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361055677394805551, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7710899397700638796, guid: 5b162bd8b8dbbfd469785de5a5927b6e,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3530,7 +3644,8 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
 --- !u!1001 &8795824051861514634
 PrefabInstance:
