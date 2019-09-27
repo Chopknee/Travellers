@@ -113,21 +113,19 @@ public class DungeonManager: MonoBehaviour {
         //}
 
         //Generate the nav mesh - add the nav mesh component if it is not already present.
+        navSurface = GetComponent<NavMeshSurface>();
         if (navSurface == null) {
-            navSurface = GetComponent<NavMeshSurface>();
-            if (navSurface == null) {
-                navSurface = gameObject.AddComponent<NavMeshSurface>();
-                navSurface.collectObjects = CollectObjects.Volume;
-                navSurface.size = new Vector3(GridSize.x * GridScale.x, navMeshHeight, GridSize.y * GridScale.y);
-                navSurface.center = new Vector3((GridSize.x * GridScale.x)/2-(GridScale.x/2), 0, (GridSize.y * GridScale.y)/2-(GridScale.y/2));
-                navSurface.overrideTileSize = true;
-                navSurface.voxelSize = 0.126667f;
-                navSurface.overrideTileSize = true;
-                navSurface.tileSize = 32;
-                navSurface.layerMask = navMeshLayers;
-            } else {
-                navSurface.enabled = true;
-            }
+            navSurface = gameObject.AddComponent<NavMeshSurface>();
+            navSurface.collectObjects = CollectObjects.Volume;
+            navSurface.size = new Vector3(GridSize.x * GridScale.x, navMeshHeight, GridSize.y * GridScale.y);
+            navSurface.center = new Vector3((GridSize.x * GridScale.x)/2-(GridScale.x/2), 0, (GridSize.y * GridScale.y)/2-(GridScale.y/2));
+            navSurface.overrideTileSize = true;
+            navSurface.voxelSize = 0.126667f;
+            navSurface.overrideTileSize = true;
+            navSurface.tileSize = 32;
+            navSurface.layerMask = navMeshLayers;
+        } else {
+            navSurface.enabled = true;
         }
 
         //Enables all gameobjects and shows the instance.

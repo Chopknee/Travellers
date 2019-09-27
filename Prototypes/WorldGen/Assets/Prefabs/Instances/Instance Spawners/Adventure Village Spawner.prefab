@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5869443905751087349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6950063298885504557}
+  - component: {fileID: 4183764180444148463}
+  - component: {fileID: 1664901623608647642}
+  m_Layer: 0
+  m_Name: Adventure Village Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6950063298885504557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.062143322, y: 0.07921719, z: -0.14138724}
+  m_LocalScale: {x: 0.07142857, y: 0.07142857, z: 0.07142857}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4183764180444148463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638180ea231e12a4faa9f244ecb9ed27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageCode: 35
+  RequestNumberCacheLength: 100
+  FilterMessagesByView: 0
+  Receivers: 0
+  CachingOption: 0
+  ReliabilityMode: 1
+  isInstanceMaster: 0
+  spawnablesPool:
+  - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
+  joinedPlayers: 
+--- !u!114 &1664901623608647642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4395b21f58272c14fb7a9d40bf07c77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a,
+    type: 3}
+  EndTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a, type: 3}
+  BasicTiles:
+  - {fileID: 4994255060124693510, guid: 3c8ede9fc0d807e42b4c1e28586bf73b, type: 3}
+  SpawnSpecialTilesOnce: 1
+  SpecialTiles:
+  - {fileID: 725584129208779873, guid: 92f9aba43cb910c40ac51d5f2eaa2e5a, type: 3}
+  - {fileID: 4994255060124693510, guid: 2c4ad38bef2ca0849bb66a319a748616, type: 3}
+  ImpassableTiles:
+  - {fileID: 8422868706217120560, guid: 556d1ca437a010e4eac59e8f4bf72aaf, type: 3}
+  AlignBorderTilesToEdge: 0
+  BorderTiles:
+  - {fileID: 5063352144898810619, guid: cb60ea93ea4256942a95af447b94d13b, type: 3}
+  navMeshHeight: 9
+  navMeshLayers:
+    serializedVersion: 2
+    m_Bits: 311
+  StartPathFromCenter: 1
+  GeneratorSeed: 0
+  GridSize: {x: 7, y: 7}
+  GridScale: {x: 14, y: 14}
+  PathNodeCount: 15
+  HallLengths: 3
+  NodeTwist: 3.141
+  BranchChance: 0.2
+  BranchDeathChance: 0.2
+  BranchMaximumNodes: 4

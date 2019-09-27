@@ -82,6 +82,12 @@ public class InstanceActivation : MonoBehaviour {
     public void DoInteraction() {
         //Generating a seed based on the position and current seed stack. (meaning there is a limit to how many levels deep we can go)
         int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
+        //If the dungeon manager is previously cached
+        GameObject dm = GameObject.Find("Instance Manager " + instanceSeed);
+        if (dm != null) {
+            dm.GetComponent<DungeonManager>().EnterArea();
+            return;
+        }
         //int instanceSeed = //Seed based on position?
         if (dungeonManagerPrefab != null) {
             Debug.Log("Entering new area; " + instanceSeed);

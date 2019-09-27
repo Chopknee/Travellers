@@ -101,6 +101,7 @@ namespace BaD.Modules {
                 //Hides all overworld stuff
                 LocalPlayerObjectInstance.SetActive(false);
                 OverworldControl.Instance.HideOverworld();
+                LocalPlayerObjectInstance.SetActive(false);
 
             } else {
                 //Just hide the previously generated instance
@@ -133,6 +134,8 @@ namespace BaD.Modules {
                 cf.distanceToPlayer = 2;
                 cf.horizontalDistanceToPlayer = 3;
                 cf.mouseSensitivity = 1.5f;
+
+                LocalPlayerObjectInstance.SetActive(true);
             }
         }
 
