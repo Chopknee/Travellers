@@ -98,7 +98,7 @@ namespace BaD.Modules.Terrain {
             }
 
             if (isCurrentNavTarget) {
-                GameObject playerInst = DungeonManager.CurrentInstance.playerInstance;
+                GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
                 if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                     isCurrentNavTarget = false;
                     ActivateInstance();
@@ -108,7 +108,7 @@ namespace BaD.Modules.Terrain {
 
         public void OnMouseDown () {
             //Do the appropriate stuff here.
-            GameObject playerInst = DungeonManager.CurrentInstance.playerInstance;
+            GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Activate this thing.
                 ActivateInstance();

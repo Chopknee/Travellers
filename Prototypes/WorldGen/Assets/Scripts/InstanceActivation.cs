@@ -43,7 +43,7 @@ public class InstanceActivation : MonoBehaviour {
             if (DungeonManager.CurrentInstance == null) {
                 playerInst = MainControl.Instance.LocalPlayerObjectInstance;
             } else {
-                playerInst = DungeonManager.CurrentInstance.playerInstance;
+                playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
             }
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Interact with the thing.
@@ -58,7 +58,7 @@ public class InstanceActivation : MonoBehaviour {
         if (DungeonManager.CurrentInstance == null) {
             playerInst = MainControl.Instance.LocalPlayerObjectInstance;
         } else {
-            playerInst = DungeonManager.CurrentInstance.playerInstance;
+            playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
         }
         if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
             DoInteraction();
@@ -73,7 +73,7 @@ public class InstanceActivation : MonoBehaviour {
                 MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
 
             } else {
-                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
+                DungeonManager.CurrentInstance.localPlayerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             }
             
         }
@@ -96,7 +96,6 @@ public class InstanceActivation : MonoBehaviour {
             dungeonManagerInst.transform.localScale = Vector3.one;
             dungeonManager = dungeonManagerInst.GetComponent<DungeonManager>();
             dungeonManager.name = "Instance Manager " + instanceSeed;
-            dungeonManager.GeneratorSeed = instanceSeed;
             dungeonManager.EnterArea();
         } else {
             //If no dungeon manager is set, assume the player wishes to exit.

@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5869443905751087349}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.062143322, y: 0.07921719, z: -0.14138724}
-  m_LocalScale: {x: 0.07142857, y: 0.07142857, z: 0.07142857}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -66,31 +66,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4395b21f58272c14fb7a9d40bf07c77c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a,
+  dungeonPrefab: {fileID: 3317877963116997535, guid: efd4c9f6f963ab84c8e7a4cc66ce91a0,
     type: 3}
-  EndTile: {fileID: 4179396713308023193, guid: 561bc804ce2a851499a782af26f8834a, type: 3}
-  BasicTiles:
-  - {fileID: 4994255060124693510, guid: 3c8ede9fc0d807e42b4c1e28586bf73b, type: 3}
-  SpawnSpecialTilesOnce: 1
-  SpecialTiles:
-  - {fileID: 725584129208779873, guid: 92f9aba43cb910c40ac51d5f2eaa2e5a, type: 3}
-  - {fileID: 4994255060124693510, guid: 2c4ad38bef2ca0849bb66a319a748616, type: 3}
-  ImpassableTiles:
-  - {fileID: 8422868706217120560, guid: 556d1ca437a010e4eac59e8f4bf72aaf, type: 3}
-  AlignBorderTilesToEdge: 0
-  BorderTiles:
-  - {fileID: 5063352144898810619, guid: cb60ea93ea4256942a95af447b94d13b, type: 3}
-  navMeshHeight: 9
+  navmeshAreaSize: {x: 100, y: 100, z: 100}
+  navmeshAreaCenter: {x: 0, y: 0, z: 0}
   navMeshLayers:
     serializedVersion: 2
     m_Bits: 311
-  StartPathFromCenter: 1
-  GeneratorSeed: 0
-  GridSize: {x: 7, y: 7}
-  GridScale: {x: 14, y: 14}
-  PathNodeCount: 15
-  HallLengths: 3
-  NodeTwist: 3.141
-  BranchChance: 0.2
-  BranchDeathChance: 0.2
-  BranchMaximumNodes: 4

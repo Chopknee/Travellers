@@ -142,7 +142,7 @@ namespace BaD.Modules {
         public int GetStackSeed() {//Generates a lovely seed based on the current stack.
             int seed = 0;
             foreach (DungeonManager dm in areaStack) {
-                seed += dm.GeneratorSeed;//Choptilities.Vector3ToID(dm.transform.position);
+                seed += dm.dungeonSeed;//Choptilities.Vector3ToID(dm.transform.position);
             }
             return seed;
         }
