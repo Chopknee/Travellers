@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3142094833692590188}
   - component: {fileID: 7836127519462938434}
   - component: {fileID: 5747324776812355833}
+  - component: {fileID: 5298080631834247519}
   m_Layer: 0
   m_Name: PrototypeOverworldPlayer
   m_TagString: Player
@@ -210,6 +211,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5298080631834247519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4822365178215254495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f7ed9d097a020245a8f477fa1ae8b33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navigationMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1001 &584335907454576498
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules;
+using BaD.Modules.Control;
 using BaD.Modules.Networking;
 using Photon.Pun;
 using System.Collections;
@@ -77,7 +78,7 @@ namespace BaD.Modules.Terrain {
             //Select a random number of items to spawn based on the range of items allowed to spawn
             int itemsToSpawn = Noise.GetRandomRange(noiseSeed, minItems, maxItems);
 
-            Item[] startitems = new Item[itemsToSpawn];
+            ItemInstance[] startitems = new ItemInstance[itemsToSpawn];
             //Fill the inventory with a random selection of items.
             for (int i = 0; i < itemsToSpawn; i++) {
                 int randomItem = Noise.GetRandomRange(noiseSeed, 0, shopData.spawnableItems.Length);
@@ -98,7 +99,7 @@ namespace BaD.Modules.Terrain {
             }
 
             if (isCurrentNavTarget) {
-                GameObject playerInst = DungeonManager.CurrentInstance.playerInstance;
+                GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
                 if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                     isCurrentNavTarget = false;
                     ActivateInstance();
@@ -108,7 +109,7 @@ namespace BaD.Modules.Terrain {
 
         public void OnMouseDown () {
             //Do the appropriate stuff here.
-            GameObject playerInst = DungeonManager.CurrentInstance.playerInstance;
+            GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Activate this thing.
                 ActivateInstance();

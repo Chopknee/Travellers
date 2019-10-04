@@ -19,6 +19,7 @@ public class PlayerData {
             }
         }
     }
+
     public delegate void PlayerGoldChanged(PlayerData player);
     public PlayerGoldChanged OnPlayerGoldChanged;
 
@@ -83,7 +84,7 @@ public class PlayerData {
         }
     }
     
-    private void OnInventoryChanged( int originalRequestID, Item[] addedItems, Item[] removedItems ) {
+    private void OnInventoryChanged( int originalRequestID, ItemInstance[] addedItems, ItemInstance[] removedItems ) {
         OnActionsTakenChanged?.Invoke(this);
     }
 

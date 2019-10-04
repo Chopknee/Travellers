@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5869443905751087349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6950063298885504557}
+  - component: {fileID: 4183764180444148463}
+  - component: {fileID: 1664901623608647642}
+  m_Layer: 0
+  m_Name: CryptSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6950063298885504557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.062143322, y: 0.07921719, z: -0.14138724}
+  m_LocalScale: {x: 0.07142857, y: 0.07142857, z: 0.07142857}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4183764180444148463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638180ea231e12a4faa9f244ecb9ed27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageCode: 35
+  RequestNumberCacheLength: 100
+  FilterMessagesByView: 0
+  Receivers: 0
+  CachingOption: 0
+  ReliabilityMode: 1
+  isInstanceMaster: 0
+  spawnablesPool:
+  - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
+  - {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
+  - {fileID: 2486412213244728257, guid: c984a04ffff7c7a4f8664fe76c025ad4, type: 3}
+  joinedPlayers: 
+--- !u!114 &1664901623608647642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5869443905751087349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4395b21f58272c14fb7a9d40bf07c77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonPrefab: {fileID: 5209865257824612315, guid: 4f95c0d6453f4854fb976dcf5f8ff0d8,
+    type: 3}
+  navmeshAreaSize: {x: 100, y: 100, z: 100}
+  navmeshAreaCenter: {x: 0, y: 0, z: 0}
+  navMeshLayers:
+    serializedVersion: 2
+    m_Bits: 311

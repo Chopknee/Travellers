@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CombatController : MonoBehaviour
-{
+public class CombatController: MonoBehaviour {
     Animator anim;
-    public TextMeshProUGUI t;
 
     public GameObject currentWeapon;
-    public Transform currentTarget;
-    AttackStyle style;
+    AttackStyle weaponScript;
     Collider hitbox;
     LayerMask enemyLayer;
     public float reach;
@@ -18,15 +15,6 @@ public class CombatController : MonoBehaviour
 
     bool attacking;
 
-    float lastHit;
-    float nextHit;
-   
-    /*
-     * make movement and attack the same button, and only attack if clicking on an enemy.
-     * 
-     */
-    Transform s = null;
-    Vector3 sRest;
 
     private void Start()
     {
@@ -128,10 +116,30 @@ public class CombatController : MonoBehaviour
 
 
 
+    private void Start () {
+        if (currentWeapon.GetComponent<AttackStyle>() == null) {
+            Debug.Log("Cannot use current weapon gameobject. It does not have an attack style or derivative script.");
+            return;
+        }
+        SetWeapon(currentWeapon.GetComponent<AttackStyle>());
+    }
 
-    void LetGo()
-    {
-        s.parent = currentWeapon.transform.Find("Main.Bone");
-        s.localPosition = sRest;
+    void Update () {
+        if (currentWeapon != null) {
+            if (Input.GetButtonDown("Attack")) {
+                if (!weaponScript.IsAttacking) {
+                    weaponScript.DoAttack();
+                    //Debug.Log("Attacking!!");
+                } else {
+                    //Debug.Log("Can't attack, already attacking.");
+                }
+            } 
+        }
+    }
+
+    public void SetWeapon ( AttackStyle weapon ) {
+        currentWeapon = weapon.gameObject;
+        weaponScript = weapon;
+        weaponScript.wielder = gameObject;
     }
 }

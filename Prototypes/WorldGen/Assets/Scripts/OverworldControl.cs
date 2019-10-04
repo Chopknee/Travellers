@@ -8,79 +8,68 @@ using UnityEngine.AI;
 namespace BaD.Modules {
     public class OverworldControl: MonoBehaviourPunCallbacks, IPunObservable {
 
+        public delegate void FinishedGenerating ();
+        public FinishedGenerating OnFinishedGenerating;
+
         [SerializeField]
 #pragma warning disable 0649
         private MapData mapGenerationInformation;
 
-        //[SerializeField]
-        //private int MapSeed = 0;
         private int mpSd = 0;
 
         [SerializeField]
         private GameObject buildingsPointerPrefab;
 
-        public static OverworldControl Instance {
-            get {
-                return LocalPlayerReference;
-            }
-        }
-
-        private static OverworldControl LocalPlayerReference;
-
-        public Map Map {
-            get {
-                return GetComponent<Map>();
-            }
-        }
-
-        public int NoiseSeed {
-            get {
-                return Map.noiseData.seed;
-            }
-        }
-
-        public bool MapReady {
-            get {
-                return Map.Generated;
-            }
-        }
-
-        private void Awake () {
-            //There should only ever be a single instance of this object on every player's game.
-            LocalPlayerReference = this;
-            bp = Instantiate(buildingsPointerPrefab);
-            bp.SetActive(false);
-        }
-
-        public void Start () {
-            if (photonView.IsMine) {
-                //Only sync the variables here if we are the owner of the server.
-                ulong value = 0;
-                ulong.TryParse(PlayerPrefs.GetString(UISeedEntry.worldSeedPrefNameKey), out value);
-                mpSd = (int)value;
-                mapGenerationInformation.noiseData.seed = mpSd;
-                Map.Generate(mapGenerationInformation);//Since we know dat will be set at this point.
-                MapGenerated = true;//Prevents double-regeneration
-            }
-        }
+        public static OverworldControl Instance { get; private set; }
 
         bool MapGenerated = false;
 
+        public Map Map { get { return GetComponent<Map>(); } }
+        public int NoiseSeed { get { return Map.noiseData.seed; } }
+        public bool MapReady { get { return Map.Generated; } }
+
+        public bool SeedReceived { get; private set; }
+
+        public GameObject BuildingPointer { get; private set; }
+
+        GameObject[] structures;
+
+        private void Awake () {
+            Instance = this;
+
+            BuildingPointer = Instantiate(buildingsPointerPrefab);
+            BuildingPointer.SetActive(false);
+        }
+
+        public void SetupMaster() {
+            if (PhotonNetwork.IsMasterClient) {
+                //Only sync the variables here if we are the owner of the server.
+                ulong value = 0;
+                ulong.TryParse(PlayerPrefs.GetString(UISeedEntry.worldSeedPrefNameKey), out value);
+                mpSd = (int) value;
+                mapGenerationInformation.noiseData.seed = mpSd;
+                Map.Generate(mapGenerationInformation);//Since we know dat will be set at this point.
+                MapGenerated = true;//Prevents double-regeneration
+                OnFinishedGenerating?.Invoke();
+            }
+        }
+
+        public void SetupClient() {
+            Map.Generate(mapGenerationInformation);
+            MapGenerated = true;
+            OnFinishedGenerating?.Invoke();
+        }
+
         public void OnPhotonSerializeView ( PhotonStream stream, PhotonMessageInfo info ) {
-            if (stream.IsWriting) {//Only send the data if the instance is miine????
+            if (stream.IsWriting) {
                 stream.SendNext(mpSd);
             } else {
                 //Waiting for the map generation information to be synchronized.
                 if (!MapGenerated) {
                     object rcvd = stream.ReceiveNext();
-                    try {
-                        mpSd = (int) rcvd;
-                        mapGenerationInformation.noiseData.seed = mpSd;
-                        Map.Generate(mapGenerationInformation);
-                        MapGenerated = true;
-                    } catch (InvalidCastException) {
-                        Debug.LogFormat("<Color=Red>Could not receive map seed, the stream data was in the wrong format. {0}", rcvd);
-                    }
+                    mpSd = (int) rcvd;
+                    mapGenerationInformation.noiseData.seed = mpSd;
+                    SeedReceived = true;
                 }
             }
         }
@@ -91,13 +80,6 @@ namespace BaD.Modules {
                 return MainControl.Instance.ShopUI.activeSelf;
             }
         }
-
-        public GameObject BuildingPointer {
-            get {
-                return bp;
-            }
-        }
-        GameObject[] structures;
 
         public void HideOverworld() {
             GetComponent<NavMeshSurface>().enabled = false;
@@ -121,7 +103,5 @@ namespace BaD.Modules {
             BuildingPointer.SetActive(true);
             //The light as well
         }
-
-        private GameObject bp;
     }
 }

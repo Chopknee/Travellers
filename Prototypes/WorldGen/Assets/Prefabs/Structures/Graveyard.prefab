@@ -345,7 +345,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 442cd3b575d75e648a60d1fe1615e65f, type: 2}
+  - {fileID: 2100000, guid: 6aec35a4337ee274e9c0d5e318f1f890, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -442,6 +442,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &4525474229286806504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7546918376154757644}
+  m_Layer: 8
+  m_Name: ExitPoint
+  m_TagString: SpawnPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7546918376154757644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4525474229286806504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.81, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5450388703247479504}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7176592041601078137
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,7 +673,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5450388703247479504}
   - component: {fileID: 9023723966721557035}
-  - component: {fileID: 8514531882034846359}
   - component: {fileID: 5875478573688081048}
   m_Layer: 8
   m_Name: Graveyard
@@ -669,6 +698,7 @@ Transform:
   - {fileID: 5620250787261186216}
   - {fileID: 1368407860}
   - {fileID: 1515062740}
+  - {fileID: 7546918376154757644}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -686,22 +716,6 @@ CapsuleCollider:
   m_Height: 43.2
   m_Direction: 1
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!208 &8514531882034846359
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9077271668174930115}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 14.5, y: 21.6, z: 14.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.1, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &5875478573688081048
 MonoBehaviour:
   m_ObjectHideFlags: 0

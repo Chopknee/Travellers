@@ -39,12 +39,12 @@ namespace BaD.UI.DumpA {
             gameObject.SetActive(false);
         }
 
-        public void OnInventorySynced ( int originalRequestID, Item[] added, Item[] removed ) {
+        public void OnInventorySynced ( int originalRequestID, ItemInstance[] added, ItemInstance[] removed ) {
             //Clear out the old children of the list.
             ClearItems();
             //Make new children to add in the list.
-            Item[] theItems = LocalPlayerInventory.Items;
-            foreach (Item item in theItems) {
+            ItemInstance[] theItems = LocalPlayerInventory.Items;
+            foreach (ItemInstance item in theItems) {
                 GameObject wid = MakeItemWidget(item);
                 wid.transform.SetParent(ItemsList.content);
             }
@@ -59,8 +59,8 @@ namespace BaD.UI.DumpA {
             Choptilities.DestroyList(dest);
         }
 
-        GameObject MakeItemWidget ( Item data ) {
-            ItemCard item = NetworkedInventoryManager.Instance.GetItemData(data);
+        GameObject MakeItemWidget ( ItemInstance data ) {
+            ItemType item = NetworkedInventoryManager.Instance.GetItemData(data);
             GameObject go = Instantiate(ItemWidgetPrefab);
             UIItemChit uiic = go.GetComponent<UIItemChit>();
             uiic.ItemData = item;
