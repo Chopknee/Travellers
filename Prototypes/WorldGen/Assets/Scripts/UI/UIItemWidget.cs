@@ -12,7 +12,7 @@ public class UIItemWidget : IUIItemcard {
     public Text valueText;
     public Image itemImage;
 
-    public override void CardDataChanged(ItemCard cd) {
+    public override void CardDataChanged(ItemType cd) {
         if (nameText != null) {
             nameText.text = cd.itemName;
         }

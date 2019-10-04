@@ -16,6 +16,6 @@ MonoBehaviour:
   maximumSlope: 0.563
   alignToSlope: 0
   flattenTerrain: 1
-  numberToSpawn: 2
+  numberToSpawn: 1
   structurePrefabs:
   - {fileID: 9077271668174930115, guid: 48ede255b222c23428ed69746729bea4, type: 3}

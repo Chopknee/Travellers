@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
-{
+public class CameraMovement: MonoBehaviour {
     public Transform currentTarget;
 
     public float smoothness = 5f, pan = 5f;
@@ -22,18 +21,17 @@ public class CameraMovement : MonoBehaviour
 
     Vector3 playerPrevPos, playerMoveDir;
 
-    private void Start()
-    {
+    private void Start () {
         camOffset = new Vector3(offset, verticalOffset, offset);
         playerPrevPos = targetPos;
 
     }
-    private void LateUpdate()
-    {
+
+    private void LateUpdate () {
         targetPos = currentTarget.position;
 
         //offset is equal to target pos, plus the vector containing the offset of camoffset x and y, multiplied by the offset float (5f);
-        Vector3 posWithOffset = ((targetPos + (new Vector3(camOffset.x, 0 + verticalOffset, camOffset.z)) * offset));
+        Vector3 posWithOffset = ( ( targetPos + ( new Vector3(camOffset.x, 0 + verticalOffset, camOffset.z) ) * offset ) );
 
 
 
@@ -44,19 +42,15 @@ public class CameraMovement : MonoBehaviour
 
 
 
-        if (Input.GetAxis("Horizontal") != 0)
-        {
+        if (Input.GetAxis("Horizontal") != 0) {
             //rotation offset of camera (camera physically moves around the player)
             camOffset = Quaternion.AngleAxis(-Input.GetAxis("Horizontal") * turnSpeed, Vector3.up) * camOffset;
         }
 
         if (velocity < maxVelocity) velocity += turnSpeed * Input.GetAxis("Mouse X");
-        if (Input.GetMouseButton(2))
-        {
+        if (Input.GetMouseButton(2)) {
             camOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * mouseSensitivity * turnSpeed, Vector3.up) * camOffset;
-        }
-        else
-        {
+        } else {
             if (velocity > 0) velocity -= .01f;
             else velocity = 0;
         }
@@ -72,21 +66,11 @@ public class CameraMovement : MonoBehaviour
         transform.rotation = rotLerp;
     }
     // Update is called once per frame
-    void FixedUpdate()
-    {
+    void FixedUpdate () {
         //zoom on scroll
-        if (Input.mouseScrollDelta != Vector2.zero)
-        {
+        if (Input.mouseScrollDelta != Vector2.zero) {
             offset -= Input.mouseScrollDelta.y * zoomSensitivity;
             verticalOffset -= Input.mouseScrollDelta.y * zoomSensitivity; // this should be based on ground 0 instead of player's location.
         }
-
-
-
     }
-
-
-
-
-
 }

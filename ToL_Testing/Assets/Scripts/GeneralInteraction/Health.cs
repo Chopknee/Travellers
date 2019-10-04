@@ -152,5 +152,13 @@ public class Health : MonoBehaviour
         else dotActivated = false;
     }
 
+    private void OnTriggerEnter ( Collider other ) {
+        if (other.CompareTag("SwingingWeapon")) {
+            MeleeWeapon w = other.transform.parent.GetComponent<MeleeWeapon>();
+            Debug.Log("Weapon: " + w.weapon + " hit " + gameObject.name + " with " + w.baseDamage);
+            ChangeHealth(false, w.baseDamage, false, 1);
+            other.enabled = false;
+        }
+    }
 
 }

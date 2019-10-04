@@ -6,28 +6,28 @@ using UnityEngine;
 namespace BaD.Modules.Inventory {
     public class Inventory: MonoBehaviour {
 
-        public Item[] Items {
+        public ItemInstance[] Items {
             get {
                 return items.ToArray();
             }
         }
 
-        List<Item> items = new List<Item>();
+        List<ItemInstance> items = new List<ItemInstance>();
 
-        public void AddItem ( Item item ) {
+        public void AddItem ( ItemInstance item ) {
             items.Add(item);
         }
 
-        public void AddItems ( Item[] items ) {
+        public void AddItems ( ItemInstance[] items ) {
             this.items.AddRange(items);
         }
 
-        public void RemoveItem ( Item item ) {
+        public void RemoveItem ( ItemInstance item ) {
             items.Remove(item);
         }
 
-        public void RemoveItems ( Item[] items ) {
-            foreach (Item i in items) {
+        public void RemoveItems ( ItemInstance[] items ) {
+            foreach (ItemInstance i in items) {
                 this.items.Remove(i);
             }
         }
@@ -37,10 +37,10 @@ namespace BaD.Modules.Inventory {
         }
 
         //Yay, so much confusion
-        public static Item[] GetItemsByGroup ( Item[] items, Collection[] filters ) {
-            List<Item> filtered = new List<Item>();
+        public static ItemInstance[] GetItemsByGroup ( ItemInstance[] items, Collection[] filters ) {
+            List<ItemInstance> filtered = new List<ItemInstance>();
             foreach (Collection coll in filters) {
-                foreach (Item i in items) {
+                foreach (ItemInstance i in items) {
                     Collection[] cardCollections = NetworkedInventoryManager.Instance.GetItemData(i).collections;
                     foreach (Collection itemCollection in cardCollections) {
                         if (itemCollection == coll && !filtered.Contains(i)) {

@@ -1,7 +1,9 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules;
+using BaD.Modules.Control;
 using BaD.Modules.Terrain;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class InstanceActivation : MonoBehaviour {
     [SerializeField]
@@ -42,7 +44,7 @@ public class InstanceActivation : MonoBehaviour {
             if (DungeonManager.CurrentInstance == null) {
                 playerInst = MainControl.Instance.LocalPlayerObjectInstance;
             } else {
-                playerInst = DungeonManager.CurrentInstance.playerInstance;
+                playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
             }
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Interact with the thing.
@@ -57,7 +59,7 @@ public class InstanceActivation : MonoBehaviour {
         if (DungeonManager.CurrentInstance == null) {
             playerInst = MainControl.Instance.LocalPlayerObjectInstance;
         } else {
-            playerInst = DungeonManager.CurrentInstance.playerInstance;
+            playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
         }
         if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
             DoInteraction();
@@ -67,9 +69,12 @@ public class InstanceActivation : MonoBehaviour {
             isCurrentNavTarget = true;
             if (DungeonManager.CurrentInstance == null) {
                 Debug.Log("Navigating.");
-                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
+                NavMesh.SamplePosition(transform.position, out NavMeshHit hit, activationRadius+8, 0);
+                if (!hit.hit) { Debug.Log("No point found!"); return; }
+                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+
             } else {
-                DungeonManager.CurrentInstance.playerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
+                DungeonManager.CurrentInstance.localPlayerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
             }
             
         }
@@ -78,17 +83,24 @@ public class InstanceActivation : MonoBehaviour {
     public void DoInteraction() {
         //Generating a seed based on the position and current seed stack. (meaning there is a limit to how many levels deep we can go)
         int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
+        //If the dungeon manager is previously cached
+        GameObject dm = GameObject.Find("Instance Manager " + instanceSeed);
+        if (dm != null) {
+            dm.GetComponent<DungeonManager>().EnterArea();
+            return;
+        }
         //int instanceSeed = //Seed based on position?
         if (dungeonManagerPrefab != null) {
+            Debug.Log("Entering new area; " + instanceSeed);
             GameObject dungeonManagerInst = Instantiate(dungeonManagerPrefab);
             dungeonManagerInst.transform.position = Vector3.zero;
             dungeonManagerInst.transform.localScale = Vector3.one;
             dungeonManager = dungeonManagerInst.GetComponent<DungeonManager>();
             dungeonManager.name = "Instance Manager " + instanceSeed;
-            dungeonManager.GeneratorSeed = instanceSeed;
             dungeonManager.EnterArea();
         } else {
             //If no dungeon manager is set, assume the player wishes to exit.
+            Debug.Log("Exiting area.");
             DungeonManager.CurrentInstance.ExitArea();
         }
     }

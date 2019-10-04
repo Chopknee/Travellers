@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace BaD.UI.DumpA {
     public class UIItemChit: MonoBehaviour {
 
-        public ItemCard ItemData {
+        public ItemType ItemData {
             get {
                 return cd;
             }
@@ -16,7 +16,7 @@ namespace BaD.UI.DumpA {
             }
         }
 
-        private ItemCard cd;
+        private ItemType cd;
 
         [SerializeField]
 #pragma warning disable 0649
@@ -33,7 +33,7 @@ namespace BaD.UI.DumpA {
             OnClicked?.Invoke(this);
         }
 
-        void CardDataChanged( ItemCard newCard ) {
+        void CardDataChanged( ItemType newCard ) {
             itemImage.sprite = newCard.itemSprite;
         }
     }

@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class EnemyMovementAnimationController : MovementAnimationController
 {
     bool transitioning;
-    public float transitionTime = 2;
+
+    public new float transitionTime = 2;
     float fallSpeed = .01f;
 
     private void Start()

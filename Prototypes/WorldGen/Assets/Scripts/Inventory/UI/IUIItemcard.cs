@@ -11,11 +11,11 @@ using UnityEngine.EventSystems;
 namespace BaD.UI.DumpA {
     public abstract class IUIItemcard: UIDraggable {
         [HideInInspector]
-        public Item sourceItem;
+        public ItemInstance sourceItem;
         [HideInInspector]
         public NetInventory OwnerInventory;
 
-        public ItemCard CardData {
+        public ItemType CardData {
             get {
                 return cd;
             }
@@ -25,7 +25,7 @@ namespace BaD.UI.DumpA {
             }
         }
 
-        private ItemCard cd;
+        private ItemType cd;
 
         public bool safe = false;
 
@@ -51,6 +51,6 @@ namespace BaD.UI.DumpA {
         }
 
         //This function should be overriden to update the card gui
-        public abstract void CardDataChanged ( ItemCard newCard );
+        public abstract void CardDataChanged ( ItemType newCard );
     }
 }
