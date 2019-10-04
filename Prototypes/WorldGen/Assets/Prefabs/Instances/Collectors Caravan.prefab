@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 153198341272995212}
   - component: {fileID: 4672590598475758783}
   - component: {fileID: 2827897532606950605}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,8 +369,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 13.19118, y: 3.8422327, z: 4.1469345}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 7.4716616, y: 3.8422327, z: 4.1469345}
+  m_Center: {x: -0.162539, y: 0, z: 0}
 --- !u!114 &2827897532606950605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ MonoBehaviour:
   dungeonManagerPrefab: {fileID: 0}
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 5b5d168532e6306479f90d711aa6ee55,
     type: 3}
-  activationRadius: 3.6
+  activationRadius: 4.31
   isCurrentNavTarget: 0
   isHighlighted: 0
 --- !u!1 &8908529207279405446
