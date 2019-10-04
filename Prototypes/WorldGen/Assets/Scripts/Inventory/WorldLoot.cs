@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class WorldLoot: MonoBehaviour, IPunObservable {
 
-    public ItemCard itemData;
-    public Item netItemData {get;private set;}
+    public ItemType itemData;
+    public ItemInstance netItemData {get;private set;}
     public GameObject itemDataGui;
     private GameObject itemDataGuiInst;
     public AudioClip pickupSound;
@@ -71,7 +71,7 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
                 stream.SendNext(netItemData);
             }
         } else {
-            netItemData = (Item) stream.ReceiveNext();
+            netItemData = (ItemInstance) stream.ReceiveNext();
         }
     }
 

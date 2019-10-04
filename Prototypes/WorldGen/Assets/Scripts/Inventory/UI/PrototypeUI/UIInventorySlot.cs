@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using BaD.Modules.Networking;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class UIInventorySlot : MonoBehaviour  {
 

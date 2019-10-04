@@ -114,7 +114,7 @@ public class DungeonManager: MonoBehaviour {
     //Exits the area without running the world exit area code.
     public void HideArea() {
         //Hides all gameobjects and disables the instance
-        dungeonInstance.SetActive(true);
+        dungeonInstance.SetActive(false);
 
         //PhotonNetwork.Destroy(playerInstance);
         NetInstanceManager netManager = GetComponent<NetInstanceManager>();

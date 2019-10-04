@@ -119,16 +119,16 @@ public class UIShopTrade : MonoBehaviour {
         playerData.gold += value;
 
         //The exchange of items between the inventories
-        List<Item> playerPurchasedItems = new List<Item>();
-        foreach (Item item in buyWindow.Items) {
+        List<ItemInstance> playerPurchasedItems = new List<ItemInstance>();
+        foreach (ItemInstance item in buyWindow.Items) {
             playerPurchasedItems.Add(item);
         }
         if (playerPurchasedItems.Count > 0) {
             playerData.Inventory.AddItems(playerPurchasedItems.ToArray());
         }
 
-        List<Item> playerSoldItems = new List<Item>();
-        foreach (Item item in sellWindow.Items) {
+        List<ItemInstance> playerSoldItems = new List<ItemInstance>();
+        foreach (ItemInstance item in sellWindow.Items) {
             playerSoldItems.Add(item);
         }
         if (playerSoldItems.Count > 0) {
@@ -150,11 +150,11 @@ public class UIShopTrade : MonoBehaviour {
 
     public void ExitTrade() {
         //Revert any unfinished trades
-        List<Item> moveBacks;
+        List<ItemInstance> moveBacks;
         if (sellWindow.Items.Length != 0) {
             //Revert the player items back to their inventory
-            moveBacks = new List<Item>();
-            foreach (Item i in sellWindow.Items) {
+            moveBacks = new List<ItemInstance>();
+            foreach (ItemInstance i in sellWindow.Items) {
                 moveBacks.Add(i);
             }
             playerData.Inventory.AddItems(moveBacks.ToArray());
@@ -162,8 +162,8 @@ public class UIShopTrade : MonoBehaviour {
         //sellWindow.Items
         if (buyWindow.Items.Length != 0) {
             //Revert the shop items back to their inventory
-            moveBacks = new List<Item>();
-            foreach (Item i in buyWindow.Items) {
+            moveBacks = new List<ItemInstance>();
+            foreach (ItemInstance i in buyWindow.Items) {
                 moveBacks.Add(i);
             }
             shopInventory.AddItems(moveBacks.ToArray());

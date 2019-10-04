@@ -1,11 +1,11 @@
-﻿using BaD.Chopknee.Utilities;
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaD.Modules.Networking {
+
     public class NetworkedInventoryManager: Messaging {
 
         public static NetworkedInventoryManager Instance { get; private set; }
@@ -22,12 +22,12 @@ namespace BaD.Modules.Networking {
 
         [SerializeField]
 #pragma warning disable 0649
-        private ItemCard[] NetworkedItems;//All items that can exist in an inventory.
+        private ItemType[] NetworkedItems;//All items that can exist in an inventory.
 
         public new void Awake () {
             base.Awake();
             Instance = this;
-            PhotonPeer.RegisterType(typeof(Item), (byte) 'I', Item.Serialize, Item.DeSerialize);
+            PhotonPeer.RegisterType(typeof(ItemInstance), (byte) 'I', ItemInstance.Serialize, ItemInstance.DeSerialize);
             if (PhotonNetwork.IsMasterClient) {
                 masterInventories = new Dictionary<int, GameObject>();
             }
@@ -120,27 +120,27 @@ namespace BaD.Modules.Networking {
             //ph.ViewID
         }
 
-        public ItemCard GetItemData(Item i) {//Takes the network item reference, and converts it to item data
+        public ItemType GetItemData(ItemInstance i) {//Takes the network item reference, and converts it to item data
             return NetworkedItems[i.itemIndex];
         }
 
-        public Item MakeItemStruct(ItemCard ic) {
-            int ind = GetItemCardIndex(ic);
+        public ItemInstance MakeItemStruct(ItemType ic) {
+            int ind = GetItemDataIndex(ic);
             if (ind != -1) {
-                return new Item((short)ind);
+                return new ItemInstance((short)ind);
             }
             throw new Exception("Item requested was not added to networked items list in Networked Inventory Manager Object.");
         }
 
-        public ItemCard[] GetItemData(Item[] networkItems) {
-            ItemCard[] items = new ItemCard[networkItems.Length];
+        public ItemType[] GetItemData(ItemInstance[] networkItems) {
+            ItemType[] items = new ItemType[networkItems.Length];
             for (int i = 0; i < networkItems.Length; i++) {
                 items[i] = GetItemData(networkItems[i]);
             }
             return items;
         }
 
-        public int GetItemCardIndex(ItemCard ic ) {
+        public int GetItemDataIndex(ItemType ic ) {
             for (int i = 0; i < NetworkedItems.Length; i++) { 
                 if (NetworkedItems[i] == ic) {
                     return i;
@@ -154,44 +154,9 @@ namespace BaD.Modules.Networking {
             nextNetworkItemId++;
             return nId;
         }
-    }
 
-    [Serializable]
-    public class Item : IEquatable<Item> {
-        public short itemIndex { get; }//This links to one of the items int he ItemCard array NetowrkedItems
-        public short networkID { get; }//This is unique to this item
-
-        public Item ( short itemCardIndex ) {
-            itemIndex = itemCardIndex;
-            networkID = 0;
-            if (NetworkedInventoryManager.Instance != null) {
-                networkID = (short)NetworkedInventoryManager.Instance.GetItemNetworkId();
-            }
-        }
-
-        private Item(short itemCardIndex, short netId) {
-            itemIndex = itemCardIndex;
-            networkID = netId;
-        }
-
-        public static byte[] Serialize(object received) {
-            byte[] arr = new byte[4];
-            Item item = (Item) received;
-            Choptilities.ShortToBytes(item.itemIndex, out arr[0], out arr[1]);
-            Choptilities.ShortToBytes(item.networkID, out arr[2], out arr[3]);
-            return arr;
-        }
-
-        public static object DeSerialize(byte[] received) {
-            Item i = new Item(
-                Choptilities.ByteToShort(received[0], received[1]),
-                Choptilities.ByteToShort(received[2], received[3])
-                );
-            return i;
-        }
-
-        public bool Equals ( Item i ) {
-            return itemIndex == i.itemIndex && networkID == i.networkID;
+        public bool Compare(ItemInstance netItem, ItemType itemData) {
+            return netItem.itemIndex == GetItemDataIndex(itemData);
         }
     }
 }

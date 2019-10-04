@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ItemCard;
+using static ItemType;
 namespace BaD.UI.DumpA {
     public class UIItemInfoObject: MonoBehaviour {
 
-        public ItemCard ItemData {
+        public ItemType ItemData {
             get {
                 return cd;
             }
@@ -15,7 +15,7 @@ namespace BaD.UI.DumpA {
                 GenerateCard();
             }
         }
-        private ItemCard cd;
+        private ItemType cd;
 
         [Header("UI Components")]
         [SerializeField]

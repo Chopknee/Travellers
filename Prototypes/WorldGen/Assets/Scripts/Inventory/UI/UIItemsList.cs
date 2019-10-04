@@ -33,7 +33,7 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
     public int GoldValue {
         get {
             int gv = 0;
-            foreach (ItemCard card in NetworkedInventoryManager.Instance.GetItemData(associatedInventory.Items)) {
+            foreach (ItemType card in NetworkedInventoryManager.Instance.GetItemData(associatedInventory.Items)) {
                 gv += card.value;
             }
             return gv;
@@ -45,7 +45,7 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
         if (item is IUIItemcard) {
             //Case the dropped item as an item card.
             IUIItemcard uiItemData = (IUIItemcard) item;
-            ItemCard itemData = uiItemData.CardData;
+            ItemType itemData = uiItemData.CardData;
             bool passed = blackListMode;//Set up the passed variable for the scenario where the card is not part of a group
             passed = passed && allowLinkedInventoryOnly && associatedInventory == uiItemData.OwnerInventory;
             //If there is no group filter specified, or the card is not part of a group, bypass the following nested loop
@@ -102,7 +102,7 @@ public class UIItemsList : MonoBehaviour, IUIDropZone {
     }
 
     public void Cleanup () {
-        List<Item> cardsToPutBack = new List<Item>();
+        List<ItemInstance> cardsToPutBack = new List<ItemInstance>();
         foreach (Transform child in transform) {
             if (child.GetComponent<UIDraggable>() != null) {
                 GameObject.Destroy(child.gameObject);

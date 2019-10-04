@@ -83,11 +83,11 @@ namespace BaD.UI.DumpA {
             get {
                 int gv = 0;
                 if (UseLocalInventory) {
-                    foreach (ItemCard card in NetworkedInventoryManager.Instance.GetItemData(localInventory.Items)) {
+                    foreach (ItemType card in NetworkedInventoryManager.Instance.GetItemData(localInventory.Items)) {
                         gv += card.value;
                     }
                 } else {
-                    foreach (ItemCard card in NetworkedInventoryManager.Instance.GetItemData(networkedInventory.Items)) {
+                    foreach (ItemType card in NetworkedInventoryManager.Instance.GetItemData(networkedInventory.Items)) {
                         gv += card.value;
                     }
                 }
@@ -95,7 +95,7 @@ namespace BaD.UI.DumpA {
             }
         }
 
-        public Item[] Items {
+        public ItemInstance[] Items {
             get {
                 if (UseLocalInventory) {
                     return localInventory.Items;
@@ -111,7 +111,7 @@ namespace BaD.UI.DumpA {
                 //Case the dropped item as an item card.
                 IUIItemcard uiItemData = (IUIItemcard) item;
                 UIInventory otherInventory = uiItemData.originalParent.GetComponent<UIInventory>();
-                ItemCard itemData = uiItemData.CardData;
+                ItemType itemData = uiItemData.CardData;
                 bool passed = blackListMode;//Set up the passed variable for the scenario where the card is not part of a group
                 passed = passed && allowLinkedInventoryOnly && otherInventory.linkedInventoryWindow == this;
                 //If there is no group filter specified, or the card is not part of a group, bypass the following nested loop
@@ -180,7 +180,7 @@ namespace BaD.UI.DumpA {
         }
 
         //This is executed by the network inventory object when it receives inventory sync requests for this specific inventory.
-        public void OnInventorySynced ( int originalRequestID, Item[] added, Item[] removed ) {
+        public void OnInventorySynced ( int originalRequestID, ItemInstance[] added, ItemInstance[] removed ) {
             //Debug.Log("Received an inventory sync with id of " + originalRequestID + " Inventory size: " + associatedInventory.Items.Length);
             if (LastInventoryRequestID == originalRequestID) {
                 List<GameObject> keepers = new List<GameObject>();
@@ -212,7 +212,7 @@ namespace BaD.UI.DumpA {
 
 
             //This just adds all items in the inventory as items, completely ignoring all else.
-            Item[] shopItems = networkedInventory.Items;
+            ItemInstance[] shopItems = networkedInventory.Items;
             for (int i = 0; i < shopItems.Length; i++) {
                 GameObject go = MakeItemWidget(shopItems[i], networkedInventory);
                 go.transform.SetParent(transform);
@@ -220,8 +220,8 @@ namespace BaD.UI.DumpA {
             }
         }
 
-        public GameObject MakeItemWidget ( Item data, NetInventory owner ) {
-            ItemCard item = NetworkedInventoryManager.Instance.GetItemData(data);
+        public GameObject MakeItemWidget ( ItemInstance data, NetInventory owner ) {
+            ItemType item = NetworkedInventoryManager.Instance.GetItemData(data);
             GameObject go = Instantiate(itemWidgetPrefab);
             IUIItemcard uiic = go.GetComponent<IUIItemcard>();
             uiic.CardData = item;

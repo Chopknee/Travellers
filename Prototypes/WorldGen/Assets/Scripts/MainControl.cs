@@ -55,27 +55,27 @@ namespace BaD.Modules {
         void Awake () {
             //Warning messages about missing objects.
             if (shopUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> Shop GUI reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> Shop GUI reference.", this);
             }
 
             if (actionConfirmationUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> Action Confirmation reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> Action Confirmation reference.", this);
             }
 
             if (playerInventoryUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> Player Inventory reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> Player Inventory reference.", this);
             }
 
             if (hudUI == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> HUD reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> HUD reference.", this);
             }
 
             if (MapControlPrefab == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> map prefab reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> map prefab reference.");
             }
 
             if (OverworldPlayerPrefab == null) {
-                Debug.Log("<Color=Blue><a>Missing</a><Color> player prefab reference.", this);
+                Debug.Log("<color=blue><a>Missing</a></color> player prefab reference.");
             }
         }
 
@@ -90,7 +90,9 @@ namespace BaD.Modules {
                 LocalPlayerObjectInstance.transform.position += Vector3.up * 10;
                 LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
                 //LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
-                Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
+                if (Camera.main.GetComponent<CameraMovement>() != null) {
+                    Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
+                }
             }
         }
 

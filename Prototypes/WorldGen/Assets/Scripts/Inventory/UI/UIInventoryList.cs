@@ -14,7 +14,7 @@ public class UIInventoryList : MonoBehaviour, IUIDropZone {
     public bool TryDropItem(UIDraggable item) {
         if (item is IUIItemcard) {
             //Cast the item card as an IUIItemCard???
-            ItemCard data = ((IUIItemcard)item).CardData;//Does this actually work!?!?!?
+            ItemType data = ((IUIItemcard)item).CardData;//Does this actually work!?!?!?
             //Debug.Log("A " + data.name + " was dropped in " + debugName);
             if (GroupsList.Length == 0) {return true;}//If the group list is empty, the check automatically passes.
             if (data.collections.Length == 0) {return blackListMode;}//If the card is not part of a group, only pass it if we are in blacklist mode???
