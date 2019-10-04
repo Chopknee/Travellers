@@ -83,16 +83,58 @@ namespace BaD.Modules {
             if (Instance == null) {
                 Instance = this;
                 if (PhotonNetwork.IsMasterClient) {
+                    Debug.Log("<color=green>Generating</color> map for the master client.");
                     //Only the master should spawn an instance of the map. (All other players will spawn this automatically thanks to the network.)
                     MapControlObjectInstance = NetworkInstantiation.Instance.Instantiate(MapControlPrefab, false);
+                    MapControlObjectInstance.GetComponent<OverworldControl>().OnFinishedGenerating += OnMapGenerationFinished;
+                    MapControlObjectInstance.GetComponent<OverworldControl>().SetupMaster();
+                    needsSetup = false;
+                    
                 }
-                LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
-                LocalPlayerObjectInstance.transform.position += Vector3.up * 10;
-                LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
-                //LocalPlayerData = LocalPlayerObjectInstance.GetComponent<Terrain.Player>().Data;
-                if (Camera.main.GetComponent<CameraMovement>() != null) {
-                    Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
+            }
+        }
+
+        bool needsSetup = true;
+        public void Update () {
+            //Waiting for the overworld control to be spawned, and for the seed to be fulfilled
+            if (needsSetup && !PhotonNetwork.IsMasterClient) {
+                if (OverworldControl.Instance != null) {
+                    if (OverworldControl.Instance.SeedReceived) {
+                        Debug.Log("<color=green>Generating</color> map for regular client.");
+                        OverworldControl.Instance.OnFinishedGenerating += OnMapGenerationFinished;
+                        OverworldControl.Instance.SetupClient();
+                        needsSetup = false;
+                        
+                    }
                 }
+            }
+        }
+
+        public void OnMapGenerationFinished() {
+            //This is when we know the map has been generated!!!
+            Debug.Log("<color=green>Generating</color> map has finished.");
+            CollectorsCaravanStart();
+
+        }
+
+        public void CollectorsCaravanStart() {
+
+            LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
+            LocalPlayerObjectInstance.transform.position += Vector3.up * 10;
+            LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
+            LocalPlayerObjectInstance.SetActive(false);//We don't need it any more.
+
+            if (Camera.main.GetComponent<CameraMovement>() != null) {
+                Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
+            }
+
+            //At this point, we want to spawn the player in the first spawned instance of the collector's caravan.
+            GameObject cc = GameObject.Find("Collectors Caravan(Clone)");
+            if (cc != null) {
+                Debug.Log("<color=green>Spawning</color> at collector's caravan.");
+                cc.GetComponent<InstanceActivation>().DoInteraction();//Force the instance to spawn.
+            } else {
+                Debug.Log("<color=green>Could</color> not find an instance of the collector's caravan to start at.");
             }
         }
 

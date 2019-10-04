@@ -1,5 +1,6 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules;
+using BaD.Modules.Control;
 using UnityEngine;
 using UnityEngine.AI;
 

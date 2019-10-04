@@ -6,6 +6,7 @@ using BaD.Modules.Terrain.Modifiers;
 using UnityEngine.AI;
 
 public class Map : MonoBehaviour {
+
     [Range(0, MeshGenerator.numSupportedChunkSizes - 1)]
     public int TerrainSize;
     [Range(0, MeshGenerator.numSupportedLODs - 1)]

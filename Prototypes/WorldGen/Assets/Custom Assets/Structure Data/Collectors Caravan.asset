@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6f39671f39f0046be5f5594c9a24b6, type: 3}
-  m_Name: Graveyard
+  m_Name: Collectors Caravan
   m_EditorClassIdentifier: 
   radius: 4
-  maximumSlope: 0.563
-  alignToSlope: 0
+  maximumSlope: 0.106
+  alignToSlope: 1
   flattenTerrain: 1
   numberToSpawn: 1
   structurePrefabs:
-  - {fileID: 9077271668174930115, guid: 48ede255b222c23428ed69746729bea4, type: 3}
+  - {fileID: 9077271668174930115, guid: e5a3e77fc23b3334790eb45f4675ba8f, type: 3}

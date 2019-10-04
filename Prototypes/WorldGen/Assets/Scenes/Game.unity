@@ -3225,15 +3225,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTarget: {fileID: 0}
   smoothness: 5
-  pan: 50
+  pan: 100
   camOffset: {x: 0, y: 0, z: 0}
   offsetY: {x: 0, y: 0, z: 0}
   turnSpeed: 2
-  offset: 5
-  verticalOffset: 5
-  zoomSensitivity: 1
+  offset: 2
+  verticalOffset: 4
+  zoomSensitivity: 0.2
   followPlayer: 1
-  distanceToPlayer: 2
+  distanceToPlayer: 5
   horizontalDistanceToPlayer: 3
   mouseSensitivity: 1.5
 --- !u!1 &2121965930
@@ -3272,7 +3272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.17529874, y: 1}
-  m_AnchoredPosition: {x: -9.05249, y: 0.00012207031}
+  m_AnchoredPosition: {x: -9.052246, y: 0.00012207031}
   m_SizeDelta: {x: -38.634842, y: -31.630005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2121965932
@@ -3567,11 +3567,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094687638433899554, guid: 0fce39037f8758c469ec1917340ba533,
-        type: 3}
-      propertyPath: shopUI
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7094687638433899554, guid: 0fce39037f8758c469ec1917340ba533,
         type: 3}
