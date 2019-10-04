@@ -32,7 +32,7 @@ TagManager:
   - Enemy
   - dP
   - Player
-  - 
+  - IgnoreEntityCollision
   - 
   - 
   - 

@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
     NavMeshAgent agent;
     public bool followingArrow;
     public GameObject particles;
-
+    public Transform clickedObject;
 
     private void Start()
     {
@@ -139,11 +139,11 @@ public class PlayerMovement : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask))
             {
                 string t = hit.collider.tag;
+                clickedObject = hit.transform;
+                Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+                targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
                 if (t == ("Room"))
                 {
-                    Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-                    targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
                     destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
                     SetDestination(destinationPosition, true);

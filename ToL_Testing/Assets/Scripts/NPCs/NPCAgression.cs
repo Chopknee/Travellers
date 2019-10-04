@@ -10,7 +10,7 @@ public class NPCAgression : MonoBehaviour
     public Transform currentTarget;
     public NavMeshAgent agent;
     public float sightDistance = 5;
-
+    
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -30,9 +30,13 @@ public class NPCAgression : MonoBehaviour
         }
     }
 
-    public void FindTarget()
+    public void Attack(Transform t)
     {
 
+    }
+
+    public void FindTarget()
+    {
         int r = Random.Range(0, targets.Length);
         if (targets[r] != null)
             currentTarget = targets[r].transform;

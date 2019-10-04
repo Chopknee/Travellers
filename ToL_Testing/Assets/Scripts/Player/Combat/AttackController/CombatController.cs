@@ -12,9 +12,11 @@ public class CombatController : MonoBehaviour
     public Transform currentTarget;
     AttackStyle style;
     Collider hitbox;
+    LayerMask enemyLayer;
     public float reach;
     public List<GameObject> nearbyEnemies;
 
+    bool attacking;
 
     float lastHit;
     float nextHit;
@@ -30,20 +32,24 @@ public class CombatController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         style = GetComponent<AttackStyle>();
-        if (style.attackStyle == AttackStyle.AttackType.Ranged)
-        {
-            s = currentWeapon.transform.Find("String.Bone");
-            //sRest = s.localPosition;
-        }
+
     }
     
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
 
-        if (Input.GetButtonDown("Attack") && Time.time > lastHit)
+        if (Input.GetButtonDown("Attack") && Time.time > lastHit && !attacking)
         {
+            if (GetComponent<PlayerMovement>().clickedObject.CompareTag("Enemy"))
+            {
+                Vector3 directionOfTarget = GetComponent<PlayerMovement>().clickedObject.position;
+                Quaternion targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
+                transform.rotation = targetRotation;
+            }
+
+            anim.SetTrigger("Attack");
             
             GameObject o = new GameObject("Dmg");
             o.transform.position = transform.position + transform.forward * 1;
@@ -55,6 +61,7 @@ public class CombatController : MonoBehaviour
                 {
                     if (!nearbyEnemies.Contains(c.gameObject) && c.CompareTag("Enemy"))
                         nearbyEnemies.Add(c.gameObject);
+
                 }
                 else
                 {
@@ -68,9 +75,9 @@ public class CombatController : MonoBehaviour
             {
                 waitingForHit = true;
                 nextHit = Time.time + currentWeapon.GetComponent<MeleeWeapon>().attackRate;
-                lastHit = Time.time + anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
 
-                anim.SetTrigger("Attack");
+
+                attacking = true;
                 WaitForHit();
 
             }
@@ -92,10 +99,11 @@ public class CombatController : MonoBehaviour
                 MeleeWeapon wp = currentWeapon.GetComponent<MeleeWeapon>();
                 Vector3 dir = -(g.transform.position - transform.position);
 
-                g.GetComponent<Rigidbody>().AddForce(-dir.normalized * wp.knockbackPower, ForceMode.Impulse); // UPDATED
+                g.GetComponent<Rigidbody>().AddForce(-dir.normalized * wp.knockbackPower, ForceMode.Impulse); 
                 g.GetComponent<Health>().ChangeHealth(false, wp.baseDamage, false, 1);
+                lastHit = Time.time + anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
             }
-            Invoke("ClearNearbyList", 1);
+            Invoke("ClearNearbyList", .5f);
             waitingForHit = false;
             nextHit = Time.time * 2;
         }
@@ -104,11 +112,13 @@ public class CombatController : MonoBehaviour
 
     void ClearNearbyList()
     {
-        foreach(GameObject g in nearbyEnemies) // UPDATED
-        {// UPDATED
-            g.GetComponent<Rigidbody>().velocity = Vector3.zero;// UPDATED
-        }// UPDATED
+        foreach(GameObject g in nearbyEnemies) 
+        {
+            if(g != null)
+                g.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
         nearbyEnemies.Clear();
+        attacking = false;
     }
 
 

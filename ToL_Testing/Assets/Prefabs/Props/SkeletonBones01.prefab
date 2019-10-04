@@ -13,12 +13,12 @@ GameObject:
   - component: {fileID: 8072531259047752322}
   - component: {fileID: 4675892043263193221}
   - component: {fileID: 6748699092646840324}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &6091455529893930487
 Transform:
@@ -121,12 +121,12 @@ GameObject:
   - component: {fileID: 8112859033844732045}
   - component: {fileID: 1772081441533762888}
   - component: {fileID: 7363270669173396953}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &5738964540300941768
 Transform:
@@ -229,12 +229,12 @@ GameObject:
   - component: {fileID: 6245744434546976955}
   - component: {fileID: 2965911301598235120}
   - component: {fileID: 7151368753830621521}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2216600580830072536
 Transform:
@@ -337,12 +337,12 @@ GameObject:
   - component: {fileID: 7838048147907144440}
   - component: {fileID: 8212988727187296389}
   - component: {fileID: 8244813289387621535}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &7492363975175149332
 Transform:
@@ -445,12 +445,12 @@ GameObject:
   - component: {fileID: 4753273808042952866}
   - component: {fileID: 894991731223356641}
   - component: {fileID: 511821099842708752}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Icosphere.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &726691625337714633
 Transform:
@@ -553,12 +553,12 @@ GameObject:
   - component: {fileID: 2395902729680146529}
   - component: {fileID: 690620543201787872}
   - component: {fileID: 5073007519966223235}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1509284203760591225
 Transform:
@@ -661,12 +661,12 @@ GameObject:
   - component: {fileID: 6066807034862298141}
   - component: {fileID: 3532456439825943234}
   - component: {fileID: 7956121306047428159}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBone.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1202727525117905146
 Transform:
@@ -765,7 +765,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4855730969710070365}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SkeletonBones01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
