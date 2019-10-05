@@ -714,7 +714,7 @@ GameObject:
   - component: {fileID: 244905304306038456}
   - component: {fileID: 244905304306038463}
   - component: {fileID: 244905304306038462}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RoofSegment2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3656,7 +3656,7 @@ GameObject:
   - component: {fileID: 244905305118323245}
   - component: {fileID: 244905305118323244}
   - component: {fileID: 244905305118323235}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RoofSegment1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4625,7 +4625,7 @@ GameObject:
   - component: {fileID: 244905305365157039}
   - component: {fileID: 244905305365157038}
   - component: {fileID: 244905305365157037}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17695,7 +17695,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3140209363998096043}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.34, y: 0.8498, z: -0.47}
+  m_LocalPosition: {x: -0.2, y: 0.8498, z: 0.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 244905305347329897}
@@ -19478,7 +19478,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7972831702982498760}
   - component: {fileID: 8653930352106122044}
-  m_Layer: 0
+  - component: {fileID: 3590810872250277562}
+  m_Layer: 9
   m_Name: ActivationBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19493,7 +19494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3237616217993877151}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.92, y: 2.72, z: -0}
+  m_LocalPosition: {x: -3.92, y: 2.72, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 244905305347329897}
@@ -19510,8 +19511,31 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10.031875, y: 3.7431743, z: 8.426264}
-  m_Center: {x: -0.15826702, y: -0.049088597, z: 0.20342636}
+  m_Size: {x: 10.68087, y: 7.004543, z: 9.731781}
+  m_Center: {x: -0.4827652, y: 1.5815957, z: 0.11643028}
+--- !u!114 &3590810872250277562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237616217993877151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6547577bb3f92f94480fe66c0b36a06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HoverInfoGUIPrefab: {fileID: 3086768761848597538, guid: 703a71fd8c5e7c847a7f2cfb3bbdfff1,
+    type: 3}
+  activationRadius: 2.28
+  navigationPoint: {fileID: 4700599326071437258}
+  shopData: {fileID: 11400000, guid: b1b2803b47f8c644f8d49ee7b18a46ee, type: 2}
+  DisplayName: 
+  shopInventory: {fileID: 0}
+  minItems: 0
+  maxItems: 10
+  shopUIPrefab: {fileID: 6204288817545835729, guid: b505fb275d11b2a459b2463f29ed7584,
+    type: 3}
 --- !u!1 &3339979022733458309
 GameObject:
   m_ObjectHideFlags: 0

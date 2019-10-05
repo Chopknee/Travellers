@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 991bfa058288e734b97544841a0bdabb, type: 3}
   m_Name: MapTestErosion
   m_EditorClassIdentifier: 
-  erosionData: {fileID: 11400000, guid: 178405e089aa05342b187a8277ca60af, type: 2}
+  erosionData: {fileID: 11400000, guid: 33d3a84754525004e86530e79d69395b, type: 2}
   Iterations: 100000

@@ -1,18 +1,9 @@
 ﻿using BaD.Chopknee.Utilities;
-using BaD.Modules;
-using BaD.Modules.Control;
 using BaD.Modules.Networking;
-using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BaD.Modules.Terrain {
-    public class ShopInteractable: MonoBehaviour {
-
-        public GameObject HoverInfoGUIPrefab;
-        private GameObject HoverInfoGUIInstance;
+    public class ShopInteractable: Interactable {
 
         public ShopData shopData;
         [HideInInspector]
@@ -22,38 +13,27 @@ namespace BaD.Modules.Terrain {
         public NetInventory shopInventory;
         public int minItems = 0;
         public int maxItems = 10;
-        
+
+        public GameObject shopUIPrefab;
+        private GameObject shopUIInstance;
+
         private UIShopTrade shopGuI;
-
-        bool isHighlighted;
-
-        public float activationRadius;
-        private float activationRadiusSquared;
-
-        bool isCurrentNavTarget = false;
 
         int inventoryID;
 
-        public void Start () {
+        public override void Start () {
 
-            activationRadiusSquared = activationRadius * activationRadius;
 
             //Id used to reference this specific inventory.
             inventoryID = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
             //Send a request for the inventory. If it is already locally cached, this will run the callback before executing the next line, elsewise;
             //  the callback will not be run until the master client responds.
             NetworkedInventoryManager.Instance.RequestInventory(inventoryID, RequestInventoryCallback);//Id needs to be based on the current instance id stack
-            //The reference to the shop gui
-            shopGuI = MainControl.Instance.ShopUI.GetComponent<UIShopTrade>();
+            
             //Making a copy of the shop data because idk
             shopData = shopData.GetNew();
 
-            if (HoverInfoGUIPrefab != null) {
-                HoverInfoGUIInstance = Instantiate(HoverInfoGUIPrefab);
-                HoverInfoGUIInstance.GetComponent<UITargetObject>().target = transform;
-                HoverInfoGUIInstance.SetActive(false);
-                HoverInfoGUIInstance.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
-            }
+            base.Start();
         }
 
         public void RequestInventoryCallback(GameObject inv, bool needsInitialize) {
@@ -69,8 +49,6 @@ namespace BaD.Modules.Terrain {
             if (needsInitialize) {
                 AddStartItems(noiseSeed);
             }
-            //An inventory object has been received, now I need to determine if the start items should be dropped in??
-            //if (shopInventory)
         }
 
         private void AddStartItems(int noiseSeed) {//Need to figure out how to know when the shop's items need to be initialized??
@@ -87,83 +65,23 @@ namespace BaD.Modules.Terrain {
             shopInventory.AddItems(startitems);
         }
 
-        public string GetDisplayName () {
+        public override void DoInteraction () {
+            if (shopUIInstance == null) {
+                shopUIInstance = Instantiate(shopUIPrefab);
+            }
+            shopGuI = shopUIInstance.GetComponent<UIShopTrade>();
+            shopGuI.ShowTradeWindow(DisplayName, shopInventory, MainControl.Instance.LocalPlayerData);
+            shopGuI.OnClosed += ShopClosed;
+        }
+
+        public override string GetShopName() {
             return DisplayName;
         }
 
-        public void Update () {
-            if (isCurrentNavTarget && Input.GetButtonDown("Interact")) {
-                if (!isHighlighted) {
-                    isCurrentNavTarget = false;
-                }
-            }
-
-            if (isCurrentNavTarget) {
-                GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
-                if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
-                    isCurrentNavTarget = false;
-                    ActivateInstance();
-                }
-            }
-        }
-
-        public void OnMouseDown () {
-            //Do the appropriate stuff here.
-            GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
-            if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
-                //Activate this thing.
-                ActivateInstance();
-            } else {
-                isCurrentNavTarget = true;
-                playerInst.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
-
-                //Move to this thing, then activate it.
-            }
-        }
-
-        private void ActivateInstance() {
-            shopGuI.ShowTradeWindow(DisplayName, shopInventory, MainControl.Instance.LocalPlayerData);
-            shopGuI.OnClosed += ShopClosed;
-            guiOpen = true;
-        }
-
-        public void OnMouseEnter () {
-            if (HoverInfoGUIInstance != null) {
-                HoverInfoGUIInstance.SetActive(true);
-                HoverInfoGUIInstance.transform.Find("txtShopName").GetComponent<Text>().text = DisplayName;
-                isHighlighted = true;
-            }
-        }
-
-        public void OnMouseExit () {
-            if (HoverInfoGUIInstance != null) {
-                HoverInfoGUIInstance.SetActive(false);
-                isHighlighted = false;
-            }
-        }
-
-        public void OnDisable () {
-            if (HoverInfoGUIInstance != null) {
-                HoverInfoGUIInstance.SetActive(false);
-                isHighlighted = false;
-            }
-        }
-
-        public void OnValidate () {
-            minItems = Mathf.Min(Mathf.Max(minItems, 0), maxItems - 1);//Cannot be less than 0, or greater than max items
-            maxItems = Mathf.Max(minItems + 1, maxItems);//Cannot be less than min items
-        }
-
         //Not sure how this is useful yet.
-        bool guiOpen = false;
         public void ShopClosed () {
-            guiOpen = false;
             shopGuI.OnClosed -= ShopClosed;
-        }
-
-        public void OnDrawGizmos () {
-            Gizmos.color = Color.white;
-            Gizmos.DrawWireSphere(transform.position, activationRadius);
+            //Destroy(shopUIInstance);
         }
     }
 }

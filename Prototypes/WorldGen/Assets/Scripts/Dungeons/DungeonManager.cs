@@ -70,6 +70,7 @@ public class DungeonManager: MonoBehaviour {
         //Enables all gameobjects and shows the instance.
         if (!instantiated) {
             dungeonInstance = Instantiate(dungeonPrefab);
+            dungeonInstance.transform.SetParent(transform);
             instantiated = true;
             //Only update the nav mesh if needed.
             navSurface.BuildNavMesh();

@@ -126,6 +126,7 @@ namespace BaD.Modules {
             LocalPlayerObjectInstance = NetworkInstantiation.Instance.Instantiate(OverworldPlayerPrefab, true);
             LocalPlayerObjectInstance.transform.position += Vector3.up * 10;
             LocalPlayerData = new PlayerData(LocalPlayerObjectInstance);
+            LocalPlayerData.gold += 10;
             LocalPlayerObjectInstance.SetActive(false);//We don't need it any more.
 
             if (Camera.main.GetComponent<CameraMovement>() != null) {

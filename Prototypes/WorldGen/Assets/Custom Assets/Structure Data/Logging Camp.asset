@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6f39671f39f0046be5f5594c9a24b6, type: 3}
   m_Name: Logging Camp
   m_EditorClassIdentifier: 
-  radius: 7
+  radius: 2.6
   maximumSlope: 0.744
   alignToSlope: 1
   flattenTerrain: 1

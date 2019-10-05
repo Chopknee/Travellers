@@ -415,7 +415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5450388703247479504}
   - component: {fileID: 9023723966721557035}
-  - component: {fileID: 5107437209913237939}
+  - component: {fileID: 7033042492982252024}
   m_Layer: 9
   m_Name: Mine
   m_TagString: Structure
@@ -432,7 +432,7 @@ Transform:
   m_GameObject: {fileID: 9077271668174930115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 232.73499, y: 273.55, z: 0}
-  m_LocalScale: {x: 0.29885834, y: 0.29885834, z: 0.29885834}
+  m_LocalScale: {x: 0.075, y: 0.075, z: 0.075}
   m_Children:
   - {fileID: 5540377857742360334}
   - {fileID: 5444972657381934258}
@@ -456,19 +456,22 @@ CapsuleCollider:
   m_Height: 43.2
   m_Direction: 1
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!208 &5107437209913237939
-NavMeshObstacle:
+--- !u!114 &7033042492982252024
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9077271668174930115}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 245460a489e50ea4e9122d7929aaf921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonManagerPrefab: {fileID: 5869443905751087349, guid: d71c786fc99184747a7d61dd2c605ddd,
+    type: 3}
+  HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
+    type: 3}
+  activationRadius: 1.9
+  isCurrentNavTarget: 0
+  isHighlighted: 0

@@ -355,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 9077271668174930115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 232.73499, y: 273.55, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 969770246810803484}
   - {fileID: 5444972657381934258}
@@ -395,7 +395,7 @@ MonoBehaviour:
     type: 3}
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
     type: 3}
-  activationRadius: 7.62
+  activationRadius: 2.14
   isCurrentNavTarget: 0
   isHighlighted: 0
 --- !u!1001 &9207015088983281977
