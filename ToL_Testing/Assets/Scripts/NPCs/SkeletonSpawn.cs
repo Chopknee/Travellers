@@ -7,7 +7,7 @@ public class SkeletonSpawn : MonoBehaviour
     public Transform spawnPoint;
     public GameObject skeletonPrefab;
     public AudioSource skeletonSpawnFX;
-    public bool spawned;
+    bool spawned;
     
     void InitiateSpawn()
     {

@@ -6,45 +6,62 @@ using UnityEngine.AI;
 public class NPCAgression : MonoBehaviour
 {
 
-    public GameObject[] targets;
+    public Collider[] targets;
     public Transform currentTarget;
     public NavMeshAgent agent;
-    public float sightDistance = 5;
-    
+    public AttackStyle style;
+    public float sightRadius = 5, sightOffset = 2;
+    public LayerMask layer_mask;
+    public float distanceToCurrentTarget = 0;
+
+
+
+
+
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        style.wielder = gameObject;
     }
 
     private void Update()
     {
-        targets = GameObject.FindGameObjectsWithTag("Player");
-        if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) < sightDistance)
-        {
-            //chase player
-            agent.SetDestination(currentTarget.position);
-        }
-        else
-        {
-            FindTarget();
-        }
-    }
+        targets = Physics.OverlapSphere(transform.position + sightOffset * transform.forward, sightRadius, layer_mask);
 
-    public void Attack(Transform t)
-    {
-
+        if (currentTarget != null)
+        {
+            distanceToCurrentTarget = (currentTarget.position - transform.position).sqrMagnitude;
+            if ((transform.position - currentTarget.position).sqrMagnitude < Mathf.Pow(sightRadius,2))
+            {
+                //chase player
+                agent.SetDestination(currentTarget.position);
+            }
+            style.DoAttack();
+            Debug.Log("FOOR THE HORDE");
+        }
+        FindTarget();
     }
 
     public void FindTarget()
     {
-        int r = Random.Range(0, targets.Length);
-        if (targets[r] != null)
-            currentTarget = targets[r].transform;
+        if (targets.Length > 0 && currentTarget == null)
+        {
+            currentTarget = targets[0].transform;
+        }
+
+        foreach (Collider c in targets)
+        {
+            if ((c.transform.position - transform.position).sqrMagnitude < distanceToCurrentTarget)
+            {
+                currentTarget = c.transform;
+            }
+        }
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(255, 0, 0, .2f);
-        Gizmos.DrawSphere(transform.position, sightDistance);
+        Gizmos.DrawSphere(transform.position, sightOffset);
     }
 }
