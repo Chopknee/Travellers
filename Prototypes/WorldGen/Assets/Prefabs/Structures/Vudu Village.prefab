@@ -308,7 +308,7 @@ GameObject:
   m_Layer: 8
   m_Name: ExitPoint
   m_TagString: SpawnPoint
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: 3051b0583025e2046bbd8621517fe85d, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -320,7 +320,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7657067636543943010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.33, y: 0, z: 0}
+  m_LocalPosition: {x: -18.95, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5450388703247479504}
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 5450388703247479504}
   - component: {fileID: 9023723966721557035}
   - component: {fileID: 3247634444758837721}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Vudu Village
   m_TagString: Structure
   m_Icon: {fileID: 0}

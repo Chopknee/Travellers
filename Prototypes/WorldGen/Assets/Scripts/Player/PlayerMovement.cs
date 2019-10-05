@@ -16,12 +16,15 @@ namespace BaD.Modules.Control {
         public bool followingArrow;
         public GameObject particles;
 
+        public float agentRemainingDist = 0;
+        public bool pathfinding = false;
 
         private void Start () {
             destinationPosition = transform.position;
             agent = GetComponent<NavMeshAgent>();
         }
         private void Update () {
+            //Normal navigation
             if (Input.GetButtonDown("Interact")) {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -30,32 +33,37 @@ namespace BaD.Modules.Control {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask)) {
                     string t = hit.collider.tag;
                     if (t == ( "Room" )) {
-                        Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-                        targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
-                        destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-                        SetDestination(destinationPosition, true);
+                        SetDestination(hit.point, true);
                     }
                 }
             }
 
+            if (pathfinding) {
+                switch (agent.pathStatus) {
+                    case NavMeshPathStatus.PathComplete:
+                        pathfinding = false;
+                        Debug.Log("Path found.");
+                        break;
+                    case NavMeshPathStatus.PathInvalid:
+                        pathfinding = false;
+                        Debug.Log("Path invalid.");
+                        break;
+                    case NavMeshPathStatus.PathPartial:
+                        pathfinding = false;
+                        Debug.Log("Path ended early.");
+                        break;
+                }
+            }
+            agentRemainingDist = agent.remainingDistance;
             if (currentArrow != null) {
                 if (!agent.pathPending) {
                     if (agent.remainingDistance <= agent.stoppingDistance) {
                         if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0) {
+                            Debug.Log("Finished navigating.");
                             KillArrow();
                             particles.GetComponent<ParticleSystem>().Play();
                         }
                     }
-                }
-
-                if (!agent.pathPending && !agent.hasPath) {
-                    timeSincePathfinding += .1f;
-                } else timeSincePathfinding = 0;
-
-                if (timeSincePathfinding >= 5f) {
-                    KillArrow();
                 }
             }
 
@@ -67,8 +75,6 @@ namespace BaD.Modules.Control {
             }
 
         }
-
-        float timeSincePathfinding = 0;
 
         private void OnDestroy () {
             if (currentArrow != null) {
@@ -83,17 +89,24 @@ namespace BaD.Modules.Control {
             }
         }
 
-        public void SetDestination ( Vector3 dest, bool hasArrow ) // location to move to, does it have an arrow with it
-        {
-            if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position) {
+        // location to move to, does it have an arrow with it
+        public void SetDestination ( Vector3 dest, bool hasArrow ) {
+            Debug.Log("<color=blue>Player destination set to " + dest + "</color>");
+
+            Vector3 targetLookPoint = new Vector3(dest.x, transform.position.y, dest.z);
+
+            targetRotation = Quaternion.LookRotation(targetLookPoint - transform.position);
+
+            if (dest != null && targetRotation != null && dest != transform.position) {
                 if (currentArrow != null) {
                     KillArrow();
                 }
 
-                GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
-
-                if (hasArrow)
+                agent.SetDestination(dest);
+                pathfinding = true;
+                if (hasArrow) {
                     CreateArrow(dest);
+                }
             }
         }
 
@@ -104,7 +117,7 @@ namespace BaD.Modules.Control {
             GameObject o = null;
             o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
 
-            if (Physics.Raycast(dest, Vector3.down, out RaycastHit hit, 500, layer_mask)) {
+            if (Physics.Raycast(dest + Vector3.up * 100, Vector3.down, out RaycastHit hit, 500, layer_mask)) {
                 o.transform.position = hit.point + Vector3.up * 3.14f;
             }
 

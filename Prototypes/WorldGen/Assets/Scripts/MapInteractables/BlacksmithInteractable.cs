@@ -44,9 +44,23 @@ namespace BaD.Modules.Terrain {
         }
 
         public void Update () {
-            if (isCurrentNavTarget && Input.GetButtonDown("Interact")) {
+            if (Input.GetButtonDown("Interact")) {
                 if (!isHighlighted) {
-                    isCurrentNavTarget = false;
+                    if (isCurrentNavTarget) {
+                        isCurrentNavTarget = false;
+                    }
+                } else {
+                    //Do the appropriate stuff here.
+                    GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                    if (( playerInst.transform.position - navigationPoint.position ).sqrMagnitude < activationRadiusSquared) {
+                        //Activate this thing.
+                        OpenBlacksmith();
+                    } else {
+                        isCurrentNavTarget = true;
+                        playerInst.GetComponent<PlayerMovement>().SetDestination(navigationPoint.position, true);
+
+                        //Move to this thing, then activate it.
+                    }
                 }
             }
 
@@ -60,17 +74,7 @@ namespace BaD.Modules.Terrain {
         }
 
         public void OnMouseDown () {
-            //Do the appropriate stuff here.
-            GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
-            if (( playerInst.transform.position - navigationPoint.position ).sqrMagnitude < activationRadiusSquared) {
-                //Activate this thing.
-                OpenBlacksmith();
-            } else {
-                isCurrentNavTarget = true;
-                playerInst.GetComponent<PlayerMovement>().SetDestination(navigationPoint.position, true);
 
-                //Move to this thing, then activate it.
-            }
         }
 
         private void OpenBlacksmith() {

@@ -1,4 +1,5 @@
 ﻿using BaD.Chopknee.Utilities;
+using BaD.Modules.Control;
 using BaD.Modules.Networking;
 using BaD.UI.DumpA;
 using ExitGames.Client.Photon;
@@ -7,6 +8,7 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BaD.Modules {
     public class MainControl: MonoBehaviourPunCallbacks {
@@ -51,6 +53,8 @@ namespace BaD.Modules {
 
 
         public GameObject DungeonPlayerPrefab;
+
+        public Transform playerDropoffSpot;
 
         void Awake () {
             //Warning messages about missing objects.
@@ -143,9 +147,12 @@ namespace BaD.Modules {
         public void EnterArea(DungeonManager area) {
             if (areaStack.Count == 0) {//0 means we aren't in an area
                 //Hides all overworld stuff
+                LocalPlayerObjectInstance.GetComponent<PlayerMovement>().enabled = false;
+                LocalPlayerObjectInstance.GetComponent<NavMeshAgent>().enabled = false;
                 LocalPlayerObjectInstance.SetActive(false);
+
+
                 OverworldControl.Instance.HideOverworld();
-                LocalPlayerObjectInstance.SetActive(false);
 
             } else {
                 //Just hide the previously generated instance
@@ -164,7 +171,7 @@ namespace BaD.Modules {
             Debug.Log("Area stack after moving; " + areaStack.Count);
             if (areaStack.Count == 0) {//Move back to the overworld.
                 Debug.Log("Reentering the overworld!!");
-                LocalPlayerObjectInstance.SetActive(true);
+
                 OverworldControl.Instance.ShowOverworld();
 
                 CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
@@ -180,6 +187,15 @@ namespace BaD.Modules {
                 cf.mouseSensitivity = 1.5f;
 
                 LocalPlayerObjectInstance.SetActive(true);
+
+                if (playerDropoffSpot != null) {
+                    LocalPlayerObjectInstance.transform.position = playerDropoffSpot.position;
+                } else {
+                    Debug.Log("Can't set dropoff spot, none has been specified!!!!!!");
+                }
+
+                LocalPlayerObjectInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
+                LocalPlayerObjectInstance.GetComponent<NavMeshAgent>().enabled = true;//Enable the player movement script.
             }
         }
 
