@@ -1,67 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1368407859
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1368407860}
-  - component: {fileID: 1368407861}
-  m_Layer: 8
-  m_Name: Density Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1368407860
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1368407859}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1352148, y: 2.0500002, z: -0.06802654}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5450388703247479504}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1368407861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1368407859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1fbb15bf92b84f40a1eb030765b5afe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameters:
-    albedo: {r: 1, g: 1, b: 1, a: 1}
-    meanFreePath: 15.9
-    asymmetry: 0
-    volumeMask: {fileID: 0}
-    textureScrollingSpeed: {x: 0, y: 0, z: 0}
-    textureTiling: {x: 1, y: 1, z: 1}
-    positiveFade: {x: 0.05878722, y: 0.17665334, z: 0.09325472}
-    negativeFade: {x: 0.093053065, y: 0, z: 0.028064076}
-    m_EditorUniformFade: 0
-    m_EditorPositiveFade: {x: 0.05878722, y: 0.17665334, z: 0.09325472}
-    m_EditorNegativeFade: {x: 0.093053065, y: 0, z: 0.028064076}
-    m_EditorAdvancedFade: 1
-    size: {x: 22.233019, y: 3.5632248, z: 21.231192}
-    invertFade: 0
-    distanceFadeStart: 10000
-    distanceFadeEnd: 10000
-    textureIndex: -1
-  m_Version: 2
 --- !u!1 &1515062739
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5450388703247479504}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &1515062743
 Light:
@@ -454,7 +392,7 @@ GameObject:
   m_Layer: 8
   m_Name: ExitPoint
   m_TagString: SpawnPoint
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: 3051b0583025e2046bbd8621517fe85d, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -470,7 +408,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5450388703247479504}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7176592041601078137
 GameObject:
@@ -674,7 +612,7 @@ GameObject:
   - component: {fileID: 5450388703247479504}
   - component: {fileID: 9023723966721557035}
   - component: {fileID: 5875478573688081048}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Graveyard
   m_TagString: Structure
   m_Icon: {fileID: 0}
@@ -690,13 +628,12 @@ Transform:
   m_GameObject: {fileID: 9077271668174930115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.51874, y: 0.51874, z: 0.51874}
+  m_LocalScale: {x: 0.13, y: 0.13, z: 0.13}
   m_Children:
   - {fileID: 5540377857742360334}
   - {fileID: 5444972657381934258}
   - {fileID: 7622067785065892550}
   - {fileID: 5620250787261186216}
-  - {fileID: 1368407860}
   - {fileID: 1515062740}
   - {fileID: 7546918376154757644}
   m_Father: {fileID: 0}
@@ -732,6 +669,6 @@ MonoBehaviour:
     type: 3}
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
     type: 3}
-  activationRadius: 9.95
+  activationRadius: 2.62
   isCurrentNavTarget: 0
   isHighlighted: 0

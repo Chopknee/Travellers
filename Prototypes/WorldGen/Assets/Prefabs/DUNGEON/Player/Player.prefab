@@ -7486,7 +7486,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5741135456754803403}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.44
   m_Speed: 3.5
@@ -7643,6 +7643,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 129350255495253916, guid: 618533da9b3fb0a48adba06a8d80236e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7977819192417808284, guid: 618533da9b3fb0a48adba06a8d80236e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 618533da9b3fb0a48adba06a8d80236e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7697,16 +7707,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 129350255495253916, guid: 618533da9b3fb0a48adba06a8d80236e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 7977819192417808284, guid: 618533da9b3fb0a48adba06a8d80236e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 9027124049610543990, guid: 618533da9b3fb0a48adba06a8d80236e,
         type: 3}

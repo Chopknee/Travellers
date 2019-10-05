@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e611492a401c62546bd99bdae4196409, type: 3}
   m_Name: NewErosion
   m_EditorClassIdentifier: 
-  autoUpdate: 1
-  erosionRadius: 3
+  erosionRadius: 2
   inertia: 0.01
   sedimentCapacityFactor: 4
   minSedimentCapacity: 0.01
-  erodeSpeed: 0.3
-  depositSpeed: 0.3
+  erodeSpeed: 0.064
+  depositSpeed: 0.06
   evaporateSpeed: 0.01
   gravity: 4
   maxDropletLifetime: 30

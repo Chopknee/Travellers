@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
+  m_Name: Cheese_Wheel
+  m_EditorClassIdentifier: 
+  itemName: Cheese Wheel
+  description: Where'd the missing wedge go?
+  value: 9
+  itemSprite: {fileID: 21300000, guid: 4fbde22719a010645b3ef255ab0fd3b6, type: 3}
+  cardTier: 1
+  collections:
+  - {fileID: 11400000, guid: 6dd2e654734922f43b0ae0384632d555, type: 2}

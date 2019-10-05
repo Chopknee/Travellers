@@ -32,13 +32,44 @@ public class InstanceActivation : MonoBehaviour {
     }
 
     public void Update () {
-        //Allows the player to 'cancel' the move to this point.
-        if (isCurrentNavTarget && Input.GetButtonDown("Interact")) {
+        //If interact button is clicked
+        if (Input.GetButtonDown("Interact")) {
+            //If the mouse is not over the collider
             if (!isHighlighted) {
-                isCurrentNavTarget = false;
+                //If the player is already navigating to this spot.
+                if (isCurrentNavTarget) {
+                    //Cancel the move
+                    isCurrentNavTarget = false;
+                }
+
+                //If the mouse is over the collider
+            } else {
+                //If the player is not already moving here
+                if (!isCurrentNavTarget) {
+                    GameObject playerInst;
+                    if (DungeonManager.CurrentInstance == null) {
+                        playerInst = MainControl.Instance.LocalPlayerObjectInstance;
+                    } else {
+                        playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                    }
+                    //If the player is close enough to this object
+                    if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
+                        DoInteraction();//Do the interaction
+                    } else {
+                        //Try to find a spot close to this thing.
+                        NavMesh.SamplePosition(transform.position, out NavMeshHit hit, activationRadius + 16, NavMesh.AllAreas);
+                        if (!hit.hit) { Debug.Log("The instance activator " + gameObject.name + " is unreachable, apparently."); return; }
+
+                        isCurrentNavTarget = true;
+                        if (DungeonManager.CurrentInstance == null) {
+                            MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+                        } else {
+                            DungeonManager.CurrentInstance.localPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+                        }
+                    }
+                }
             }
         }
-
         if (isCurrentNavTarget) {
             GameObject playerInst;
             if (DungeonManager.CurrentInstance == null) {
@@ -54,33 +85,12 @@ public class InstanceActivation : MonoBehaviour {
         }
     }
 
-    public void OnMouseDown () {
-        GameObject playerInst;
-        if (DungeonManager.CurrentInstance == null) {
-            playerInst = MainControl.Instance.LocalPlayerObjectInstance;
-        } else {
-            playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
-        }
-        if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
-            DoInteraction();
-        } else {
-            //Set this as the target and somehow make a callback to this when the player is close enough?
-            // - unless the player clicks elsewhere.
-            isCurrentNavTarget = true;
-            if (DungeonManager.CurrentInstance == null) {
-                Debug.Log("Navigating.");
-                NavMesh.SamplePosition(transform.position, out NavMeshHit hit, activationRadius+8, 0);
-                if (!hit.hit) { Debug.Log("No point found!"); return; }
-                MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
-
-            } else {
-                DungeonManager.CurrentInstance.localPlayerInstance.GetComponent<PlayerMovement>().SetDestination(transform.position, true);
-            }
-            
-        }
-    }
-
     public void DoInteraction() {
+        Transform t = transform.Find("ExitPoint");
+        if (t != null) {
+            MainControl.Instance.playerDropoffSpot = t;
+        }
+
         //Generating a seed based on the position and current seed stack. (meaning there is a limit to how many levels deep we can go)
         int instanceSeed = MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
         //If the dungeon manager is previously cached

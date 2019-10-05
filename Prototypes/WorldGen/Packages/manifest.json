@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "ca.andydbc.unity-texture-packer": "file:C:/Users/Brian/Unity/Travellers/Tools/Texture Packer",
     "com.unity.analytics": "3.3.2",
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.probuilder": "4.1.0",

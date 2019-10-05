@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b68d907084d26c42a390902a39d983a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TerrainSize: 3
+  TerrainSize: 0
   LevelOfDetail: 0
   editorMapData: {fileID: 0}
   terrainData: {fileID: 11400000, guid: a682c94b4262ba84fa0697bd64bb09c1, type: 2}

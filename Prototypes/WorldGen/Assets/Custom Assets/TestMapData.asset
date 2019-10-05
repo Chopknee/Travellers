@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noiseData: {fileID: 11400000, guid: 105ba4546209f4448857883ca3c23be9, type: 2}
   terrainData: {fileID: 11400000, guid: a682c94b4262ba84fa0697bd64bb09c1, type: 2}
-  terrainMaterial: {fileID: 2100000, guid: 9cd983cc299083942beb394fea912c58, type: 2}
   terrainModifiers:
   - {fileID: 11400000, guid: a8bb38e208a0f2440a63be3003ee77c9, type: 2}
   - {fileID: 11400000, guid: 432f68d35456d384193af517da504381, type: 2}

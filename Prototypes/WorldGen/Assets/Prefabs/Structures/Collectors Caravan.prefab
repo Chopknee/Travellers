@@ -119,7 +119,7 @@ GameObject:
   m_Layer: 8
   m_Name: ExitPoint
   m_TagString: SpawnPoint
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: 3051b0583025e2046bbd8621517fe85d, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -131,7 +131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5925296817137725965}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.34, z: 21.82}
+  m_LocalPosition: {x: 0, y: 0.34, z: 20.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5450388703247479504}
@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 5450388703247479504}
   - component: {fileID: 9023723966721557035}
   - component: {fileID: 3385319671208214282}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Collectors Caravan
   m_TagString: Structure
   m_Icon: {fileID: 0}
@@ -355,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 9077271668174930115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 232.73499, y: 273.55, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 969770246810803484}
   - {fileID: 5444972657381934258}
@@ -395,7 +395,7 @@ MonoBehaviour:
     type: 3}
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
     type: 3}
-  activationRadius: 9.62
+  activationRadius: 2.14
   isCurrentNavTarget: 0
   isHighlighted: 0
 --- !u!1001 &9207015088983281977

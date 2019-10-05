@@ -70,6 +70,7 @@ public class DungeonManager: MonoBehaviour {
         //Enables all gameobjects and shows the instance.
         if (!instantiated) {
             dungeonInstance = Instantiate(dungeonPrefab);
+            dungeonInstance.transform.SetParent(transform);
             instantiated = true;
             //Only update the nav mesh if needed.
             navSurface.BuildNavMesh();
@@ -91,6 +92,7 @@ public class DungeonManager: MonoBehaviour {
         MainControl.Instance.DungeonPlayerPrefab.GetComponent<PlayerMovement>().enabled = false;//Stop this script from causing issues
         localPlayerInstance = netManagerSettings.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
         localPlayerInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
+        localPlayerInstance.GetComponent<NavMeshAgent>().enabled = true;//Enable the player movement script.
         localPlayerInstance.transform.SetParent(transform);
 
         CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
