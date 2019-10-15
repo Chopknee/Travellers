@@ -19,14 +19,17 @@ public class CombatController : MonoBehaviour
             Debug.Log("Cannot use current weapon gameobject. It does not have an attack style or derivative script.");
             return;
         }
+        
         SetWeapon(currentWeapon.GetComponent<AttackStyle>());
     }
 
     void Update()
     {
+        if (!GetComponent<PlayerMovement>().playerCanInteract) return;
+
         if (currentWeapon != null)
         {
-            if (Input.GetButtonDown("Attack"))
+            if (Input.GetButton("Attack"))
             {
                 if (!weaponScript.IsAttacking)
                 {

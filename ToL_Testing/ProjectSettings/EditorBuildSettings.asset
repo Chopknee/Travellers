@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Dungeon/animations.unity
-    guid: 426f622d55acb9143b367c9e8c9e276e
+    path: Assets/Scenes/Testing/ArrowTesting.unity
+    guid: 5de68e0ce879f3c4493f45e5500e7f5e
   m_configObjects: {}
