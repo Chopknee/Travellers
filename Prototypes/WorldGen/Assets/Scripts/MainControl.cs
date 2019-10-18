@@ -1,6 +1,7 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules.Combat;
 using BaD.Modules.Control;
+using BaD.Modules.Input;
 using BaD.Modules.Networking;
 using BaD.UI.DumpA;
 using ExitGames.Client.Photon;
@@ -57,6 +58,8 @@ namespace BaD.Modules {
 #pragma warning disable 0649
         private GameObject OverworldPlayerPrefab;
 
+        public MainControls Controls { get; private set; }
+
 
         public GameObject DungeonPlayerPrefab;
 
@@ -91,6 +94,9 @@ namespace BaD.Modules {
             if (OverworldSceneAndLightingSettings == null) {
                 Debug.Log("<color=blue><a>Missing</a></color> overworld scene and lighting settings gameobject reference.");
             }
+
+            Controls = new MainControls();
+            Controls.Enable();
         }
 
         public void Start () {
@@ -139,8 +145,8 @@ namespace BaD.Modules {
             LocalPlayerData.gold += 10;
             LocalPlayerObjectInstance.SetActive(false);//We don't need it any more.
 
-            if (Camera.main.GetComponent<CameraMovement>() != null) {
-                Camera.main.GetComponent<CameraMovement>().currentTarget = LocalPlayerObjectInstance.transform;
+            if (Camera.main.GetComponent<CameraMotion>() != null) {
+                Camera.main.GetComponent<CameraMotion>().target = LocalPlayerObjectInstance.transform;
             }
 
             //At this point, we want to spawn the player in the first spawned instance of the collector's caravan.
@@ -214,8 +220,8 @@ namespace BaD.Modules {
             //Moving back into the overworld.
             OverworldControl.Instance.ShowOverworld();
 
-            CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
-            cf.currentTarget = LocalPlayerObjectInstance.transform;
+            CameraMotion cf = Camera.main.GetComponent<CameraMotion>();
+            cf.target = LocalPlayerObjectInstance.transform;
             lastDM.HideArea();
             if (playerDropoffSpot != null) {
                 LocalPlayerObjectInstance.transform.position = playerDropoffSpot.position;

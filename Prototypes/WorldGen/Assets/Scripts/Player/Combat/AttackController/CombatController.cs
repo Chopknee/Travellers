@@ -23,7 +23,7 @@ namespace BaD.Modules.Combat {
 
         void Update () {
             if (currentWeapon != null) {
-                if (Input.GetButtonDown("Attack")) {
+                if (UnityEngine.Input.GetButtonDown("Attack")) {
                     if (!weaponScript.IsAttacking) {
                         weaponScript.DoAttack();
                         //Debug.Log("Attacking!!");

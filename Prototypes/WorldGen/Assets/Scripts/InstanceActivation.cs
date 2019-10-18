@@ -62,9 +62,9 @@ public class InstanceActivation : MonoBehaviour {
 
                         isCurrentNavTarget = true;
                         if (DungeonManager.CurrentInstance == null) {
-                            MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+                            //MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
                         } else {
-                            DungeonManager.CurrentInstance.LocalDungeonPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+                            //DungeonManager.CurrentInstance.LocalDungeonPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
                         }
                     }
                 }

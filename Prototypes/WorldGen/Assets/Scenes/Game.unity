@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.105761774, g: 0.2128061, b: 0.41203645, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3082,25 +3082,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 2002930761}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3410635a1172f2549bf3461644b81883, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b3b5e90ed436564fbe5b4ff1acc026e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTarget: {fileID: 0}
-  smoothness: 15
-  pan: 15
-  panSpeed: 0.84
-  zoomSpeed: 1
-  mouseScrollSensitivity: 1
-  mousePanSensitivity: 1.5
-  axisScrollSensitivity: 1
-  axisPanSensititivty: 1
-  CONTROLLER_INPUT: 1
-  camMinHeight: 1
-  camMaxHeight: 15
-  camMinDist: 0.64
-  camMaxDist: 1.1
-  height: 5
-  distToPlayer: 0
+  zoomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  zoomSensitivity: 0.01
+  zoomPercent: 0.15
+  heightConstraintRange: {x: 0, y: 8.9}
+  distanceConstraint: {x: 6.06, y: 17}
+  zoomDrag: 6
+  target: {fileID: 0}
+  horizontalSensitivity: 0.25
+  horizontalSmoothing: 10
+  horizontal: 3.14
+  verticalSensitivity: 0.25
+  verticalSmoothing: 10
+  vertical: 0.5
+  heightZoomScalar: 3
+  smoothTime: 0.1
 --- !u!1 &2121965930
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BaD.Modules.Input;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,125 +14,72 @@ namespace BaD.Modules.Control {
         public GameObject arrow;
         public WaypointAnimations currentArrow;
         NavMeshAgent agent;
-        public bool followingArrow;
         public GameObject particles;
+        public float playerSpeed = 1;
 
-        public float agentRemainingDist = 0;
-        public bool pathfinding = false;
+        MainControls mc;
+        public Vector2 moveDirection;
+
+        GameObject cameraTracker;
+        Transform cameraTrackTransform;
+        Transform cameraTransform;
 
         private void Start () {
             destinationPosition = transform.position;
             agent = GetComponent<NavMeshAgent>();
+
+            mc = MainControl.Instance.Controls;
+
+            cameraTracker = new GameObject("Camera Tracker");
+            cameraTracker.transform.SetParent(transform);
+            cameraTrackTransform = cameraTracker.transform;
+            cameraTransform = Camera.main.gameObject.transform;
         }
+
         private void Update () {
-            //Normal navigation
-            if (Input.GetButtonDown("Interact")) {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //Make the camera track point in the forward of the camera, minus the pitch
+            cameraTrackTransform.rotation = Quaternion.identity;
+            cameraTrackTransform.position = new Vector3(cameraTransform.position.x, transform.position.y, cameraTransform.position.z);
+            cameraTrackTransform.forward = ( transform.position - cameraTransform.position );
 
-                RaycastHit hit;
+            
 
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask)) {
-                    string t = hit.collider.tag;
-                    if (t == ( "Room" )) {
-                        SetDestination(hit.point, true);
-                    }
-                }
+            moveDirection = mc.Player.Movement.ReadValue<Vector2>();
+            if (moveDirection != Vector2.zero) {
+                Vector3 dir = (moveDirection.y * cameraTrackTransform.forward.normalized) + (moveDirection.x * cameraTrackTransform.right.normalized);
+                dir.Normalize();
+                dir *= playerSpeed * Time.deltaTime;
+                agent.Move(dir);
+                destinationPosition = transform.position + dir;
+                //MoveToPoint(destinationPosition);
+                transform.rotation = FaceDirection(destinationPosition);
             }
 
-            if (pathfinding) {
-                switch (agent.pathStatus) {
-                    case NavMeshPathStatus.PathComplete:
-                        pathfinding = false;
-                        Debug.Log("Path found.");
-                        break;
-                    case NavMeshPathStatus.PathInvalid:
-                        pathfinding = false;
-                        Debug.Log("Path invalid.");
-                        break;
-                    case NavMeshPathStatus.PathPartial:
-                        pathfinding = false;
-                        Debug.Log("Path ended early.");
-                        break;
-                }
-            }
-            agentRemainingDist = agent.remainingDistance;
-            if (currentArrow != null) {
-                if (!agent.pathPending) {
-                    if (agent.remainingDistance <= agent.stoppingDistance) {
-                        if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0) {
-                            Debug.Log("Finished navigating.");
-                            KillArrow();
-                            particles.GetComponent<ParticleSystem>().Play();
-                        }
-                    }
-                }
-            }
-
-
-            if (currentArrow != null && followingArrow) {
-                if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f) {
-                    KillArrow();
-                }
-            }
-
-        }
-
-        private void OnDestroy () {
-            if (currentArrow != null) {
-                currentArrow.Die();
-                currentArrow = null;
-            }
-        }
-        private void OnDisable () {
-            if (currentArrow != null) {
-                currentArrow.Die();
-                currentArrow = null;
-            }
-        }
-
-        // location to move to, does it have an arrow with it
-        public void SetDestination ( Vector3 dest, bool hasArrow ) {
-            Debug.Log("<color=blue>Player destination set to " + dest + "</color>");
-
-            Vector3 targetLookPoint = new Vector3(dest.x, transform.position.y, dest.z);
-
-            targetRotation = Quaternion.LookRotation(targetLookPoint - transform.position);
-
-            if (dest != null && targetRotation != null && dest != transform.position) {
-                if (currentArrow != null) {
-                    KillArrow();
-                }
-
-                agent.SetDestination(dest);
-                pathfinding = true;
-                if (hasArrow) {
-                    CreateArrow(dest);
-                }
-            }
+            
         }
 
 
-        public void CreateArrow ( Vector3 dest ) {
+        public void MoveToPoint ( Vector3 dest ) {
+            Vector3 dist = dest - transform.position;
 
-
-            GameObject o = null;
-            o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
-
-            if (Physics.Raycast(dest + Vector3.up * 100, Vector3.down, out RaycastHit hit, 500, layer_mask)) {
-                o.transform.position = hit.point + Vector3.up * 3.14f;
+            if (dist.sqrMagnitude > agent.stoppingDistance * agent.stoppingDistance) {
+                Vector3 movement = (transform.position + dist) * Time.deltaTime;
+                movement.y = transform.position.y;
+                agent.Move(movement);
             }
 
-            currentArrow = o.transform.Find("wp").GetComponent<WaypointAnimations>();
-
-            followingArrow = true;
 
         }
 
-        public void KillArrow () {
-            if (currentArrow != null) {
-                currentArrow.Die();
-                currentArrow = null;
-            }
+        public Quaternion FaceDirection ( Vector3 destination ) {
+            float pan = 10f;
+            //rotation of Object
+            var heading = destination - transform.position;
+            var rot = Quaternion.LookRotation(heading);
+
+            Quaternion rotLerp = Quaternion.Lerp(transform.rotation, rot, pan * Time.deltaTime);
+
+            return rotLerp;
         }
     }
 }

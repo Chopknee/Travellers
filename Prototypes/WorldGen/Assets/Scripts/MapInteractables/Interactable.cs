@@ -36,7 +36,7 @@ namespace BaD.Modules.Terrain {
         }
 
         public void Update () {
-            if (Input.GetButtonDown("Interact")) {
+            if (UnityEngine.Input.GetButtonDown("Interact")) {
                 if (!isMouseover) {
                     if (isCurrentNavTarget) {
                         isCurrentNavTarget = false;
@@ -49,7 +49,7 @@ namespace BaD.Modules.Terrain {
                         DoInteraction();
                     } else {
                         isCurrentNavTarget = true;
-                        playerInst.GetComponent<PlayerMovement>().SetDestination(navigationPoint.position, true);
+                        //playerInst.GetComponent<PlayerMovement>().SetDestination(navigationPoint.position, true);
                         //Move to this thing, then activate it.
                     }
                 }

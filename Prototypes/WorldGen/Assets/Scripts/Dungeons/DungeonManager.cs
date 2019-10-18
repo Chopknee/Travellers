@@ -147,8 +147,8 @@ public class DungeonManager: MonoBehaviour {
 
         instantiated = true;
 
-        CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
-        cf.currentTarget = LocalDungeonPlayerInstance.transform;
+        CameraMotion cf = Camera.main.GetComponent<CameraMotion>();
+        cf.target = LocalDungeonPlayerInstance.transform;
 
         Showing = true;
         Invoke("ReverseFade", fadeWaitTime);

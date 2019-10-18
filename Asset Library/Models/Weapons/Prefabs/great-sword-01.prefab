@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4451051096154769071}
   - component: {fileID: 7444481934287766653}
   - component: {fileID: 6872149687186100583}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: great-sword-01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9181936858947072161}
-  m_Mesh: {fileID: -2683961028396970969, guid: 1741194732db26b458383acab32022de, type: 3}
+  m_Mesh: {fileID: -5495902117074765545, guid: 1741194732db26b458383acab32022de, type: 3}
 --- !u!114 &4451051096154769071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,16 +54,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60a11ce0c8e96a4e988afbf8c5d2489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackStyle: 1
-  wielder: {fileID: 0}
-  baseDamage: 75
+  attackStyle: 0
+  weapon: 2
+  baseDamage: 100
   knockbackPower: 5
-  attackRate: 0.7
-  damagePosition: {x: 0, y: 0, z: 0}
-  damageRadius: 1
-  attackDamageDelay: 0.2
-  DamageableTags:
-  - Enemy
+  attackRate: 2
 --- !u!23 &7444481934287766653
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -81,7 +76,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 92d69fae17345cb4aa025936c6c72b02, type: 2}
+  - {fileID: 670224309865224971, guid: 1741194732db26b458383acab32022de, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,5 +111,5 @@ MonoBehaviour:
   leftHand: {fileID: 0}
   rightHand: {fileID: 0}
   hand: 1
-  rotationOffset: {x: 0, y: 0, z: 0}
-  positionOffset: {x: 0, y: -0.09, z: 0.01}
+  rotationOffset: {x: -90, y: 0, z: 0}
+  positionOffset: {x: 0, y: 0, z: 0}

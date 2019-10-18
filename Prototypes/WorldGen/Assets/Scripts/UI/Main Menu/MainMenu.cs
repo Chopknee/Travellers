@@ -42,11 +42,24 @@ public class MainMenu : MonoBehaviourPunCallbacks {
     public void HostGame() {
 
         //Creates a new game based on existing player prefs
-        if (PhotonNetwork.CreateRoom(PlayerPrefs.GetString("RoomName"))) {
+        if (PhotonNetwork.CreateRoom(PlayerPrefs.GetString("HostRoomName"))) {
             Debug.Log("<color=cyan>Attempting to create new room...</color>");
             return;
         }
         Debug.Log("<color=cyan>Failed to create new room. Unknown cause.</color>");
+    }
+
+    public void JoinGame() {
+        string name = PlayerPrefs.GetString("JoinRoomName");
+        if (name != "") {
+            if (PhotonNetwork.JoinRoom(name)) {
+                Debug.LogFormat("Attempting to join room {0}.", name);
+            } else {
+                Debug.LogFormat("Could not join room {0}.", name);
+            }
+        } else {
+            Debug.LogFormat("Could not join room, no name was specified.");
+        }
     }
 
     public override void OnConnected () {
@@ -68,6 +81,17 @@ public class MainMenu : MonoBehaviourPunCallbacks {
 
     public override void OnCreateRoomFailed ( short returnCode, string message ) {
         Debug.LogFormat("<color=cyan>Failed to create room. Cause: {0}.", message);
+    }
+
+    public override void OnJoinedRoom() {
+        Debug.LogFormat("Joined room successfully.");
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1) {
+            PhotonNetwork.LoadLevel("Game");
+        }
+    }
+
+    public override void OnJoinRoomFailed ( short returnCode, string message ) {
+        Debug.LogFormat("Could not join room. Reason; {0}", message);
     }
 
     //public void OnRegionListReceived ( RegionHandler regionHandler ) {
