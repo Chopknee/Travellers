@@ -1,111 +1,4 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.AI;
-//public class PlayerMovement : MonoBehaviour
-//{
-//    NavMeshAgent agent;
-
-//    public string roomTagForPathfinding = "Room";
-
-//    public Vector3 destinationPosition;
-
-//    Quaternion targetRotation;
-
-//    GameObject[] arrowsInGame;
-
-
-//    public LayerMask layer_mask;
-
-//    public GameObject arrow;
-
-//    private void Start()
-//    {
-//        destinationPosition = transform.position;
-//        agent = GetComponent<NavMeshAgent>();
-//    }
-
-//    float smoothVel = 0;
-//    float lastSpd = 0;
-
-//    private void Update()
-//    {
-//        if (Input.GetButtonDown("Interact"))
-//        {
-//            RaycastHit hit;
-//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-//            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layer_mask))
-//            {
-//                string t = hit.collider.tag;
-//                if (t == (roomTagForPathfinding))
-//                {
-//                    Vector3 p = hit.collider.transform.root.transform.position;
-//                    Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-//                    targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
-//                    destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z); 
-
-//                    if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
-//                    {
-//                        agent.SetDestination(destinationPosition);
-
-//                        CreateArrow(destinationPosition);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    private void OnTriggerEnter(Collider other)
-//    {
-//        if (other.CompareTag("PortalOut"))
-//        {
-//            Debug.LogError("----------------------Exited----------------------");
-//        }
-
-//        if (other.CompareTag("DestinationArrowTmp"))
-//        {
-//            if (arrow == other.gameObject)
-//                KillArrow();
-//        }
-//    }
-
-//    private void OnDrawGizmos()
-//    {
-//        if (arrow != null)
-//        {
-//            Gizmos.color = new Color(0, 255, 0, .2f);
-//            Gizmos.DrawWireSphere(arrow.transform.position, arrow.GetComponent<SphereCollider>().radius);
-
-//        }
-//    }
-
-
-//    float lastTime;
-//    void CreateArrow(Vector3 dest)
-//    {
-//        float next = 50f;
-//        lastTime = Time.time + next;
-
-//        arrow = Instantiate(arrow, new Vector3(dest.x, transform.position.y + 2, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
-
-//        //yield return new WaitForSeconds(.1f);
-
-//        //yield return new WaitUntil(() => Vector3.Distance(transform.position, dest) <= 2);
-
-//    }
-
-//    void KillArrow()
-//    {
-//        if (arrow != null)
-//        {
-//            arrow.transform.Find("wp").GetComponent<WaypointAnimations>().Die();
-//            arrow = null;
-//        }
-//    }
-//}
-
+﻿
 
 using System.Collections;
 using System.Collections.Generic;
@@ -122,20 +15,70 @@ public class PlayerMovement : MonoBehaviour
     public bool followingArrow;
     public GameObject particles;
     public Transform clickedObject;
+    public bool playerCanInteract = true;
+    public bool faceDirection;
+    public GameObject CONTROLLER_VISUAL_DIRECTION_OBJECT;
+    public bool CONTROLLER_INPUT = true;
+    public Vector2 CONTROLLER_RightStickDirection, CONTROLLER_LeftStickDirection;
 
     private void Start()
     {
         destinationPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
+
+        if (CONTROLLER_VISUAL_DIRECTION_OBJECT)
+        {
+            CONTROLLER_VISUAL_DIRECTION_OBJECT.transform.position = transform.position;
+            Camera.main.GetComponent<CameraMovement>().ControllerVisualObject = CONTROLLER_VISUAL_DIRECTION_OBJECT.transform;
+            
+        }
     }
     private void Update()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (!playerCanInteract)
+        {
+            return;
+        }
+
+        if (destinationPosition != null)
+        {
+            transform.rotation = FaceDirection(destinationPosition);
+
+            if (!CONTROLLER_INPUT && (transform.position - destinationPosition).sqrMagnitude > 49)
+            {
+                SetDestination(destinationPosition, false);
+            }
+
+        }
+        // Controller input axis
+        if (CONTROLLER_INPUT)
+        {
+
+            CONTROLLER_VISUAL_DIRECTION_OBJECT.transform.position = transform.position;
+
+            float verticalRot;
+            CONTROLLER_RightStickDirection = new Vector2(Input.GetAxisRaw("HorizontalRightStick"), Input.GetAxisRaw("VerticalRightStick"));
+            CONTROLLER_LeftStickDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+            verticalRot = Mathf.Atan2(CONTROLLER_LeftStickDirection.x, CONTROLLER_LeftStickDirection.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+
+            //Quaternion.AngleAxis(horizontalAxis * mouseSensitivity * turnSpeed, Vector3.up) * camOffset;
+            CONTROLLER_VISUAL_DIRECTION_OBJECT.transform.eulerAngles = new Vector3(0, verticalRot, 0);
+
+
+            if (CONTROLLER_LeftStickDirection != Vector2.zero)
+            {
+                destinationPosition = CONTROLLER_VISUAL_DIRECTION_OBJECT.transform.Find("Target").position;
+                SetDestination(destinationPosition, false);
+            }
+        }
+        else if (Input.GetButtonDown("Interact"))
+
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hit;
-
+            // PC Input
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Camera.main.farClipPlane, layer_mask))
             {
                 string t = hit.collider.tag;
@@ -144,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
                 targetRotation = Quaternion.LookRotation(directionOfTarget - transform.position);
                 if (t == ("Room"))
                 {
+                    Camera.main.GetComponent<CameraMovement>().playerIsMoving = true;
                     destinationPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
                     SetDestination(destinationPosition, true);
@@ -168,8 +112,13 @@ public class PlayerMovement : MonoBehaviour
             if (!agent.pathPending && !agent.hasPath)
             {
                 timeSincePathfinding += .1f;
+                Camera.main.GetComponent<CameraMovement>().playerIsMoving = true;
             }
-            else timeSincePathfinding = 0;
+            else
+            {
+                timeSincePathfinding = 0;
+                Camera.main.GetComponent<CameraMovement>().playerIsMoving = false;
+            }
 
             if (timeSincePathfinding >= 5f)
             {
@@ -215,8 +164,35 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public Quaternion FaceDirection(Vector3 destination)
+    {
+        float pan = 10f;
+        //rotation of Object
+        var heading = destination - transform.position;
+        var rot = Quaternion.LookRotation(heading);
+
+        Quaternion rotLerp = Quaternion.Lerp(transform.rotation, rot, pan * Time.deltaTime);
+
+        return rotLerp;
+    }
+    public void MoveToPoint(Vector3 dest)
+    {
+        float dist = Vector3.Distance(dest, transform.position);
+
+        if (dist > agent.stoppingDistance)
+        {
+            Vector3 movement = transform.forward * Time.deltaTime * dist;
+            movement.y = transform.position.y;
+            agent.Move(movement);
+        }
+
+
+    }
+
     public void SetDestination(Vector3 dest, bool hasArrow) // location to move to, does it have an arrow with it
     {
+        if (!playerCanInteract) return;
+
         if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
         {
             if (currentArrow != null)
@@ -224,7 +200,10 @@ public class PlayerMovement : MonoBehaviour
                 KillArrow();
             }
 
-            GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
+            MoveToPoint(destinationPosition);
+
+
+            //GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
 
             if (hasArrow)
                 CreateArrow(dest);
@@ -234,12 +213,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void CreateArrow(Vector3 dest)
     {
-
+        if (!playerCanInteract) return;
 
         GameObject o = null;
         o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
 
-        if(Physics.Raycast(dest, Vector3.down, out RaycastHit hit, 500, layer_mask))
+        if (Physics.Raycast(dest, Vector3.down, out RaycastHit hit, 500, layer_mask))
         {
             o.transform.position = hit.point + Vector3.up * 3.14f;
         }

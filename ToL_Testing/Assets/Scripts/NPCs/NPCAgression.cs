@@ -29,16 +29,17 @@ public class NPCAgression : MonoBehaviour
     {
         targets = Physics.OverlapSphere(transform.position + sightOffset * transform.forward, sightRadius, layer_mask);
 
-        if (currentTarget != null)
+        if (currentTarget != null && !currentTarget.GetComponent<Health>().dead)
         {
             distanceToCurrentTarget = (currentTarget.position - transform.position).sqrMagnitude;
             if ((transform.position - currentTarget.position).sqrMagnitude < Mathf.Pow(sightRadius,2))
             {
                 //chase player
                 agent.SetDestination(currentTarget.position);
+                style.DoAttack();
             }
-            style.DoAttack();
-            Debug.Log("FOOR THE HORDE");
+            
+            //Debug.Log("FOOR THE HORDE " + gameObject.name);
         }
         FindTarget();
     }
@@ -61,7 +62,7 @@ public class NPCAgression : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(255, 0, 0, .2f);
+        Gizmos.color = new Color(255, 0, 0, .05f);
         Gizmos.DrawSphere(transform.position, sightOffset);
     }
 }

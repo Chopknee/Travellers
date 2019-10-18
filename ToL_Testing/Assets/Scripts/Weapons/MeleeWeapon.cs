@@ -29,7 +29,6 @@ public class MeleeWeapon : AttackStyle
     {
         get
         {
-            //return ( transform.rotation * damagePosition ) + transform.position;
             return (wielder.transform.rotation * damagePosition) + wielder.transform.position;
         }
     }
@@ -41,6 +40,7 @@ public class MeleeWeapon : AttackStyle
     
     public override void DoAttack()
     {
+        if (wielder.GetComponent<PlayerMovement>() != null && !wielder.GetComponent<PlayerMovement>().playerCanInteract) return;
         if (IsAttacking) return;
         IsAttacking = true;
 
@@ -54,7 +54,7 @@ public class MeleeWeapon : AttackStyle
         }
         //Drop the damage orb somewhere??
         
-        Invoke("DoDamage", a.GetCurrentAnimatorClipInfo(0)[0].clip.length - animationOffset);
+        Invoke("DoDamage", a.GetCurrentAnimatorClipInfo(0)[0].clip.length / 2 + animationOffset);
         Invoke("SetCanAttack", attackRate);
     }
 

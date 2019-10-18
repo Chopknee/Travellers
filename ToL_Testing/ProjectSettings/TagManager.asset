@@ -16,6 +16,7 @@ TagManager:
   - PortalOut
   - Enemy
   - SwingingWeapon
+  - PlayerFairy
   layers:
   - Default
   - TransparentFX
