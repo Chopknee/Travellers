@@ -45,9 +45,11 @@ public class NetInstanceManager: Messaging {
     }
 
     public void JoinInstance(int instanceID) {
+        Debug.LogFormat("Joining instance <color=green>{0}</color>.", instanceID);
         this.instanceID = instanceID;
         object[] data = new object[] { instanceID, JoinInstanceNotificationCode, PhotonNetwork.LocalPlayer.ActorNumber };
         SendNetMessage(data);
+        Debug.LogFormat("Sent dungeon instance join notification <color=green>{0}</color>.", instanceID);
         isInstanceMaster = true;
         CurrentManager = this;
     }
@@ -75,7 +77,9 @@ public class NetInstanceManager: Messaging {
             Destroy(entry.Value.gameObjectRef);
         }
         instancesPool.Clear();
-        CurrentManager = null;
+        if (CurrentManager == this) {
+            CurrentManager = null;
+        }
     }
 
     public void DestroyObject(GameObject go) {
@@ -102,13 +106,16 @@ public class NetInstanceManager: Messaging {
     public override void MessageReceived ( object[] messageData ) {
         //Message received stuff here...
         MessageMeta meta = (MessageMeta) messageData[0];
+        Debug.LogFormat("RECEIVED FUCKING MESSAGE Receiver ID:{0}, Message Code: {1}, {2}", (int) messageData[1], (byte) messageData[2], ((int) messageData[1] != instanceID)? "Not For Me":"For Me");
         //If message is not related to this instance, ignore it
         if ((int)messageData[1] != instanceID) { return; }
         switch ((byte) messageData[2]) {
             case JoinInstanceNotificationCode:
                 //Join instance was received.
                 joinedPlayers.Add((int) messageData[3]);//track the players currently joined.
+                Debug.LogFormat("A new player  <color=green>{1}</color> has joined instance <color=green>{0}</color>.", instanceID, messageData[3]);
                 if (isInstanceMaster) {
+                    Debug.LogFormat("I am the master in instance <color=green>{0}</color> so I tell the player to EFF off.", instanceID);
                     //Basically tell them they aren't the master here.
                     SendNetMessage(new object[] { instanceID, NotMaster, joinedPlayers.ToArray() });
                     //And then sync all the networked objects in the instance
@@ -127,6 +134,7 @@ public class NetInstanceManager: Messaging {
                 instancesPool.Add(view.ViewID, new NetworkInstance(view.ViewID, (int)messageData[4], inst));
                 break;
             case NotMaster:
+                Debug.LogFormat(" I received a not master notification for the current instance {0}.", instanceID);
                 //A special message that is received when joining an instance and someone else has already made it
                 isInstanceMaster = false;
                 //Also, sync the joined players list.

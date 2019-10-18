@@ -43,7 +43,7 @@ namespace BaD.Modules.Terrain {
                     }
                 } else {
                     //Do the appropriate stuff here.
-                    GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                    GameObject playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
                     if (( playerInst.transform.position - navigationPoint.position ).sqrMagnitude < activationRadiusSquared) {
                         //Activate this thing.
                         DoInteraction();
@@ -56,7 +56,7 @@ namespace BaD.Modules.Terrain {
             }
 
             if (isCurrentNavTarget) {
-                GameObject playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                GameObject playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
                 if (( playerInst.transform.position - navigationPoint.position ).sqrMagnitude < activationRadiusSquared) {
                     isCurrentNavTarget = false;
                     DoInteraction();

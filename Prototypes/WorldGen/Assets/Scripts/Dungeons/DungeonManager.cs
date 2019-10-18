@@ -1,6 +1,8 @@
 ﻿using BaD.Chopknee.Utilities;
 using BaD.Modules;
+using BaD.Modules.Combat;
 using BaD.Modules.Control;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,7 +13,7 @@ public class DungeonManager: MonoBehaviour {
     
     public bool Showing { get; private set; }
 
-    public GameObject localPlayerInstance { get; private set; }
+    public GameObject LocalDungeonPlayerInstance { get; private set; }
 
     public GameObject dungeonInstance { get; private set; }
 
@@ -31,8 +33,16 @@ public class DungeonManager: MonoBehaviour {
     public int dungeonSeed { get; private set; }
 
 
+    public AnimationCurve fadeCurve;
+    public Color fadeColor;
+    public float fadeTime;
+    public float fadeWaitTime;
+    UIFade uif;
+
     private bool instantiated = false;
     private NavMeshSurface navSurface;
+    private Transform lastLocalPlayerLocation;
+    private Vector3 lastPlayerLocation;
     /**
      * Entering an instance is as follows;
      * Hide the map. -- will need to set up for instance to instance transfer
@@ -45,11 +55,53 @@ public class DungeonManager: MonoBehaviour {
      */
 
     //Automatically hides everything and generates the dungeon instance
-    public void EnterArea() {
+    public void EnterArea(int seedId) {
+        dungeonSeed = seedId;//USED FOR NET COMMS
+        if (CurrentInstance != null) {
+            SetLocalPlayerControl(false);
+        } else {
+            MainControl.SetLocalPlayerControl(false);//Freeze the overworld player
+        }
 
+        //First things first, gotta prepare the space for the transiton!!
+        uif = UIFade.DoFade(fadeTime, OnEnterDungeonFadeFinished, fadeColor, fadeCurve);
+
+    }
+
+    public void ExitArea() {
+        MainControl.Instance.ExitArea(this);
+        //HideArea();
+    }
+
+    //Exits the area without running the world exit area code.
+    public void HideArea() {
+        //Hides all gameobjects and disables the instance
+        lastPlayerLocation = LocalDungeonPlayerInstance.transform.position;
+
+        dungeonInstance.SetActive(false);
+        //PhotonNetwork.Destroy(playerInstance);
+        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
+        netManager.DestroyObject(LocalDungeonPlayerInstance);
+        //Shut down the instance manager.
+        netManager.LeaveInstance();
+        netManager.enabled = false;
+        navSurface.enabled = false;
+
+        if (CurrentInstance == this) {
+            CurrentInstance = null;
+        }
+
+        Showing = false;
+
+    }
+
+    //Spawns the dungeon and sets up the networking for it
+    void OnEnterDungeonFadeFinished() {
         MainControl.Instance.EnterArea(this);
 
         NetInstanceManager netManagerSettings = GetComponent<NetInstanceManager>();
+
+        CurrentInstance = this;
 
         //Generate the nav mesh - add the nav mesh component if it is not already present.
         navSurface = GetComponent<NavMeshSurface>();
@@ -67,69 +119,62 @@ public class DungeonManager: MonoBehaviour {
             navSurface.enabled = true;
         }
 
-        //Enables all gameobjects and shows the instance.
-        if (!instantiated) {
+        if (!instantiated) {//Spawn in the dungeon prefab and build the navmesh
             dungeonInstance = Instantiate(dungeonPrefab);
             dungeonInstance.transform.SetParent(transform);
-            instantiated = true;
             //Only update the nav mesh if needed.
             navSurface.BuildNavMesh();
-        } else {
-            dungeonInstance.SetActive(true);
         }
 
-        CurrentInstance = this;
+        //Find the spawnpoint gameobject
+        Transform spawnPoint = dungeonInstance.transform.Find("SpawnPoint").transform;
 
-        //Move the player to the spawn of the dungeon
-        GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+        //If previously loaded
+        if (instantiated) {
+            dungeonInstance.SetActive(true);
+            spawnPoint.position = lastPlayerLocation;
+        }
 
-        dungeonSeed = Choptilities.Vector3ToID(transform.position);
-
+        //Mostly used for the name of the dungeon
         //Enable the instance manager and join the instance.
         netManagerSettings.enabled = true;
         netManagerSettings.JoinInstance(dungeonSeed);
 
-        MainControl.Instance.DungeonPlayerPrefab.GetComponent<PlayerMovement>().enabled = false;//Stop this script from causing issues
-        localPlayerInstance = netManagerSettings.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.transform.position, spawnPoint.transform.rotation);
-        localPlayerInstance.GetComponent<PlayerMovement>().enabled = true;//Enable the player movement script.
-        localPlayerInstance.GetComponent<NavMeshAgent>().enabled = true;//Enable the player movement script.
-        localPlayerInstance.transform.SetParent(transform);
+        LocalDungeonPlayerInstance = netManagerSettings.Instantiate(MainControl.Instance.DungeonPlayerPrefab, true, spawnPoint.position, spawnPoint.rotation);
+        LocalDungeonPlayerInstance.transform.SetParent(transform);
+        LocalDungeonPlayerInstance.name = "My " + LocalDungeonPlayerInstance.name;
+        SetLocalPlayerControl(true);
+
+        instantiated = true;
 
         CameraMovement cf = Camera.main.GetComponent<CameraMovement>();
-        cf.currentTarget = localPlayerInstance.transform;
-        cf.smoothness = 5;
-        cf.pan = 100;
-        cf.turnSpeed = 2;
-        cf.offset = 2;
-        cf.verticalOffset = 4;
-        cf.zoomSensitivity = 0.2f;
-        cf.distanceToPlayer = 5;
-        cf.horizontalDistanceToPlayer = 3;
-        cf.mouseSensitivity = 1.5f;
+        cf.currentTarget = LocalDungeonPlayerInstance.transform;
+
         Showing = true;
+        Invoke("ReverseFade", fadeWaitTime);
     }
 
-    public void ExitArea() {
-        MainControl.Instance.ExitArea(this);
-        HideArea();
+    //Once the dungeon is ready to go, and a small delay has expired, unfade the screen.
+    void ReverseFade() {
+        uif.onFadeCompleted = OnDungeonEnterFadeBackIn;
+        uif.Reverse();
     }
 
-    //Exits the area without running the world exit area code.
-    public void HideArea() {
-        //Hides all gameobjects and disables the instance
-        dungeonInstance.SetActive(false);
-
-        //PhotonNetwork.Destroy(playerInstance);
-        NetInstanceManager netManager = GetComponent<NetInstanceManager>();
-        netManager.DestroyObject(localPlayerInstance);
-        //Shut down the instance manager.
-        netManager.LeaveInstance();
-        netManager.enabled = false;
-        navSurface.enabled = false;
-
-        CurrentInstance = null;
-        Showing = false;
+    //The fade has finished, re-enable the player.
+    void OnDungeonEnterFadeBackIn() {
+        MainControl.SetLocalPlayerControl(true);
+        Destroy(uif.gameObject);
     }
 
+    public static void SetLocalPlayerControl ( bool canControl ) {
+        if (CurrentInstance != null) {
+            if (CurrentInstance.LocalDungeonPlayerInstance != null && CurrentInstance.LocalDungeonPlayerInstance.GetComponent<PhotonView>().IsMine) {
+                GameObject pl = CurrentInstance.LocalDungeonPlayerInstance;
+                pl.GetComponent<PlayerMovement>().enabled = canControl;
+                pl.GetComponent<CombatController>().enabled = canControl;
+                pl.GetComponent<NavMeshAgent>().enabled = canControl;//Enable the player movement script.
+            }
+        }
+    }
 
 }

@@ -43,5 +43,18 @@ namespace BaD.Chopknee.Utilities {
             int.TryParse(thing, out int res);
             return res * sign;
         }
+
+        public static ulong StringToSeedNumber ( string val ) {
+            if (val == "")
+                return 0;
+
+            ulong value = 0;
+            foreach (char c in val) {
+                value <<= 1;
+                value = value | c;//'or' the bits together
+                value <<= 1;//Shif the bits to the left by 1. (this has a pretty big impact on the final number)
+            }
+            return value;
+        }
     }
 }

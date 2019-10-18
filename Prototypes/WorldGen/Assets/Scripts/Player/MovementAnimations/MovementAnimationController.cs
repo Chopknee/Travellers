@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class MovementAnimationController: MonoBehaviour {
-    bool transitioning;
-    public float transitionTime = 2;
-    float fallSpeed = .02f;
 
     public enum state {
         Attack, Die
@@ -15,7 +12,6 @@ public class MovementAnimationController: MonoBehaviour {
     public state lastState, nextState;
 
     public float speed;
-    bool player;
     private Vector3 velocity;
 
     public Animator anim;
@@ -23,10 +19,11 @@ public class MovementAnimationController: MonoBehaviour {
     AnimationClip lastClip;
     NavMeshAgent agent;
     Vector3 lastPos, nextPos;
+
+    public Average avg;
+
     private void Start () {
         lastPos = transform.position;
-        if (transform.CompareTag("Player"))
-            player = true;
 
         if (anim == null) {
             anim = transform.GetComponent<Animator>();
@@ -36,35 +33,24 @@ public class MovementAnimationController: MonoBehaviour {
             }
         }
         agent = GetComponent<NavMeshAgent>();
+        avg = new Average(10);
     }
 
-    float[] avgSpeedArray = new float[10];
-
-    int indexOfAvg = 0;
-    public float avgSpeed;
+    float avgSpeed;
     float smoothVel = 0;
     float lastSpd = 0;
+
     private void LateUpdate () {
         //This is all for the running animation speed setting
         nextPos = transform.position;
         float lv = ( nextPos - lastPos ).sqrMagnitude / Time.deltaTime;
         float tmpSpeed = 100 * Mathf.SmoothDamp(lv, (float) System.Math.Round(lv, 1), ref smoothVel, .5f);
-        float roundSpeed = Mathf.RoundToInt(speed);
-
         speed = Mathf.Lerp(lastSpd, avgSpeed, .3f);
-        lastPos = transform.position;
         lastSpd = tmpSpeed;
-
         speed = (float) System.Math.Round(speed, 2);
+        lastPos = transform.position;
 
-        avgSpeedArray[indexOfAvg] = speed;
-        indexOfAvg = ( indexOfAvg == avgSpeedArray.Length - 1 ) ? 0 : indexOfAvg + 1;
-        avgSpeed = 0;
-        foreach (float f in avgSpeedArray) {
-            avgSpeed += f;
-        }
-
-        avgSpeed = avgSpeed / (float) avgSpeedArray.Length;
+        avgSpeed = (float) System.Math.Round(avg.GetNext(speed), 2);
 
         anim.SetFloat("Runspeed", avgSpeed);
 

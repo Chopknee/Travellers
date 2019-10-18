@@ -29,7 +29,6 @@ public class PlayerData {
     public delegate void PlayerActionsTakenChanged ( PlayerData player );
     public PlayerActionsTakenChanged OnActionsTakenChanged;
 
-    private string name;
     private int takenActions = 0;
     private int heldGold = 0;
 
@@ -57,10 +56,10 @@ public class PlayerData {
     
     public string Name {
         get {
-            return name;
+            return PhotonNetwork.NickName;
         }
         set {
-            name = value;
+            PhotonNetwork.NickName = value;
             OnPlayernameChanged?.Invoke(this);
             
         }

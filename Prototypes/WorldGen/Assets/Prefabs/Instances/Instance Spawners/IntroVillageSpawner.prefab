@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4183764180444148463}
   - component: {fileID: 1664901623608647642}
   m_Layer: 0
-  m_Name: Adventure Village Spawner
+  m_Name: IntroVillageSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,3 +73,30 @@ MonoBehaviour:
   navMeshLayers:
     serializedVersion: 2
     m_Bits: 311
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeTime: 1.5
+  fadeWaitTime: 1

@@ -45,7 +45,7 @@ namespace BaD.Modules {
             if (PhotonNetwork.IsMasterClient) {
                 //Only sync the variables here if we are the owner of the server.
                 ulong value = 0;
-                ulong.TryParse(PlayerPrefs.GetString(UISeedEntry.worldSeedPrefNameKey), out value);
+                ulong.TryParse(PlayerPrefs.GetString("MapSeed"), out value);
                 mpSd = (int) value;
                 mapGenerationInformation.noiseData.seed = mpSd;
                 Map.Generate(mapGenerationInformation);//Since we know dat will be set at this point.

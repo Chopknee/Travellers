@@ -48,6 +48,7 @@ MonoBehaviour:
   shopUI: {fileID: 0}
   actionConfirmationUI: {fileID: 0}
   playerInventoryUI: {fileID: 0}
+  OverworldSceneAndLightingSettings: {fileID: 0}
   hudUI: {fileID: 0}
   MapControlPrefab: {fileID: 7941106588625948817, guid: 1fd5e9cd8df7f6a48b1e5ba8fe5adb61,
     type: 3}
@@ -55,7 +56,34 @@ MonoBehaviour:
     type: 3}
   DungeonPlayerPrefab: {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350,
     type: 3}
+  playerDropoffSpot: {fileID: 0}
   areaStack: []
+  fadeTime: 1.5
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &7094687638433899549
 MonoBehaviour:
   m_ObjectHideFlags: 0

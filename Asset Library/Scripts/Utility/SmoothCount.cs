@@ -33,6 +33,7 @@ public class SmoothCount {
             //Default linear animation curve
             this.curve = LinearAnimationCurve();
         }
+        forward = true;//By default forward is true
     }
 
     public void Start() {

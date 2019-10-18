@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UpdateableData : ScriptableObject {
-
+#pragma warning disable 0649
     public event System.Action OnValuesUpdated;
     public bool autoUpdate;
 

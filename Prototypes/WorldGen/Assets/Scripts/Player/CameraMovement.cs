@@ -1,61 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraMovement: MonoBehaviour {
     public Transform currentTarget;
-
-    public float smoothness = 5f, pan = 5f;
-
-    public Vector3 camOffset, offsetY;
-    public float turnSpeed = 2f, offset = 5f;
-    public float verticalOffset = 5f;
+    [Range(0.1f, 50f)]
+    public float smoothness = 15f;
+    [Range(0.1f, 50f)]
+    public float pan = 15f;
+    [Range(0.1f, 5f)]
+    public float panSpeed = 2f;
     [Range(.01f, 1f)]
-    public float zoomSensitivity = 1f;
-    public bool followPlayer = true;
-    public float distanceToPlayer = 2f;
-    public float horizontalDistanceToPlayer = 3f;
-    public float mouseSensitivity = 1.5f;
-    Vector3 targetPos = Vector3.zero;
-    float velocity = 0, maxVelocity = 5f;
+    public float zoomSpeed = 1f;
+    public float mouseScrollSensitivity = 1f;
+    public float mousePanSensitivity = 1.5f;
+    public float axisScrollSensitivity = 1f;
+    public float axisPanSensititivty = 1f;
+    public bool CONTROLLER_INPUT = true;
+    public float camMinHeight = 1, camMaxHeight = 15;
+    float camHeightRange;
+    public float camMinDist = 0.64f, camMaxDist = 1.1f;
+    float distRange;
+    public float height = 5f;
 
-    Vector3 playerPrevPos, playerMoveDir;
+    Vector3 camOffset;
 
+    public float distToPlayer;
     private void Start () {
-        camOffset = new Vector3(offset, verticalOffset, offset);
-        playerPrevPos = targetPos;
-
+        camHeightRange = camMaxHeight - camMinHeight;
+        distRange = camMaxDist - camMinDist;
+        height = camMaxHeight / 2f;
+        camOffset = new Vector3(height, height, height);
     }
 
     private void LateUpdate () {
-        targetPos = currentTarget.position;
 
-        //offset is equal to target pos, plus the vector containing the offset of camoffset x and y, multiplied by the offset float (5f);
-        Vector3 posWithOffset = ( ( targetPos + ( new Vector3(camOffset.x, 0 + verticalOffset, camOffset.z) ) * offset ) );
+        camHeightRange = camMaxHeight - camMinHeight;
+        distRange = camMaxDist - camMinDist;
 
+        float horizontalAxis = 0;
+        float verticalAxis = 0;
 
+        if (CONTROLLER_INPUT) {
+            horizontalAxis = Input.GetAxisRaw("Horizontal") * axisScrollSensitivity;
+            verticalAxis = Input.GetAxisRaw("Vertical") * axisPanSensititivty;
+        } else {
+            if (Input.GetMouseButton(2)) {
+                horizontalAxis = Input.GetAxis("Mouse X") * mousePanSensitivity;
+            }
+            verticalAxis = Input.mouseScrollDelta.y * mouseScrollSensitivity;
+        }
+        //This is how big the movement for the camera should be.
+
+        if (horizontalAxis != 0) {
+            //rotation offset of camera (camera physically moves around the player)
+            camOffset = Quaternion.AngleAxis(horizontalAxis * panSpeed, Vector3.up) * camOffset;
+        }
+
+        Vector3 targetPos = currentTarget.position;
+
+        //Zooming
+        height -= verticalAxis * zoomSpeed;
+        height = Mathf.Clamp(height, camMinHeight, camMaxHeight);
+
+        distToPlayer = ((height / camHeightRange) * distRange) + camMinDist;
+
+        //offset is equal to target pos, plus the vector containing the offset of camoffset x and y
+        Vector3 posWithOffset = ( ( targetPos + ( new Vector3(camOffset.x * distToPlayer, height, camOffset.z * distToPlayer))));
 
         // position of camera
         Vector3 lerpingPos = Vector3.Lerp(transform.position, posWithOffset, smoothness * Time.deltaTime);
         transform.position = lerpingPos;
-
-
-
-
-        if (Input.GetAxis("Horizontal") != 0) {
-            //rotation offset of camera (camera physically moves around the player)
-            camOffset = Quaternion.AngleAxis(-Input.GetAxis("Horizontal") * turnSpeed, Vector3.up) * camOffset;
-        }
-
-        if (velocity < maxVelocity) velocity += turnSpeed * Input.GetAxis("Mouse X");
-        if (Input.GetMouseButton(2)) {
-            camOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * mouseSensitivity * turnSpeed, Vector3.up) * camOffset;
-        } else {
-            if (velocity > 0) velocity -= .01f;
-            else velocity = 0;
-        }
-
-
 
         //rotation of camera
         var heading = targetPos - transform.position;
@@ -64,13 +77,5 @@ public class CameraMovement: MonoBehaviour {
         //lerp of actual camera rotation (custom LookAt)
         Quaternion rotLerp = Quaternion.Lerp(transform.rotation, rot, pan * Time.deltaTime);
         transform.rotation = rotLerp;
-    }
-    // Update is called once per frame
-    void FixedUpdate () {
-        //zoom on scroll
-        if (Input.mouseScrollDelta != Vector2.zero) {
-            offset -= Input.mouseScrollDelta.y * zoomSensitivity;
-            verticalOffset -= Input.mouseScrollDelta.y * zoomSensitivity; // this should be based on ground 0 instead of player's location.
-        }
     }
 }

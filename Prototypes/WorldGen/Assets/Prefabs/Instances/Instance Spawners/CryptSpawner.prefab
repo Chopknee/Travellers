@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
   - {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   - {fileID: 2486412213244728257, guid: c984a04ffff7c7a4f8664fe76c025ad4, type: 3}
+  - {fileID: 5843973634421846356, guid: c0787d312c7826d4082ff95d52629102, type: 3}
   joinedPlayers: 
 --- !u!114 &1664901623608647642
 MonoBehaviour:
@@ -75,3 +76,30 @@ MonoBehaviour:
   navMeshLayers:
     serializedVersion: 2
     m_Bits: 311
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeTime: 1.5
+  fadeWaitTime: 1

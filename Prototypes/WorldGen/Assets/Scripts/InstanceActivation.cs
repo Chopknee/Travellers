@@ -50,7 +50,7 @@ public class InstanceActivation : MonoBehaviour {
                     if (DungeonManager.CurrentInstance == null) {
                         playerInst = MainControl.Instance.LocalPlayerObjectInstance;
                     } else {
-                        playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                        playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
                     }
                     //If the player is close enough to this object
                     if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
@@ -64,7 +64,7 @@ public class InstanceActivation : MonoBehaviour {
                         if (DungeonManager.CurrentInstance == null) {
                             MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
                         } else {
-                            DungeonManager.CurrentInstance.localPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
+                            DungeonManager.CurrentInstance.LocalDungeonPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
                         }
                     }
                 }
@@ -75,7 +75,7 @@ public class InstanceActivation : MonoBehaviour {
             if (DungeonManager.CurrentInstance == null) {
                 playerInst = MainControl.Instance.LocalPlayerObjectInstance;
             } else {
-                playerInst = DungeonManager.CurrentInstance.localPlayerInstance;
+                playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
             }
             if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
                 //Interact with the thing.
@@ -96,18 +96,16 @@ public class InstanceActivation : MonoBehaviour {
         //If the dungeon manager is previously cached
         GameObject dm = GameObject.Find("Instance Manager " + instanceSeed);
         if (dm != null) {
-            dm.GetComponent<DungeonManager>().EnterArea();
+            dm.GetComponent<DungeonManager>().EnterArea(instanceSeed);
             return;
         }
         //int instanceSeed = //Seed based on position?
         if (dungeonManagerPrefab != null) {
             Debug.Log("Entering new area; " + instanceSeed);
             GameObject dungeonManagerInst = Instantiate(dungeonManagerPrefab);
-            dungeonManagerInst.transform.position = Vector3.zero;
-            dungeonManagerInst.transform.localScale = Vector3.one;
+            dungeonManagerInst.name = "Instance Manager " + instanceSeed;
             dungeonManager = dungeonManagerInst.GetComponent<DungeonManager>();
-            dungeonManager.name = "Instance Manager " + instanceSeed;
-            dungeonManager.EnterArea();
+            dungeonManager.EnterArea(instanceSeed);
         } else {
             //If no dungeon manager is set, assume the player wishes to exit.
             Debug.Log("Exiting area.");

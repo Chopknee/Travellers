@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +60,7 @@ namespace BaD.Modules.Combat {
         float lastHP = 0;
         protected void Update () {
             if (lastHP != health) {
-                OnHealthChanged(health);
+                OnHealthChanged?.Invoke(health);
                 lastHP = health;
             }
         }
@@ -110,11 +111,11 @@ namespace BaD.Modules.Combat {
         }
 
         public void OnPhotonSerializeView ( PhotonStream stream, PhotonMessageInfo info ) {
-            if (NetInstanceManager.CurrentManager.isInstanceMaster) {
-                stream.SendNext(health);
-            } else {
-                health = (float) stream.ReceiveNext();
-            }
+            //if (!PhotonNetwork.IsMasterClient) {
+            //    stream.SendNext(health);
+            //} else {
+            //    health = (float) stream.ReceiveNext();
+            //}
         }
     }
 }

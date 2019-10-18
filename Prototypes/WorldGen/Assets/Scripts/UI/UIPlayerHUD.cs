@@ -2,6 +2,7 @@
 using BaD.Modules.Terrain;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,13 +17,10 @@ namespace BaD.UI.DumpA {
         private Button InventoryButton;
         [SerializeField]
 #pragma warning disable 0649
-        private Text PlayerNameText;
+        private TextMeshProUGUI PlayerNameText;
         [SerializeField]
 #pragma warning disable 0649
-        private Text PlayerGoldText;
-        [SerializeField]
-#pragma warning disable 0649
-        private Text PlayerActions;
+        private TextMeshProUGUI PlayerGoldText;
 
         public PlayerData associatedPlayer;
 
@@ -34,17 +32,17 @@ namespace BaD.UI.DumpA {
         // Update is called once per frame
         void Update () {
             if (associatedPlayer == null) {
-                if (MainControl.Instance != null && MainControl.Instance.LocalPlayerObjectInstance != null) {
+                if (MainControl.Instance != null && MainControl.Instance.LocalPlayerData != null) {
                     //Get the player data from the player object
                     associatedPlayer = MainControl.Instance.LocalPlayerData;
                     if (associatedPlayer != null) {
                         associatedPlayer.OnPlayerGoldChanged += OnGoldChanged;
                         associatedPlayer.OnPlayernameChanged += OnNameChanged;
-                        associatedPlayer.OnActionsTakenChanged += OnActionsChanged;
                         OnGoldChanged(associatedPlayer);
                         OnNameChanged(associatedPlayer);
                         MenuButton.onClick.AddListener(OnMenuButtonClicked);
                         InventoryButton.onClick.AddListener(OnInventoryButtonClicked);
+                        OnNameChanged(associatedPlayer);
                     }
                 }
             }
@@ -56,10 +54,6 @@ namespace BaD.UI.DumpA {
 
         void OnNameChanged(PlayerData player) {
             PlayerNameText.text = player.Name;
-        }
-        
-        void OnActionsChanged(PlayerData player) {
-            PlayerActions.text = string.Format("Remaining Actions\n {0} of {1}", player.MaxActions - player.ActionsTaken, player.MaxActions);
         }
 
         void OnMenuButtonClicked() {
