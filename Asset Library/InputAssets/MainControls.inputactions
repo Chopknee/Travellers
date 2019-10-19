@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "CameraZoom",
+                    "name": "Zoom",
                     "type": "Value",
                     "id": "6fdf1e5d-d677-4b03-8d61-40f098778d05",
                     "expectedControlType": "Axis",
@@ -46,18 +46,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "CameraHorizontal",
-                    "type": "Value",
-                    "id": "439fe60b-c900-49ff-bd6b-a7ccbdec096d",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "CameraVertical",
+                    "name": "Look",
                     "type": "Value",
                     "id": "45353313-98ed-4554-8958-dab3538a1193",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 }
@@ -202,62 +194,62 @@
                     "interactions": "",
                     "processors": "Invert",
                     "groups": "Keyboard and Mouse",
-                    "action": "CameraZoom",
+                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "97f6fcc2-bbbe-421f-946b-6928276d55c5",
-                    "path": "<Gamepad>/dpad/y",
+                    "name": "Gamepad Zoom",
+                    "id": "373faea3-4051-4fa8-bb8a-8e4a70cfa129",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "56407485-0763-4239-8d02-db69a6f3be6e",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "CameraZoom",
+                    "action": "Zoom",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "c7805205-b89b-48c2-bccf-72c66b617590",
+                    "name": "button",
+                    "id": "8bfe23d6-6061-4ad7-a4b1-7680fcdd611e",
                     "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
-                    "processors": "Invert,Scale(factor=15)",
+                    "processors": "Scale(factor=15)",
                     "groups": "Gamepad",
-                    "action": "CameraVertical",
+                    "action": "Zoom",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
                     "id": "77a83f66-e80b-4ca0-89b4-0468ac440c35",
-                    "path": "<Mouse>/delta/y",
+                    "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "CameraVertical",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "a6125b51-41c7-48ab-b174-3bc456f532ab",
-                    "path": "<Gamepad>/rightStick/x",
+                    "id": "b41ee3b7-2265-4552-b010-2cf37af9b868",
+                    "path": "<XInputController>/rightStick",
                     "interactions": "",
-                    "processors": "Scale(factor=15)",
+                    "processors": "ScaleVector2(x=15,y=15),InvertVector2",
                     "groups": "Gamepad",
-                    "action": "CameraHorizontal",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b3667d4d-c718-4899-8dc9-911d9169d2d4",
-                    "path": "<Mouse>/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "CameraHorizontal",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

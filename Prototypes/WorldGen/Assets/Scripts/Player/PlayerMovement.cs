@@ -40,7 +40,7 @@ namespace BaD.Modules.Control {
             //Make the camera track point in the forward of the camera, minus the pitch
             cameraTrackTransform.rotation = Quaternion.identity;
             cameraTrackTransform.position = new Vector3(cameraTransform.position.x, transform.position.y, cameraTransform.position.z);
-            cameraTrackTransform.forward = ( transform.position - cameraTransform.position );
+            cameraTrackTransform.forward = ( transform.position - cameraTrackTransform.position ).normalized;
 
             
 

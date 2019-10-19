@@ -53,7 +53,7 @@ namespace BaD.Modules.Input
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""CameraZoom"",
+                    ""name"": ""Zoom"",
                     ""type"": ""Value"",
                     ""id"": ""6fdf1e5d-d677-4b03-8d61-40f098778d05"",
                     ""expectedControlType"": ""Axis"",
@@ -61,18 +61,10 @@ namespace BaD.Modules.Input
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""CameraHorizontal"",
-                    ""type"": ""Value"",
-                    ""id"": ""439fe60b-c900-49ff-bd6b-a7ccbdec096d"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""CameraVertical"",
+                    ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""45353313-98ed-4554-8958-dab3538a1193"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -217,62 +209,62 @@ namespace BaD.Modules.Input
                     ""interactions"": """",
                     ""processors"": ""Invert"",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CameraZoom"",
+                    ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""97f6fcc2-bbbe-421f-946b-6928276d55c5"",
-                    ""path"": ""<Gamepad>/dpad/y"",
+                    ""name"": ""Gamepad Zoom"",
+                    ""id"": ""373faea3-4051-4fa8-bb8a-8e4a70cfa129"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""56407485-0763-4239-8d02-db69a6f3be6e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""CameraZoom"",
+                    ""action"": ""Zoom"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""c7805205-b89b-48c2-bccf-72c66b617590"",
+                    ""name"": ""button"",
+                    ""id"": ""8bfe23d6-6061-4ad7-a4b1-7680fcdd611e"",
                     ""path"": ""<Gamepad>/rightStick/y"",
                     ""interactions"": """",
-                    ""processors"": ""Invert,Scale(factor=15)"",
+                    ""processors"": ""Scale(factor=15)"",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""CameraVertical"",
+                    ""action"": ""Zoom"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
                     ""id"": ""77a83f66-e80b-4ca0-89b4-0468ac440c35"",
-                    ""path"": ""<Mouse>/delta/y"",
+                    ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CameraVertical"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a6125b51-41c7-48ab-b174-3bc456f532ab"",
-                    ""path"": ""<Gamepad>/rightStick/x"",
+                    ""id"": ""b41ee3b7-2265-4552-b010-2cf37af9b868"",
+                    ""path"": ""<XInputController>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=15)"",
+                    ""processors"": ""ScaleVector2(x=15,y=15),InvertVector2"",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""CameraHorizontal"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b3667d4d-c718-4899-8dc9-911d9169d2d4"",
-                    ""path"": ""<Mouse>/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""CameraHorizontal"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -675,9 +667,8 @@ namespace BaD.Modules.Input
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
-            m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
-            m_Player_CameraHorizontal = m_Player.FindAction("CameraHorizontal", throwIfNotFound: true);
-            m_Player_CameraVertical = m_Player.FindAction("CameraVertical", throwIfNotFound: true);
+            m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
+            m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -744,9 +735,8 @@ namespace BaD.Modules.Input
         private readonly InputAction m_Player_Attack;
         private readonly InputAction m_Player_Interact;
         private readonly InputAction m_Player_Pause;
-        private readonly InputAction m_Player_CameraZoom;
-        private readonly InputAction m_Player_CameraHorizontal;
-        private readonly InputAction m_Player_CameraVertical;
+        private readonly InputAction m_Player_Zoom;
+        private readonly InputAction m_Player_Look;
         public struct PlayerActions
         {
             private MainControls m_Wrapper;
@@ -755,9 +745,8 @@ namespace BaD.Modules.Input
             public InputAction @Attack => m_Wrapper.m_Player_Attack;
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputAction @Pause => m_Wrapper.m_Player_Pause;
-            public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
-            public InputAction @CameraHorizontal => m_Wrapper.m_Player_CameraHorizontal;
-            public InputAction @CameraVertical => m_Wrapper.m_Player_CameraVertical;
+            public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
+            public InputAction @Look => m_Wrapper.m_Player_Look;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -779,15 +768,12 @@ namespace BaD.Modules.Input
                     Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                     Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                     Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                    CameraZoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
-                    CameraZoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
-                    CameraZoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
-                    CameraHorizontal.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraHorizontal;
-                    CameraHorizontal.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraHorizontal;
-                    CameraHorizontal.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraHorizontal;
-                    CameraVertical.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraVertical;
-                    CameraVertical.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraVertical;
-                    CameraVertical.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraVertical;
+                    Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                    Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                    Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                    Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -804,15 +790,12 @@ namespace BaD.Modules.Input
                     Pause.started += instance.OnPause;
                     Pause.performed += instance.OnPause;
                     Pause.canceled += instance.OnPause;
-                    CameraZoom.started += instance.OnCameraZoom;
-                    CameraZoom.performed += instance.OnCameraZoom;
-                    CameraZoom.canceled += instance.OnCameraZoom;
-                    CameraHorizontal.started += instance.OnCameraHorizontal;
-                    CameraHorizontal.performed += instance.OnCameraHorizontal;
-                    CameraHorizontal.canceled += instance.OnCameraHorizontal;
-                    CameraVertical.started += instance.OnCameraVertical;
-                    CameraVertical.performed += instance.OnCameraVertical;
-                    CameraVertical.canceled += instance.OnCameraVertical;
+                    Zoom.started += instance.OnZoom;
+                    Zoom.performed += instance.OnZoom;
+                    Zoom.canceled += instance.OnZoom;
+                    Look.started += instance.OnLook;
+                    Look.performed += instance.OnLook;
+                    Look.canceled += instance.OnLook;
                 }
             }
         }
@@ -954,9 +937,8 @@ namespace BaD.Modules.Input
             void OnAttack(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
-            void OnCameraZoom(InputAction.CallbackContext context);
-            void OnCameraHorizontal(InputAction.CallbackContext context);
-            void OnCameraVertical(InputAction.CallbackContext context);
+            void OnZoom(InputAction.CallbackContext context);
+            void OnLook(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

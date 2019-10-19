@@ -49,7 +49,7 @@ namespace BaD.Modules.Combat {
             }
             //Drop the damage orb somewhere??
 
-            Invoke("DoDamage", a.GetCurrentAnimatorClipInfo(0)[0].clip.length - animationOffset);
+            Invoke("DoDamage", a.GetCurrentAnimatorClipInfo(0)[0].clip.length / 2 + animationOffset);
             Invoke("SetCanAttack", attackRate);
         }
 
@@ -77,7 +77,7 @@ namespace BaD.Modules.Combat {
                     Vector3 dir = -( c.transform.position - new Vector3(transform.position.x, c.transform.position.y, transform.position.z) );
 
                     c.GetComponent<Rigidbody>().AddForce(-dir.normalized * knockbackPower, ForceMode.Impulse);
-                    c.GetComponent<Health>().ChangeHealth(false, baseDamage, false, 1);
+                    c.GetComponent<Health>().ChangeHealth(false, baseDamage, false, 1, wielder);
                 }
             }
         }

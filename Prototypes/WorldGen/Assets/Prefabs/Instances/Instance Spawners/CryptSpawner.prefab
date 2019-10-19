@@ -53,7 +53,7 @@ MonoBehaviour:
   isInstanceMaster: 0
   spawnablesPool:
   - {fileID: 5741135456754803403, guid: fce67fb694566b843b9519ecaf3a5350, type: 3}
-  - {fileID: 4361055677394805557, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
+  - {fileID: 5843973634421846356, guid: c0787d312c7826d4082ff95d52629102, type: 3}
   - {fileID: 2486412213244728257, guid: c984a04ffff7c7a4f8664fe76c025ad4, type: 3}
   - {fileID: 5843973634421846356, guid: c0787d312c7826d4082ff95d52629102, type: 3}
   joinedPlayers: 

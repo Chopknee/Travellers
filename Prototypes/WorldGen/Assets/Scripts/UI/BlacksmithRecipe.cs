@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BlacksmithRecipe: MonoBehaviour {
@@ -34,13 +35,16 @@ public class BlacksmithRecipe: MonoBehaviour {
     void Start () {
         Setup();
         CheckForValidConditions();
+        EventSystem.current.SetSelectedGameObject(recipeItems[0].clickableButton.gameObject);
     }
 
     void Setup() {
+        
         //Add onclick listeners to each button.
         foreach (RecipieItem ri in recipeItems) {
             ri.clickableButton.OnClicked += RecipeButtonClicked;
         }
+        
 
         //Add listener to turn in button.
         turnInButton.onClick.AddListener(OnTurnInClicked);

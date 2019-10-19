@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6052222891716920699}
   m_Layer: 9
   m_Name: ExitPortal
-  m_TagString: Untagged
+  m_TagString: PortalOut
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,8 +64,6 @@ MonoBehaviour:
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 5b5d168532e6306479f90d711aa6ee55,
     type: 3}
   activationRadius: 2.46
-  isCurrentNavTarget: 0
-  isHighlighted: 0
 --- !u!1 &5582408142183701943
 GameObject:
   m_ObjectHideFlags: 0

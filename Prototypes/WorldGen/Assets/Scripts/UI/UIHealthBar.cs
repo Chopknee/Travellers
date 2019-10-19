@@ -18,7 +18,7 @@ public class UIHealthBar : MonoBehaviour {
         max = GetComponentInParent<Health>().MaxHealth;
     }
 
-    void HealthChanged(float newhp) {
+    void HealthChanged(float newhp, GameObject damager) {
         hp = newhp;
         foreground.fillAmount = ( newhp / max );
     }

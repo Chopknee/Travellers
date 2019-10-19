@@ -83,18 +83,18 @@ public class InstanceActivation : MonoBehaviour {
         }
     }
 
-    public void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.CompareTag("Player")) {
+    private void OnTriggerEnter ( Collider other ) {
+        if (other.gameObject.CompareTag("Player")) {
             if (HoverInfoWindowGameobject != null) {
                 HoverInfoWindowGameobject.SetActive(true);
             }
         }
     }
 
-    public void OnCollisionExit(Collision collision) {
-        if (collision.gameObject.CompareTag("Player")) {
+    private void OnTriggerExit ( Collider other ) {
+        if (other.gameObject.CompareTag("Player")) {
             if (HoverInfoWindowGameobject != null) {
-                HoverInfoWindowGameobject.SetActive(true);
+                HoverInfoWindowGameobject.SetActive(false);
             }
         }
     }
@@ -110,7 +110,7 @@ public class InstanceActivation : MonoBehaviour {
         }
     }
 
-    public void OnDrawGizmos () {
+    public void OnDrawGizmosSelected () {
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, activationRadius);
     }

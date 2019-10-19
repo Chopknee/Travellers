@@ -30,17 +30,20 @@ namespace BaD.Modules.Combat {
 
         public bool currentlyDamaging { get; private set; }
 
-        public delegate void HealthChanged ( float value );
+        public delegate void HealthChanged ( float value, GameObject damager );
         public HealthChanged OnHealthChanged;
 
+        public GameObject lastDamager;
 
-        private void Start () {
+        public virtual void Start () {
             MaxHealth = InitialMaxHealth;
             health = InitialMaxHealth;
 
             lastHP = health;
 
         }
+
+        bool dead = false;
 
         protected void FixedUpdate () {
             if (currentlyDamaging) {
@@ -49,18 +52,28 @@ namespace BaD.Modules.Combat {
 
             health = Mathf.Clamp(health, 0, MaxHealth);//Keeping health between 0 and max health
 
-            if (health <= 0 && deathObj != null && mesh != null) {
-                Instantiate(deathObj, transform.position, Quaternion.identity);
-                mesh.SetActive(false);
-                mesh = null;
+            if (health <= 0 && !dead) {
+
+                if (deathObj != null) {
+                    Instantiate(deathObj, transform.position, Quaternion.identity);
+                }
+                if (mesh != null) {
+                    mesh.SetActive(false);
+                }
                 Invoke("Die", .1f);
+                dead = true;
+            }
+
+            if (health > 0) {
+                dead = false;
             }
         }
 
         float lastHP = 0;
-        protected void Update () {
+
+        public virtual void Update () {
             if (lastHP != health) {
-                OnHealthChanged?.Invoke(health);
+                OnHealthChanged?.Invoke(health, lastDamager);
                 lastHP = health;
             }
         }
@@ -68,16 +81,16 @@ namespace BaD.Modules.Combat {
         private float lastHealth, c01, hp, rate, next, closest;
 
 
-        public void Die () {
+        public virtual void Die () {
             NetInstanceManager.CurrentManager.DestroyObject(gameObject);
         }
 
         // health as of calling the function, add or remove, how much to change, over time, rate
-        public void ChangeHealth ( bool heal, float hp, bool damageOverTime, float rate ) {
+        public void ChangeHealth ( bool heal, float hp, bool damageOverTime, float rate, GameObject damager = null ) {
 
             float c01;
             c01 = ( heal ) ? 1 : -1; // c01 is the modifier of -1 or 1
-
+            lastDamager = damager;
             if (damageOverTime) {
                 this.c01 = c01;
                 this.hp = hp;

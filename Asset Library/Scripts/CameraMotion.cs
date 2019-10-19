@@ -10,7 +10,7 @@ public class CameraMotion: MonoBehaviour {
     public float zoomSensitivity = -3;
     public float zoomPercent = 0.5f;
     float zoomSpeed;
-    public Vector2 heightConstraintRange = new Vector2(0, 8.9f);
+    public Vector2 verticalConstraint = new Vector2(0, 8.9f);
     public Vector2 distanceConstraint = new Vector2(5, 6);
 
     public float zoomDrag = 4.15f;
@@ -42,16 +42,20 @@ public class CameraMotion: MonoBehaviour {
 
     void LateUpdate () {
         if (target == null) { return; }
-        //Vector2 cameraAxis = Pausemenu.InputMasterController.Hammy.C
+
+        Vector2 look = mc.Player.Look.ReadValue<Vector2>();
+        float zoom = mc.Player.Zoom.ReadValue<float>();
+        if (zoom != 0) { look.y = 0; }//????
 
         int vDir = 1;//( Pausemenu.VerticalInverted ) ? -1 : 1;
-        float verticalDelta = mc.Player.CameraVertical.ReadValue<float>() * Time.deltaTime * verticalSensitivity * vDir;
+        float verticalDelta = look.y * Time.deltaTime * verticalSensitivity * vDir;
         vertical += verticalDelta;
-        vertical = Mathf.Clamp(vertical, 0, 1);
+        vertical = Mathf.Clamp(vertical, verticalConstraint.x, verticalConstraint.y);
         verticalSmoothed += ( vertical - verticalSmoothed ) * Time.deltaTime * verticalSmoothing;
 
+
         int hDir = 1;//( Pausemenu.HorizontalInverted ) ? -1 : 1;
-        float horizontalDelta = mc.Player.CameraHorizontal.ReadValue<float>() * Time.deltaTime * horizontalSensitivity * hDir;
+        float horizontalDelta = look.x * Time.deltaTime * horizontalSensitivity * hDir;
         horizontal += horizontalDelta;
         horizontalSmoothed += ( horizontal - horizontalSmoothed ) * Time.deltaTime * horizontalSmoothing;
         // Keeping rotation within the 0 to 2 * PI range
@@ -65,7 +69,7 @@ public class CameraMotion: MonoBehaviour {
 
 
         //Update speed (scroll wheel)
-        zoomSpeed += mc.Player.CameraZoom.ReadValue<float>() * zoomSensitivity * Time.deltaTime;
+        zoomSpeed += zoom * zoomSensitivity * Time.deltaTime;
         zoomSpeed += -zoomSpeed * zoomDrag * Time.deltaTime;
         //Update the zoom amount
         zoomPercent = Mathf.Clamp01(zoomPercent + zoomSpeed);
@@ -77,11 +81,11 @@ public class CameraMotion: MonoBehaviour {
         //Calculate the position!!
         transform.position = target.position;
         Vector3 pos = target.position;
-        pos.y += Mathf.Lerp(heightConstraintRange.x, heightConstraintRange.y + ( heightZoomScalar * zoomPercent ), verticalSmoothed);
+        
         float dist = Mathf.Lerp(distanceConstraint.x, distanceConstraint.y, zoomCurve.Evaluate(zoomPercent));
-
         pos.x += Mathf.Sin(horizontalSmoothed) * dist;
         pos.z += Mathf.Cos(horizontalSmoothed) * dist;
+        pos.y += Mathf.Tan(verticalSmoothed) * dist;
 
         //Point toward the object
         transform.position = pos;
@@ -93,9 +97,10 @@ public class CameraMotion: MonoBehaviour {
     private void OnValidate () {
         if (!Application.isPlaying) {
             //Height constraint x is the min, must be above 0.
-            heightConstraintRange.x = Mathf.Max(0, heightConstraintRange.x);
+            verticalConstraint.x = Mathf.Max(0, verticalConstraint.x);
             //Height constrain y is the max, it must be above the min
-            heightConstraintRange.y = Mathf.Max(heightConstraintRange.x + 0.1f, heightConstraintRange.y);
+            verticalConstraint.y = Mathf.Max(verticalConstraint.x + 0.1f, verticalConstraint.y);
+            verticalConstraint.y = Mathf.Min(Mathf.PI, verticalConstraint.y);
 
             distanceConstraint.x = Mathf.Max(0, distanceConstraint.x);
             distanceConstraint.y = Mathf.Max(distanceConstraint.x + 0.1f, distanceConstraint.y);

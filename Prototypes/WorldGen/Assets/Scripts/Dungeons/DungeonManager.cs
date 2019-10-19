@@ -17,6 +17,12 @@ public class DungeonManager: MonoBehaviour {
 
     public GameObject dungeonInstance { get; private set; }
 
+    public Transform exitPortal {
+        get {
+            return GameObject.FindGameObjectWithTag("PortalOut").transform;
+        }
+    }
+
     [SerializeField]
 #pragma warning disable 0649
     private GameObject dungeonPrefab;

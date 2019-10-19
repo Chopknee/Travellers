@@ -833,7 +833,7 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: 323c2a941a1220d43aa3e2bd3de46156, type: 2}
   itemDataGui: {fileID: 3086768761848597538, guid: 25761ac1988e0914c9dcf9a3ea35ebfc,
     type: 3}
-  pickupSound: {fileID: 8300000, guid: 220e8ff020ed21644988c15c594c1905, type: 3}
+  pickupSound: {fileID: 8300000, guid: 9f18ee748df8a9f44b2a5990858e1c72, type: 3}
 --- !u!65 &4298961917404046501
 BoxCollider:
   m_ObjectHideFlags: 0

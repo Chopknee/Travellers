@@ -97,6 +97,9 @@ namespace BaD.Modules {
 
             Controls = new MainControls();
             Controls.Enable();
+            if (!PhotonNetwork.IsConnected) {
+                Instance = this;
+            }
         }
 
         public void Start () {
@@ -194,6 +197,7 @@ namespace BaD.Modules {
         private DungeonManager lastDM;
 
         public void ExitArea ( DungeonManager area ) {
+            SetPlayerControl(false);
             lastDM = area;
             int ind = areaStack.IndexOf(area);
             areaStack.RemoveRange(ind, areaStack.Count - ind);
@@ -240,6 +244,20 @@ namespace BaD.Modules {
 
         void OnFadedBackIn () {
             Destroy(uif.gameObject);
+            SetPlayerControl(true);
+        }
+
+        public void SetPlayerControl(bool active) {
+            if (active) {
+                Controls.Player.Movement.Enable();
+                Controls.Player.Attack.Enable();
+                Controls.Player.Interact.Enable();
+            } else {
+                Controls.Player.Movement.Disable();
+                Controls.Player.Attack.Disable();
+                Controls.Player.Interact.Disable();
+            }
+
         }
     }
 }

@@ -91,9 +91,9 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 1.22
+    m_Value: 0.25
   multiplier:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.79
     min: 0
   upperHemisphereLuxValue:
