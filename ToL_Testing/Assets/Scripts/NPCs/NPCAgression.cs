@@ -29,7 +29,7 @@ public class NPCAgression : MonoBehaviour
     {
         targets = Physics.OverlapSphere(transform.position + sightOffset * transform.forward, sightRadius, layer_mask);
 
-        if (currentTarget != null && !currentTarget.GetComponent<Health>().dead)
+        if (currentTarget != null && currentTarget.GetComponent<Health>() != null && !currentTarget.GetComponent<Health>().dead)
         {
             distanceToCurrentTarget = (currentTarget.position - transform.position).sqrMagnitude;
             if ((transform.position - currentTarget.position).sqrMagnitude < Mathf.Pow(sightRadius,2))

@@ -114,11 +114,16 @@ MonoBehaviour:
   turnSpeed: 2
   offset: 2
   verticalOffset: 4
-  zoomSensitivity: 0.2
+  zoomSensitivity: 0.089
   followPlayer: 1
   distanceToPlayer: 5
   horizontalDistanceToPlayer: 3
   mouseSensitivity: 1.5
+  camMinDist: 2
+  camMaxDist: 5
+  CONTROLLER_INPUT: 1
+  ControllerVisualObject: {fileID: 0}
+  playerIsMoving: 0
 --- !u!81 &2150266656779459046
 AudioListener:
   m_ObjectHideFlags: 0

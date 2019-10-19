@@ -1863,6 +1863,49 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1337539361160159218, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b162bd8b8dbbfd469785de5a5927b6e, type: 3}
+--- !u!1 &569187587
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569187589}
+  - component: {fileID: 569187588}
+  m_Layer: 0
+  m_Name: MainControls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &569187588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569187587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7770c2bcb39a86e4aa0586c9a409a7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &569187589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569187587}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.1304932, y: -4.3772535, z: 0.30964583}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &580976243
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,26 +2186,6 @@ PrefabInstance:
       propertyPath: currentTarget
       value: 
       objectReference: {fileID: 2122274762}
-    - target: {fileID: 2150266656779458973, guid: f799055c5d0111648a8faa90254687f7,
-        type: 3}
-      propertyPath: camMaxDist
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2150266656779458973, guid: f799055c5d0111648a8faa90254687f7,
-        type: 3}
-      propertyPath: camMinDist
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2150266656779458973, guid: f799055c5d0111648a8faa90254687f7,
-        type: 3}
-      propertyPath: zoomSensitivity
-      value: 0.089
-      objectReference: {fileID: 0}
-    - target: {fileID: 2150266656779458973, guid: f799055c5d0111648a8faa90254687f7,
-        type: 3}
-      propertyPath: pan
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f799055c5d0111648a8faa90254687f7, type: 3}
 --- !u!1 &823995468

@@ -29,9 +29,6 @@ public class RaycastHover : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layer_mask))
         {
             string t = hit.collider.tag;
-
-
-
             if (t == ("Enemy"))
             {
                 Vector3 directionOfTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
@@ -41,7 +38,7 @@ public class RaycastHover : MonoBehaviour
 
                 if (Input.GetButtonDown("Attack"))
                 {
-                    pm.KillArrow();
+                    //pm.KillArrow();
                     agent.isStopped = true;
                     agent.isStopped = false;
                     transform.LookAt(directionOfTarget);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BaD.Modules.Input;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,42 +30,38 @@ public class CameraMovement : MonoBehaviour
     public Transform ControllerVisualObject;
 
     public bool playerIsMoving;
+    MainControls mainControls;
 
     private void Start()
     {
+        mainControls = ControlManager.mainControls;
         camOffset = new Vector3(offset, verticalOffset, offset);
         playerPrevPos = targetPos;
 
     }
     private void LateUpdate()
     {
-        
 
         if (CONTROLLER_INPUT)
         {
-            horizontalAxis = Input.GetAxisRaw("HorizontalRightStick");
-            verticalAxis = Input.GetAxisRaw("VerticalRightStick");
-        }
-        else
-        {
-            horizontalAxis = Input.GetAxis("Mouse X");
+            horizontalAxis = mainControls.Player.CameraHorizontal.ReadValue<float>();
+            verticalAxis = mainControls.Player.CameraVertical.ReadValue<float>();
         }
 
         if (playerIsMoving)
             targetPos = currentTarget.position + currentTarget.forward * 200; //Vector3.Cross(currentTarget.position, ControllerVisualObject.Find("Target").position);
         else
             targetPos = currentTarget.position;
+
+
         //offset is equal to target pos, plus the vector containing the offset of camoffset x and y, multiplied by the offset float (5f);
         Vector3 posWithOffset = ((targetPos + (new Vector3(camOffset.x, 0 + verticalOffset, camOffset.z)) * offset));
-
-
+        
 
         // position of camera
         Vector3 lerpingPos = Vector3.Lerp(transform.position, posWithOffset, smoothness * Time.deltaTime);
         transform.position = lerpingPos;
-
-
-
+        
 
         if (horizontalAxis != 0)
         {

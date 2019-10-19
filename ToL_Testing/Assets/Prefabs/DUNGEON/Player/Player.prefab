@@ -8239,15 +8239,16 @@ MonoBehaviour:
   destinationPosition: {x: 0, y: 0, z: 0}
   arrow: {fileID: 1334023583289725456, guid: 67ff883924f166a449bc2abd77693455, type: 3}
   currentArrow: {fileID: 0}
-  followingArrow: 0
-  particles: {fileID: 1059932181}
   clickedObject: {fileID: 0}
-  playerCanInteract: 1
-  faceDirection: 0
+  particles: {fileID: 1059932181}
   CONTROLLER_VISUAL_DIRECTION_OBJECT: {fileID: 0}
   CONTROLLER_INPUT: 1
+  playerCanInteract: 1
+  faceDirection: 0
   CONTROLLER_RightStickDirection: {x: 0, y: 0}
   CONTROLLER_LeftStickDirection: {x: 0, y: 0}
+  playerSpeedBase: 2
+  playerspeedModifier: 1
 --- !u!114 &2445594148722356665
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿
 
+using BaD.Modules.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,19 +13,25 @@ public class PlayerMovement : MonoBehaviour
     public GameObject arrow;
     public WaypointAnimations currentArrow;
     NavMeshAgent agent;
-    public bool followingArrow;
-    public GameObject particles;
+    //public bool followingArrow;
     public Transform clickedObject;
-    public bool playerCanInteract = true;
-    public bool faceDirection;
+    public GameObject particles;
+    
+    
     public GameObject CONTROLLER_VISUAL_DIRECTION_OBJECT;
     public bool CONTROLLER_INPUT = true;
+    public bool playerCanInteract = true;
+    public bool faceDirection;
     public Vector2 CONTROLLER_RightStickDirection, CONTROLLER_LeftStickDirection;
+
+    public float playerSpeedBase = 1, playerspeedModifier = 1;
 
     private void Start()
     {
         destinationPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
+
+        
 
         if (CONTROLLER_VISUAL_DIRECTION_OBJECT)
         {
@@ -33,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
             
         }
     }
+
     private void Update()
     {
         if (!playerCanInteract)
@@ -53,12 +61,15 @@ public class PlayerMovement : MonoBehaviour
         // Controller input axis
         if (CONTROLLER_INPUT)
         {
+            //moveDirection = mc.Player.Movement.ReadValue<Vector2>();
 
             CONTROLLER_VISUAL_DIRECTION_OBJECT.transform.position = transform.position;
 
             float verticalRot;
-            CONTROLLER_RightStickDirection = new Vector2(Input.GetAxisRaw("HorizontalRightStick"), Input.GetAxisRaw("VerticalRightStick"));
-            CONTROLLER_LeftStickDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            //CONTROLLER_RightStickDirection = new Vector2(Input.GetAxisRaw("HorizontalRightStick"), Input.GetAxisRaw("VerticalRightStick"));
+            CONTROLLER_RightStickDirection = new Vector2(ControlManager.mainControls.Player.CameraHorizontal.ReadValue<float>(), ControlManager.mainControls.Player.CameraVertical.ReadValue<float>());
+            CONTROLLER_LeftStickDirection = ControlManager.mainControls.Player.Movement.ReadValue<Vector2>();
+            //CONTROLLER_LeftStickDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
             verticalRot = Mathf.Atan2(CONTROLLER_LeftStickDirection.x, CONTROLLER_LeftStickDirection.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
@@ -95,45 +106,49 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (currentArrow != null)
-        {
-            if (!agent.pathPending)
-            {
-                if (agent.remainingDistance <= agent.stoppingDistance)
-                {
-                    if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0)
-                    {
-                        KillArrow();
-                        particles.GetComponent<ParticleSystem>().Play();
-                    }
-                }
-            }
-
-            if (!agent.pathPending && !agent.hasPath)
-            {
-                timeSincePathfinding += .1f;
-                Camera.main.GetComponent<CameraMovement>().playerIsMoving = true;
-            }
-            else
-            {
-                timeSincePathfinding = 0;
-                Camera.main.GetComponent<CameraMovement>().playerIsMoving = false;
-            }
-
-            if (timeSincePathfinding >= 5f)
-            {
-                KillArrow();
-            }
-        }
 
 
-        if (currentArrow != null && followingArrow)
-        {
-            if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f)
-            {
-                KillArrow();
-            }
-        }
+        #region oldArrowStuff
+        //if (currentArrow != null)
+        //{
+        //    if (!agent.pathPending)
+        //    {
+        //        if (agent.remainingDistance <= agent.stoppingDistance)
+        //        {
+        //            if (!agent.hasPath || GetComponent<MovementAnimationController>().speed <= 0)
+        //            {
+        //                KillArrow();
+        //                particles.GetComponent<ParticleSystem>().Play();
+        //            }
+        //        }
+        //    }
+
+        //    if (!agent.pathPending && !agent.hasPath)
+        //    {
+        //        timeSincePathfinding += .1f;
+        //        Camera.main.GetComponent<CameraMovement>().playerIsMoving = true;
+        //    }
+        //    else
+        //    {
+        //        timeSincePathfinding = 0;
+        //        Camera.main.GetComponent<CameraMovement>().playerIsMoving = false;
+        //    }
+
+        //    if (timeSincePathfinding >= 5f)
+        //    {
+        //        KillArrow();
+        //    }
+        //}
+
+
+        //if (currentArrow != null && followingArrow)
+        //{
+        //    if (Vector3.Distance(transform.position, currentArrow.transform.position) < .1f)
+        //    {
+        //        KillArrow();
+        //    }
+        //}
+        #endregion
 
     }
 
@@ -147,29 +162,29 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        if (currentArrow != null)
-        {
-            currentArrow.Die();
-            currentArrow = null;
-        }
-    }
-    private void OnDisable()
-    {
-        if (currentArrow != null)
-        {
-            currentArrow.Die();
-            currentArrow = null;
-        }
-    }
+    //private void OnDestroy()
+    //{
+    //    if (currentArrow != null)
+    //    {
+    //        currentArrow.Die();
+    //        currentArrow = null;
+    //    }
+    //}
+    //private void OnDisable()
+    //{
+    //    if (currentArrow != null)
+    //    {
+    //        currentArrow.Die();
+    //        currentArrow = null;
+    //    }
+    //}
 
     public Quaternion FaceDirection(Vector3 destination)
     {
         float pan = 10f;
         //rotation of Object
         var heading = destination - transform.position;
-        var rot = Quaternion.LookRotation(heading);
+        var rot = Quaternion.LookRotation(new Vector3(heading.x, transform.position.y, heading.z));
 
         Quaternion rotLerp = Quaternion.Lerp(transform.rotation, rot, pan * Time.deltaTime);
 
@@ -181,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (dist > agent.stoppingDistance)
         {
-            Vector3 movement = transform.forward * Time.deltaTime * dist;
+            Vector3 movement = transform.forward * Time.deltaTime * dist * playerSpeedBase;// * CONTROLLER_LeftStickDirection;
             movement.y = transform.position.y;
             agent.Move(movement);
         }
@@ -195,46 +210,47 @@ public class PlayerMovement : MonoBehaviour
 
         if (destinationPosition != null && targetRotation != null && destinationPosition != transform.position)
         {
-            if (currentArrow != null)
-            {
-                KillArrow();
-            }
+
+            //if (currentArrow != null)
+            //{
+            //    KillArrow();
+            //}
 
             MoveToPoint(destinationPosition);
 
 
             //GetComponent<NavMeshAgent>().SetDestination(destinationPosition);
 
-            if (hasArrow)
-                CreateArrow(dest);
+            //if (hasArrow)
+            //    CreateArrow(dest);
         }
     }
 
 
-    public void CreateArrow(Vector3 dest)
-    {
-        if (!playerCanInteract) return;
+    //public void CreateArrow(Vector3 dest)
+    //{
+    //    if (!playerCanInteract) return;
 
-        GameObject o = null;
-        o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
+    //    GameObject o = null;
+    //    o = Instantiate(arrow, new Vector3(dest.x, 0, dest.z), Quaternion.Euler(new Vector3(-90, 0, 0)));
 
-        if (Physics.Raycast(dest, Vector3.down, out RaycastHit hit, 500, layer_mask))
-        {
-            o.transform.position = hit.point + Vector3.up * 3.14f;
-        }
+    //    if (Physics.Raycast(dest, Vector3.down, out RaycastHit hit, 500, layer_mask))
+    //    {
+    //        o.transform.position = hit.point + Vector3.up * 3.14f;
+    //    }
 
-        currentArrow = o.transform.Find("wp").GetComponent<WaypointAnimations>();
+    //    currentArrow = o.transform.Find("wp").GetComponent<WaypointAnimations>();
 
-        followingArrow = true;
+    //    followingArrow = true;
 
-    }
+    //}
 
-    public void KillArrow()
-    {
-        if (currentArrow != null)
-        {
-            currentArrow.Die();
-            currentArrow = null;
-        }
-    }
+    //public void KillArrow()
+    //{
+    //    if (currentArrow != null)
+    //    {
+    //        currentArrow.Die();
+    //        currentArrow = null;
+    //    }
+    //}
 }
