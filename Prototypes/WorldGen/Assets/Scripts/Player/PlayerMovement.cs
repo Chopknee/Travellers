@@ -46,11 +46,11 @@ namespace BaD.Modules.Control {
 
             moveDirection = mc.Player.Movement.ReadValue<Vector2>();
             if (moveDirection != Vector2.zero) {
-                Vector3 dir = (moveDirection.y * cameraTrackTransform.forward.normalized) + (moveDirection.x * cameraTrackTransform.right.normalized);
-                dir.Normalize();
+                Vector3 dir = ((moveDirection.y * cameraTrackTransform.forward.normalized) + (moveDirection.x * cameraTrackTransform.right.normalized)).normalized * moveDirection.magnitude; ;
                 dir *= playerSpeed * Time.deltaTime;
                 agent.Move(dir);
                 destinationPosition = transform.position + dir;
+                destinationPosition.y = transform.position.y;
                 //MoveToPoint(destinationPosition);
                 transform.rotation = FaceDirection(destinationPosition);
             }
@@ -63,7 +63,7 @@ namespace BaD.Modules.Control {
             Vector3 dist = dest - transform.position;
 
             if (dist.sqrMagnitude > agent.stoppingDistance * agent.stoppingDistance) {
-                Vector3 movement = (transform.position + dist) * Time.deltaTime;
+                Vector3 movement = (transform.position + dist);
                 movement.y = transform.position.y;
                 agent.Move(movement);
             }
@@ -80,6 +80,13 @@ namespace BaD.Modules.Control {
             Quaternion rotLerp = Quaternion.Lerp(transform.rotation, rot, pan * Time.deltaTime);
 
             return rotLerp;
+        }
+
+        public void OnDrawGizmos() {
+            if (cameraTrackTransform != null) {
+                Gizmos.color = Color.red;
+                Gizmos.DrawCube(cameraTrackTransform.position, Vector3.one);
+            }
         }
     }
 }

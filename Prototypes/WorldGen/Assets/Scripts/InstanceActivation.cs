@@ -4,6 +4,7 @@ using BaD.Modules.Control;
 using BaD.Modules.Terrain;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 public class InstanceActivation : MonoBehaviour {
     [SerializeField]
@@ -17,10 +18,21 @@ public class InstanceActivation : MonoBehaviour {
     private GameObject HoverInfoWindowGameobject;
 
     public float activationRadius = 15;
-
-    public bool isCurrentNavTarget = false;
-    public bool isHighlighted = false;
+    
     private float activationRadiusSquared;
+
+    GameObject pl {
+        get {
+            GameObject playerInst;
+            if (DungeonManager.CurrentInstance == null) {
+                playerInst = MainControl.Instance.LocalPlayerObjectInstance;
+            } else {
+                playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
+            }
+            return playerInst;
+        }
+    }
+
     public void Start () {
         if (HoverInfoWindowPrefab != null) {
             HoverInfoWindowGameobject = Instantiate(HoverInfoWindowPrefab);
@@ -29,58 +41,16 @@ public class InstanceActivation : MonoBehaviour {
             HoverInfoWindowGameobject.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
         }
         activationRadiusSquared = activationRadius * activationRadius;
+
+        //MainControl.Instance.Controls.Player.Interact.performed += context => OnInteract();
+
+
     }
 
-    public void Update () {
-        //If interact button is clicked
-        if (Input.GetButtonDown("Interact")) {
-            //If the mouse is not over the collider
-            if (!isHighlighted) {
-                //If the player is already navigating to this spot.
-                if (isCurrentNavTarget) {
-                    //Cancel the move
-                    isCurrentNavTarget = false;
-                }
-
-                //If the mouse is over the collider
-            } else {
-                //If the player is not already moving here
-                if (!isCurrentNavTarget) {
-                    GameObject playerInst;
-                    if (DungeonManager.CurrentInstance == null) {
-                        playerInst = MainControl.Instance.LocalPlayerObjectInstance;
-                    } else {
-                        playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
-                    }
-                    //If the player is close enough to this object
-                    if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
-                        DoInteraction();//Do the interaction
-                    } else {
-                        //Try to find a spot close to this thing.
-                        NavMesh.SamplePosition(transform.position, out NavMeshHit hit, activationRadius + 16, NavMesh.AllAreas);
-                        if (!hit.hit) { Debug.Log("The instance activator " + gameObject.name + " is unreachable, apparently."); return; }
-
-                        isCurrentNavTarget = true;
-                        if (DungeonManager.CurrentInstance == null) {
-                            //MainControl.Instance.LocalPlayerObjectInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
-                        } else {
-                            //DungeonManager.CurrentInstance.LocalDungeonPlayerInstance.GetComponent<PlayerMovement>().SetDestination(hit.position, true);
-                        }
-                    }
-                }
-            }
-        }
-        if (isCurrentNavTarget) {
-            GameObject playerInst;
-            if (DungeonManager.CurrentInstance == null) {
-                playerInst = MainControl.Instance.LocalPlayerObjectInstance;
-            } else {
-                playerInst = DungeonManager.CurrentInstance.LocalDungeonPlayerInstance;
-            }
-            if (( playerInst.transform.position - transform.position ).sqrMagnitude < activationRadiusSquared) {
-                //Interact with the thing.
-                isCurrentNavTarget = false;
-                DoInteraction();
+    public void OnInteract(InputAction.CallbackContext contex) {
+        if (enabled) {
+            if ((pl.transform.position - transform.position).sqrMagnitude < activationRadiusSquared) {
+                DoInteraction();//Do the interaction
             }
         }
     }
@@ -113,24 +83,30 @@ public class InstanceActivation : MonoBehaviour {
         }
     }
 
-    public void OnMouseEnter () {
-        if (HoverInfoWindowGameobject != null) {
-            HoverInfoWindowGameobject.SetActive(true);
-            isHighlighted = true;
+    public void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+            if (HoverInfoWindowGameobject != null) {
+                HoverInfoWindowGameobject.SetActive(true);
+            }
         }
     }
 
-    public void OnMouseExit () {
-        if (HoverInfoWindowGameobject != null) {
-            HoverInfoWindowGameobject.SetActive(false);
-            isHighlighted = false;
+    public void OnCollisionExit(Collision collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+            if (HoverInfoWindowGameobject != null) {
+                HoverInfoWindowGameobject.SetActive(true);
+            }
         }
     }
 
-    public void OnDisable () {
+    public void OnEnable() {
+        MainControl.Instance.Controls.Player.Interact.performed += OnInteract;
+    }
+
+    public void OnDisable() {
+        MainControl.Instance.Controls.Player.Interact.performed -= OnInteract;
         if (HoverInfoWindowGameobject != null) {
             HoverInfoWindowGameobject.SetActive(false);
-            isHighlighted = false;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace BaD.Modules.Combat {
 
@@ -22,16 +23,24 @@ namespace BaD.Modules.Combat {
         }
 
         void Update () {
+
+        }
+
+        public void DoAttack(InputAction.CallbackContext context) {
+            //
             if (currentWeapon != null) {
-                if (UnityEngine.Input.GetButtonDown("Attack")) {
-                    if (!weaponScript.IsAttacking) {
-                        weaponScript.DoAttack();
-                        //Debug.Log("Attacking!!");
-                    } else {
-                        //Debug.Log("Can't attack, already attacking.");
-                    }
+                if (!weaponScript.IsAttacking) {
+                    weaponScript.DoAttack();
                 }
             }
+        }
+
+        public void OnEnable() {
+            MainControl.Instance.Controls.Player.Attack.performed += DoAttack;
+        }
+
+        public void OnDisable() {
+            MainControl.Instance.Controls.Player.Attack.performed -= DoAttack;
         }
 
         public void SetWeapon ( AttackStyle weapon ) {

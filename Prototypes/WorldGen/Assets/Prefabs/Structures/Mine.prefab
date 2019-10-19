@@ -404,7 +404,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Test Mine
+  m_Text: Mines
 --- !u!1 &9077271668174930115
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,5 +473,3 @@ MonoBehaviour:
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 92bd3abe2e5c41645be2e6fd0e05998b,
     type: 3}
   activationRadius: 1.9
-  isCurrentNavTarget: 0
-  isHighlighted: 0

@@ -33,7 +33,7 @@ public class MovementAnimationController: MonoBehaviour {
             }
         }
         agent = GetComponent<NavMeshAgent>();
-        avg = new Average(10);
+        avg = new Average(2);
     }
 
     float avgSpeed;

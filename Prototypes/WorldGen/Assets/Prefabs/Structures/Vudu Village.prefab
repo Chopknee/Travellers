@@ -600,7 +600,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Test Village
+  m_Text: Vudu Village
 --- !u!1 &9077271668174930115
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,5 +670,3 @@ MonoBehaviour:
   HoverInfoWindowPrefab: {fileID: 3086768761848597538, guid: 6c005bda844302c458f9fa71d951ce37,
     type: 3}
   activationRadius: 4.71
-  isCurrentNavTarget: 0
-  isHighlighted: 0

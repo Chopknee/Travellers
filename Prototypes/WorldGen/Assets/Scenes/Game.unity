@@ -3109,9 +3109,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  zoomSensitivity: 0.01
+  zoomSensitivity: 0.1
   zoomPercent: 0.15
-  heightConstraintRange: {x: 0, y: 8.9}
+  heightConstraintRange: {x: 1, y: 8.9}
   distanceConstraint: {x: 6.06, y: 17}
   zoomDrag: 6
   target: {fileID: 0}
