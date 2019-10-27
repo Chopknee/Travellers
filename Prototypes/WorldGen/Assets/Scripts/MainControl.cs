@@ -24,11 +24,6 @@ namespace BaD.Modules {
 
         [SerializeField]
 #pragma warning disable 0649
-        private GameObject actionConfirmationUI;
-        public GameObject ActionConfirmationUI { get { return actionConfirmationUI; } }
-
-        [SerializeField]
-#pragma warning disable 0649
         private GameObject playerInventoryUI;
         public GameObject PlayerInventoryUI { get { return playerInventoryUI; } }
         public UIPlayerInventory PlayerInventoryInstance {
@@ -69,10 +64,6 @@ namespace BaD.Modules {
             //Warning messages about missing objects.
             if (shopUI == null) {
                 Debug.Log("<color=blue><a>Missing</a></color> Shop GUI reference.", this);
-            }
-
-            if (actionConfirmationUI == null) {
-                Debug.Log("<color=blue><a>Missing</a></color> Action Confirmation reference.", this);
             }
 
             if (playerInventoryUI == null) {

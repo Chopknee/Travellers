@@ -106,7 +106,7 @@ namespace BaD.Modules.Networking {
         /// <param name="photonEvent">The message data from the event.</param>
         public void OnEvent ( EventData photonEvent ) {
             if (photonEvent.Code != MessageCode) return;//Not an inventory command, skip the remainder of this.
-
+            Debug.Log("Relavent message gotten  in " + gameObject.name + " .");
             object[] data = (object[]) photonEvent.CustomData;
             MessageMeta mm = (MessageMeta) data[0];
             if (!AcceptRequest(mm.MessageID)) { return; }//Only returns if the message was already processed
@@ -135,7 +135,15 @@ namespace BaD.Modules.Networking {
             SendOptions sendOptions = new SendOptions {
                 Reliability = ReliabilityMode
             };
-            PhotonNetwork.RaiseEvent(MessageCode, (object) newData, eventOptions, sendOptions);
+            
+            if (PhotonNetwork.OfflineMode) {
+                //In offline mode
+                StartCoroutine(OfflineModeResponse(newData));
+            } else {
+                //Not in offline mode
+                Debug.Log("I'm sending a message!");
+                PhotonNetwork.RaiseEvent(MessageCode, (object)newData, eventOptions, sendOptions);
+            }
             return ((MessageMeta) newData[0]).MessageID;//Give back a request code!!
         }
 
@@ -154,6 +162,12 @@ namespace BaD.Modules.Networking {
                 lastRequestIndex = 0;
             }
             return true;
+        }
+
+
+        IEnumerator OfflineModeResponse(object[] message) {
+            yield return new WaitForSeconds(0.015f);//Wait a reasonable amount of time to simulate network latency
+            MessageReceived(message);
         }
     }
 

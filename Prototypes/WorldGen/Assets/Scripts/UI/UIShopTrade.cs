@@ -82,7 +82,9 @@ public class UIShopTrade : MonoBehaviour {
         //Simply creates an instance of inventory for the local windows.
         sellWindow.Open(playerToTradeWith.Inventory);
         buyWindow.Open(shopInventory);
-        MainControl.Instance.SetPlayerControl(false);
+        if (MainControl.Instance != null) {
+            MainControl.Instance.SetPlayerControl(false);
+        }
     }
 
     public void OnItemsListChanged(UIInventory caller ) {
@@ -185,6 +187,8 @@ public class UIShopTrade : MonoBehaviour {
         btnExitTrade.onClick.RemoveListener(ExitTrade);
         gameObject.SetActive(false);
         OnClosed?.Invoke();
-        MainControl.Instance.SetPlayerControl(true);
+        if (MainControl.Instance != null) {
+            MainControl.Instance.SetPlayerControl(true);
+        }
     }
 }

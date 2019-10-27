@@ -28,7 +28,7 @@ namespace BaD.Modules.Terrain {
                 HoverInfoGUIInstance = Instantiate(HoverInfoGUIPrefab);
                 HoverInfoGUIInstance.GetComponent<UITargetObject>().target = transform;
                 HoverInfoGUIInstance.SetActive(false);
-                HoverInfoGUIInstance.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
+                //HoverInfoGUIInstance.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
             }
         }
 

@@ -24,7 +24,7 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
             itemDataGuiInst = Instantiate(itemDataGui);
             itemDataGuiInst.GetComponent<UITargetObject>().target = transform;
             itemDataGuiInst.SetActive(false);
-            itemDataGuiInst.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
+            //itemDataGuiInst.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
             itemDataGuiInst.GetComponentInChildren<Text>().text = itemData.itemName;
         }
     }

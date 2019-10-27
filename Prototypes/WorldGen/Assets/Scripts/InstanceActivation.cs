@@ -38,7 +38,7 @@ public class InstanceActivation : MonoBehaviour {
             HoverInfoWindowGameobject = Instantiate(HoverInfoWindowPrefab);
             HoverInfoWindowGameobject.GetComponent<UITargetObject>().target = transform;
             HoverInfoWindowGameobject.SetActive(false);
-            HoverInfoWindowGameobject.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
+            //HoverInfoWindowGameobject.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
         }
         activationRadiusSquared = activationRadius * activationRadius;
 

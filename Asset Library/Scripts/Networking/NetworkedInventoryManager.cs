@@ -35,17 +35,22 @@ namespace BaD.Modules.Networking {
 
         //This is sent to the master to get a new inventory object spawned
         public void RequestInventory ( int id, InventoryRequestCallback onRequestFulfilled ) {
+            Debug.Log("The party has started!");
             if (!inventories.ContainsKey(id)) {
+                Debug.Log("Inventory is not already initialized, asking for a new one now!");
                 int messID = SendNetMessage(new object[] { (byte) 0, id });
                 requestCallbacks.Add(messID, onRequestFulfilled);
+                
             } else {
+                Debug.Log("Inventory was already initialized, returning!");
                 onRequestFulfilled?.Invoke(inventories[id], false);
             }
         }
 
         //This is the response to the request from the server to the clients
         private void InventoryRequestResponse ( int id, int originatingMessageID ) {
-            bool existingAlready = false; ;
+            Debug.Log("<color=red>Inventory request has been received by master.</color>");
+            bool existingAlready = false;
             GameObject invgo;
             if (masterInventories.ContainsKey(id)) {
                 //Respond with the spawn data from the existing object
@@ -60,6 +65,7 @@ namespace BaD.Modules.Networking {
 
         //This is the response of the client to the message from the server with the inventory view id
         private void InventoryRequestResponseResponse ( int messageID, int id, int viewID, bool shouldInitialize ) {
+            Debug.Log("Received a response to generate a new inventory/create and existing one.");
             if (!inventories.ContainsKey(id)) {
                 GameObject invGO = SpawnInventory(id, ViewID);
                 inventories.Add(id, invGO);
@@ -67,11 +73,16 @@ namespace BaD.Modules.Networking {
                     requestCallbacks[messageID]?.Invoke(invGO, true);
                     requestCallbacks.Remove(messageID);
                 }
+            } else {
+                Debug.Log("Received a request to spawn an existing inventory. (Not intended function!)");
             }
         }
 
         public override void MessageReceived ( object[] messageData ) {
+            
             MessageMeta mm = (MessageMeta) messageData[0];
+
+            Debug.Log("Got a message for an inventory... " + (byte)messageData[1]);
             switch ((byte) messageData[1]) {
                 case 0:
                     //Requesting an inventory
@@ -82,6 +93,10 @@ namespace BaD.Modules.Networking {
                     break;
                 case 1:
                     InventoryRequestResponseResponse((int)messageData[5], (int) messageData[2], (int) messageData[3], (bool) messageData[4]);
+                    Debug.Log("Inventory request response.. response has been received.");
+                    break;
+                default:
+                    Debug.Log("INVALID MESSAGE CODE IN INVENTORY MANAGER.");
                     break;
             }
 
