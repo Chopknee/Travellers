@@ -124,20 +124,21 @@ namespace BaD.Modules.Networking {
 
         //When a inventory sync request has been fulfilled on the client end
         private void SyncInventoryResponse ( ItemInstance[] newItems, int originalRequestID ) {
-            //No matter what, we need to know what has changed from now to then??
-            IEnumerable<ItemInstance> removedItems = newItems.AsEnumerable();//new List<ItemInstance>();
-            Debug.Log("A " + removedItems.Count());
-            removedItems = removedItems.Union(items);//Union with the new set of items.
-            Debug.Log("B " + removedItems.Count());
-            removedItems = removedItems.Except(newItems);
-            Debug.Log("C " + removedItems.Count());
+            //Added items are items that are in the new items list, but not in the old items list
+            //Removed items are items that are not in the new items list, but are in the old items list
+            List<ItemInstance> removed = new List<ItemInstance>();
+            removed.AddRange(items);
+            List<ItemInstance> added = new List<ItemInstance>();
+            added.AddRange(newItems);
+            foreach (ItemInstance newI in newItems) {
+                foreach (ItemInstance oldI in items) {
+                    if (newI == oldI) {
+                        removed.Remove(newI);
+                        added.Remove(newI);
+                    }
+                }
+            }
 
-
-            IEnumerable<ItemInstance> addedItems = newItems.AsEnumerable();
-            Debug.Log("D " + addedItems.Count());
-            //addedItems.AddRange(removedItems);//Rather than taking the union again, just copy the list already created.
-            addedItems.Except(items);
-            Debug.Log("E " + addedItems.Count());
 
             items.Clear();
             items.AddRange(newItems);
@@ -147,9 +148,9 @@ namespace BaD.Modules.Networking {
                 requestCallbacks.Remove(originalRequestID);
                 req.callback?.Invoke(originalRequestID, req.itemsTaken, true, req.items);
             }
-            Debug.Log(addedItems.ToArray().Length);
+            Debug.LogFormat("Inventory {2} had {0} items removed and {1} items added.", removed.Count(), added.Count(), gameObject.name);
             //Always invoke this, because even the master will make requests.
-            OnItemsUpdated?.Invoke(originalRequestID, addedItems.ToArray(), removedItems.ToArray());
+            OnItemsUpdated?.Invoke(originalRequestID, added.ToArray(), removed.ToArray());
         }
 
         //This is only run by the master client.
