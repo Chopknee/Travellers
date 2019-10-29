@@ -32,9 +32,9 @@ namespace BaD.UI.DumpA {
         // Update is called once per frame
         void Update () {
             if (associatedPlayer == null) {
-                if (MainControl.Instance != null && MainControl.Instance.LocalPlayerData != null) {
+                if (MainControl.LocalPlayerData != null) {
                     //Get the player data from the player object
-                    associatedPlayer = MainControl.Instance.LocalPlayerData;
+                    associatedPlayer = MainControl.LocalPlayerData;
                     if (associatedPlayer != null) {
                         associatedPlayer.OnPlayerGoldChanged += OnGoldChanged;
                         associatedPlayer.OnPlayernameChanged += OnNameChanged;

@@ -71,6 +71,7 @@ public class ChatBox : MonoBehaviour {
         CanvasGroup cg = GetComponent<CanvasGroup>();
         cg.alpha = ( value ) ? 1 : 0;
         cg.blocksRaycasts = value;
+        cg.interactable = value;
         opened = value;
     }
 

@@ -70,7 +70,7 @@ namespace BaD.Modules.Terrain {
                 shopUIInstance = Instantiate(shopUIPrefab);
             }
             shopGuI = shopUIInstance.GetComponent<UIShopTrade>();
-            shopGuI.ShowTradeWindow(DisplayName, shopInventory, MainControl.Instance.LocalPlayerData);
+            shopGuI.ShowTradeWindow(DisplayName, shopInventory, MainControl.LocalPlayerData);
             shopGuI.OnClosed += ShopClosed;
         }
 

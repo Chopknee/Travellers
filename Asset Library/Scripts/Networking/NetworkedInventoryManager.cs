@@ -8,6 +8,9 @@ namespace BaD.Modules.Networking {
 
     public class NetworkedInventoryManager: Messaging {
 
+        private const byte RequestInventoryCode = 4;
+        private const byte InventoryRequestRecCode = 2;
+
         public static NetworkedInventoryManager Instance { get; private set; }
 
         public int RequestCacheLengthForInventories = 100;
@@ -35,10 +38,9 @@ namespace BaD.Modules.Networking {
 
         //This is sent to the master to get a new inventory object spawned
         public void RequestInventory ( int id, InventoryRequestCallback onRequestFulfilled ) {
-            Debug.Log("The party has started!");
             if (!inventories.ContainsKey(id)) {
-                Debug.Log("Inventory is not already initialized, asking for a new one now!");
-                int messID = SendNetMessage(new object[] { (byte) 0, id });
+                Debug.Log("Sending a request to master for an inventory.");
+                int messID = SendNetMessage(new object[] { RequestInventoryCode, id });
                 requestCallbacks.Add(messID, onRequestFulfilled);
                 
             } else {
@@ -60,17 +62,17 @@ namespace BaD.Modules.Networking {
                 invgo = SpawnInventory(id);
                 masterInventories.Add(id, invgo);
             }
-            SendNetMessage(new object[] { (byte) 1, id, invgo.GetComponent<PhotonView>().ViewID, existingAlready, originatingMessageID });
+            SendNetMessage(new object[] { InventoryRequestRecCode, id, invgo.GetComponent<PhotonView>().ViewID, !existingAlready, originatingMessageID });
         }
 
         //This is the response of the client to the message from the server with the inventory view id
         private void InventoryRequestResponseResponse ( int messageID, int id, int viewID, bool shouldInitialize ) {
             Debug.Log("Received a response to generate a new inventory/create and existing one.");
             if (!inventories.ContainsKey(id)) {
-                GameObject invGO = SpawnInventory(id, ViewID);
+                GameObject invGO = SpawnInventory(id, viewID);
                 inventories.Add(id, invGO);
                 if (requestCallbacks.ContainsKey(messageID)) {
-                    requestCallbacks[messageID]?.Invoke(invGO, true);
+                    requestCallbacks[messageID]?.Invoke(invGO, shouldInitialize);
                     requestCallbacks.Remove(messageID);
                 }
             } else {
@@ -82,16 +84,17 @@ namespace BaD.Modules.Networking {
             
             MessageMeta mm = (MessageMeta) messageData[0];
 
-            Debug.Log("Got a message for an inventory... " + (byte)messageData[1]);
+            //Debug.Log("Got a message for an inventory... " + (byte)messageData[1]);
             switch ((byte) messageData[1]) {
-                case 0:
+                case RequestInventoryCode:
+                    Debug.Log("Received a request for a new inventory.");
                     //Requesting an inventory
                     if (PhotonNetwork.IsMasterClient) {
                         //Fulfill the request.
                         InventoryRequestResponse((int) messageData[2], mm.MessageID);
                     }
                     break;
-                case 1:
+                case InventoryRequestRecCode:
                     InventoryRequestResponseResponse((int)messageData[5], (int) messageData[2], (int) messageData[3], (bool) messageData[4]);
                     Debug.Log("Inventory request response.. response has been received.");
                     break;
@@ -120,7 +123,7 @@ namespace BaD.Modules.Networking {
                 }
             } else {
                 //Setting based on an existing view id
-                view.ViewID = ViewID;
+                view.ViewID = viewID;
             }
             //Then we have a successful instantiation of the game object... continue
             NetInventory inv = invGo.AddComponent<NetInventory>();

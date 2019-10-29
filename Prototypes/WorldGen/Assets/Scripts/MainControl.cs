@@ -16,6 +16,7 @@ namespace BaD.Modules {
     public class MainControl: MonoBehaviourPunCallbacks {
 
         public static MainControl Instance { get; private set; }
+        public static PlayerData LocalPlayerData;
 
         [SerializeField]
 #pragma warning disable 0649
@@ -42,7 +43,7 @@ namespace BaD.Modules {
         public GameObject HudUI { get { return hudUI; } }
 
         public GameObject LocalPlayerObjectInstance { get; private set; }
-        public PlayerData LocalPlayerData { get; private set; }
+        //public PlayerData LocalPlayerData { get; private set; }
         public GameObject MapControlObjectInstance { get; private set; }
         
 

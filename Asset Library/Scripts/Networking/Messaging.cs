@@ -92,11 +92,8 @@ namespace BaD.Modules.Networking {
                 PhotonPeer.RegisterType(typeof(MessageMeta), (byte) 'Z', MessageMeta.Serialize, MessageMeta.DeSerialize);
                 RegisteredMM = false;
             }
-        }
-
-        public void Start () {
             int baseMessageNumber = PhotonNetwork.LocalPlayer.ActorNumber * 100000;
-            RequestNumber = baseMessageNumber + ViewID*100;
+            RequestNumber = baseMessageNumber + ViewID * 100;
         }
 
         /// <summary>
@@ -105,12 +102,16 @@ namespace BaD.Modules.Networking {
         /// </summary>
         /// <param name="photonEvent">The message data from the event.</param>
         public void OnEvent ( EventData photonEvent ) {
-            if (photonEvent.Code != MessageCode) return;//Not an inventory command, skip the remainder of this.
-            Debug.Log("Relavent message gotten  in " + gameObject.name + " .");
+            
+            if (photonEvent.Code != MessageCode)
+                return;//Not a relavent command, skip the remainder of this.
             object[] data = (object[]) photonEvent.CustomData;
             MessageMeta mm = (MessageMeta) data[0];
-            if (!AcceptRequest(mm.MessageID)) { return; }//Only returns if the message was already processed
-            if (FilterMessagesByView && mm.ViewID != ViewID) { return; }//returns if the messaging has been set to filter by view and the view does not match
+            if (!AcceptRequest(mm.MessageID))
+                return;//Only returns if the message was already processed
+            
+            if (FilterMessagesByView && mm.ViewID != ViewID)
+                return;//returns if the messaging has been set to filter by view and the view does not match
             MessageReceived(data);
         }
 
@@ -141,7 +142,6 @@ namespace BaD.Modules.Networking {
                 StartCoroutine(OfflineModeResponse(newData));
             } else {
                 //Not in offline mode
-                Debug.Log("I'm sending a message!");
                 PhotonNetwork.RaiseEvent(MessageCode, (object)newData, eventOptions, sendOptions);
             }
             return ((MessageMeta) newData[0]).MessageID;//Give back a request code!!

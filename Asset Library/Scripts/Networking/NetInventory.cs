@@ -12,11 +12,15 @@ namespace BaD.Modules.Networking {
         private const byte InventorySync = 2;
         private const byte TakeItemCode = 1;
         private const byte AddItemCode = 3;
+        private const byte RequestFailed = 4;
 
         public delegate void ItemsUpdated ( int originalRequestID, ItemInstance[] addedItems, ItemInstance[] removedItems );
         public ItemsUpdated OnItemsUpdated;
 
         public delegate void ItemRemovedResponse ( bool success );
+
+        public delegate void InventoryRequestCallback ( int ogRequestId, bool itemsTaken, bool success, ItemInstance[] items );
+        Dictionary<int, InventoryRequest> requestCallbacks;
 
         public ItemInstance[] Items {
             get {
@@ -35,6 +39,8 @@ namespace BaD.Modules.Networking {
             if (PhotonNetwork.IsMasterClient) {
                 PhotonNetwork.AddCallbackTarget(this);
             }
+
+            requestCallbacks = new Dictionary<int, InventoryRequest>();
         }
 
         //Before doing anything with this inventory, it must be opened
@@ -52,11 +58,11 @@ namespace BaD.Modules.Networking {
             }
         }
 
-        public int RemoveItem ( ItemInstance i ) {
-            return RemoveItems(new ItemInstance[] { i });
+        public int RemoveItem ( ItemInstance i, InventoryRequestCallback callback = null ) {
+            return RemoveItems(new ItemInstance[] { i }, callback);
         }
 
-        public int RemoveItem ( ItemType i ) {
+        public int RemoveItem ( ItemType i, InventoryRequestCallback callback = null ) {
             ItemInstance netI = null;
             //This gets a little more complicated, as I need to find the item specifically to remove (assuming one even can be).
             //For each network item in the inventory
@@ -71,66 +77,107 @@ namespace BaD.Modules.Networking {
             //If the specific item instance is not null
             if (netI != null) {
                 //Send a command to have it removed immediately
-                return RemoveItem(netI);
+                return RemoveItem(netI, callback);
             } else {
                 return -1;//Failed to find an item matching.
             }
         }
 
         //Removes an item from this inventory
-        public int RemoveItems ( ItemInstance[] i ) {
-            //Remove the requested item from the inventory
+        public int RemoveItems ( ItemInstance[] i, InventoryRequestCallback callback = null ) {
             object[] data = new object[] { TakeItemCode, i };
-            return SendNetMessage(data);
+            int id = SendNetMessage(data);
+            if (callback != null) {
+                requestCallbacks.Add(id, new InventoryRequest(callback, id, true, i));
+            }
+            return id;
         }
 
-        public int AddItem ( ItemInstance i ) {
-            return AddItems(new ItemInstance[] { i });
+        public int AddItem ( ItemInstance i, InventoryRequestCallback callback = null ) {
+            return AddItems(new ItemInstance[] { i }, callback);
         }
 
-        public int AddItems ( ItemInstance[] i ) {
-            //Add the requested item to the inventory
+        //Add the requested items to the inventory
+        public int AddItems ( ItemInstance[] i, InventoryRequestCallback callback = null ) {
+            
             object[] data = new object[] { AddItemCode, i };
-            return SendNetMessage(data);
+            int id = SendNetMessage(data);
+
+            if (callback != null) {
+                requestCallbacks.Add(id, new InventoryRequest(callback, id, false, i));
+            }
+
+            return id;
         }
 
+        //Simply requests to syncronize the inventory
         private int RequestItemsSync () {
-            //
             object[] data = new object[] { RequestSyncCode };
             return SendNetMessage(data);
         }
 
+        //A reuqest to sync the inventory with others has been received.
         private int SyncOpenedInventories ( int originatingRequestID ) {
-
-            //A reuqest to synch the inventory with others has been received.
             object[] data = new object[] { InventorySync, masterItemsList.ToArray(), originatingRequestID };
             return SendNetMessage(data);
         }
 
+        //When a inventory sync request has been fulfilled on the client end
         private void SyncInventoryResponse ( ItemInstance[] newItems, int originalRequestID ) {
             //No matter what, we need to know what has changed from now to then??
-            List<ItemInstance> removedItems = new List<ItemInstance>();
-            removedItems.AddRange(items);//Add the old set of items
-            removedItems.Union(newItems);//Union with the new set of items.
-            List<ItemInstance> addedItems = new List<ItemInstance>();
-            addedItems.AddRange(removedItems);//Rather than taking the union again, just copy the list already created.
-            removedItems.Except(newItems);
+            IEnumerable<ItemInstance> removedItems = newItems.AsEnumerable();//new List<ItemInstance>();
+            Debug.Log("A " + removedItems.Count());
+            removedItems = removedItems.Union(items);//Union with the new set of items.
+            Debug.Log("B " + removedItems.Count());
+            removedItems = removedItems.Except(newItems);
+            Debug.Log("C " + removedItems.Count());
+
+
+            IEnumerable<ItemInstance> addedItems = newItems.AsEnumerable();
+            Debug.Log("D " + addedItems.Count());
+            //addedItems.AddRange(removedItems);//Rather than taking the union again, just copy the list already created.
             addedItems.Except(items);
+            Debug.Log("E " + addedItems.Count());
+
             items.Clear();
             items.AddRange(newItems);
+            if (requestCallbacks.ContainsKey(originalRequestID)) {
+                Debug.Log("Running request callback!");
+                InventoryRequest req = requestCallbacks[originalRequestID];
+                requestCallbacks.Remove(originalRequestID);
+                req.callback?.Invoke(originalRequestID, req.itemsTaken, true, req.items);
+            }
+            Debug.Log(addedItems.ToArray().Length);
             //Always invoke this, because even the master will make requests.
             OnItemsUpdated?.Invoke(originalRequestID, addedItems.ToArray(), removedItems.ToArray());
         }
 
         //This is only run by the master client.
         private void TakeItemRequestReceived ( ItemInstance[] items, int originalRequestID ) {
+
+            //This is just to check if all the items being removed are in this inventory to begin with
+            bool canTake = true;
+            List<int> indices = new List<int>();
             foreach (ItemInstance i in items) {
                 int index = FindItemIndexByNetworkId(i);
                 //Ignore requests for items not in this inventory
-                if (index != -1) {
-                    masterItemsList.RemoveAt(index);
-                }
+                canTake &= index != -1;
+                if (canTake == false)
+                    break;
+                indices.Add(index);
             }
+
+            //If at least one of the items are missing, the request will fail and the originating player should be alerted
+            if (!canTake) {
+                SendNetMessage(new object[] { RequestFailed, originalRequestID });
+                return;
+            }
+
+            //Now actullay remove the items from this inventory
+            foreach (int index in indices) {
+                masterItemsList.RemoveAt(index);
+            }
+
             SyncOpenedInventories(originalRequestID);//Syncronize all opened instances of this inventory.
         }
 
@@ -139,7 +186,7 @@ namespace BaD.Modules.Networking {
             //Debug.Log("Adding item(s) " + items.Length);
             foreach (ItemInstance i in items) {
                 int index = FindItemIndexByNetworkId(i);
-                //Ignore requests for items not in this inventory
+                //Ignore requests for items already in this inventory
                 if (index == -1) {//If the item is already in the inventory, don't add it again.
                     masterItemsList.Add(i);
 
@@ -176,6 +223,14 @@ namespace BaD.Modules.Networking {
                         AddItemsRequestReceived(ia, messageMeta.MessageID);
                     }
                     break;
+                case RequestFailed:
+                    //If a request fails, then run the request callback if one was given.
+                    if (requestCallbacks.ContainsKey((int)data[2])) {
+                        InventoryRequest req = requestCallbacks[(int)data[2]];
+                        requestCallbacks.Remove(req.ogRequestId);
+                        req.callback?.Invoke(req.ogRequestId, req.itemsTaken, false, req.items);
+                    }
+                    break;
             }
         }
 
@@ -190,7 +245,7 @@ namespace BaD.Modules.Networking {
                 case AddItemCode:
                     return "Add Item";
                 default:
-                    return "Unknow";
+                    return "Unknown";
             }
         }
 
@@ -201,5 +256,21 @@ namespace BaD.Modules.Networking {
             }
             return -1;
         }
+
+        struct InventoryRequest {
+
+            public InventoryRequestCallback callback;
+            public int ogRequestId;
+            public bool itemsTaken;
+            public ItemInstance[] items;
+
+            public InventoryRequest(InventoryRequestCallback callback, int ogId, bool itemsTaken, ItemInstance[] items) {
+                this.callback = callback;
+                this.ogRequestId = ogId;
+                this.itemsTaken = itemsTaken;
+                this.items = items;
+            }
+        }
+
     }
 }

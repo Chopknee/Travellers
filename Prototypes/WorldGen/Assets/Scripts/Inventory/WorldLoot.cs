@@ -33,7 +33,7 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
         //Click on loot?
         if (pickupSound != null) {
             //Get the loot.
-            MainControl.Instance.LocalPlayerData.Inventory.AddItem(netItemData);
+            MainControl.LocalPlayerData.Inventory.AddItem(netItemData);
             //Then destroy self.
             NetInstanceManager.CurrentManager.DestroyObject(gameObject);
         }

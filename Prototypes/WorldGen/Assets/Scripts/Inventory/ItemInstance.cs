@@ -11,6 +11,12 @@ namespace BaD.Modules.Networking {
         //Unique to this specific item instance used for identifying this item as separate from others in the game when instantiated for any reason.
         public short networkID { get; }
 
+        public ItemType details {
+            get {
+                return NetworkedInventoryManager.Instance.GetItemData(this);
+            }
+        }
+
         public ItemInstance ( short itemCardIndex ) {
             itemIndex = itemCardIndex;
             networkID = 0;

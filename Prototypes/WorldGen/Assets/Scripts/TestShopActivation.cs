@@ -1,4 +1,5 @@
-﻿using BaD.Modules.Networking;
+﻿using BaD.Modules;
+using BaD.Modules.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,8 +24,10 @@ public class TestShopActivation : MonoBehaviour {
         localPlayer = new PlayerData(null);
         localPlayer.gold = 100;
 
+        MainControl.LocalPlayerData = localPlayer;
+
         //Id used to reference this specific inventory.
-        inventoryID = Random.Range(10, 100);//MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
+        inventoryID = 69;//MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
         //Send a request for the inventory. If it is already locally cached, this will run the callback before executing the next line, elsewise;
         //  the callback will not be run until the master client responds.
         NetworkedInventoryManager.Instance.RequestInventory(inventoryID, RequestInventoryCallback);//Id needs to be based on the current instance id stack

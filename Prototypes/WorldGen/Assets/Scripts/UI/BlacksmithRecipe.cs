@@ -63,8 +63,8 @@ public class BlacksmithRecipe: MonoBehaviour {
     void CheckForValidConditions() {
         canTurnIn = false;
         //Highlight in green the items that are fulfilled.
-        if (MainControl.Instance.LocalPlayerData.Inventory.Items.Length > 0) {
-            foreach (ItemInstance it in MainControl.Instance.LocalPlayerData.Inventory.Items) {
+        if (MainControl.LocalPlayerData.Inventory.Items.Length > 0) {
+            foreach (ItemInstance it in MainControl.LocalPlayerData.Inventory.Items) {
                 foreach (RecipieItem ri in recipeItems) {
                     if (ri.isInput) {
                         if (NetworkedInventoryManager.Instance.Compare(it, ri.item)) {
@@ -103,7 +103,7 @@ public class BlacksmithRecipe: MonoBehaviour {
             //Remove the appropriate items from the player's inventory
             foreach (RecipieItem ri in recipeItems) {
                 if (ri.isInput) {
-                    MainControl.Instance.LocalPlayerData.Inventory.RemoveItem(ri.item);
+                    MainControl.LocalPlayerData.Inventory.RemoveItem(ri.item);
                 }
             }
 
