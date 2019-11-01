@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 622944841361071925}
+  - component: {fileID: 5957245940686542832}
   - component: {fileID: 7886886889979352238}
   - component: {fileID: 4651632205275818679}
   - component: {fileID: 363175967584606310}
@@ -42,6 +43,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5957245940686542832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5843973634421846356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdce555ca68070347bdff9a614504d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehavioursToDisable:
+  - {fileID: 4651632205275818679}
 --- !u!114 &7886886889979352238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,7 +204,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4924060631368055989}
   - {fileID: 405474654560960284}
-  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -3864,6 +3878,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 622944841361071925}
     m_Modifications:
+    - target: {fileID: 3861563086289585135, guid: 11280903275abd642809796d7dfeef82,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthBar
+      objectReference: {fileID: 0}
     - target: {fileID: 6369993578027085401, guid: 11280903275abd642809796d7dfeef82,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3968,11 +3987,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3861563086289585135, guid: 11280903275abd642809796d7dfeef82,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthBar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11280903275abd642809796d7dfeef82, type: 3}

@@ -1,5 +1,6 @@
 ﻿using BaD.Chopknee.Utilities;
 using System;
+using System.Collections.Generic;
 
 namespace BaD.Modules.Networking {
 
@@ -48,6 +49,21 @@ namespace BaD.Modules.Networking {
 
         public bool Equals ( ItemInstance i ) {
             return itemIndex == i.itemIndex && networkID == i.networkID;
+        }
+
+        public override int GetHashCode() {
+            return networkID.GetHashCode();
+        }
+    }
+
+    internal class ItemInstanceComparer: IEqualityComparer<ItemInstance> {
+
+        public bool Equals ( ItemInstance x, ItemInstance y ) {
+            return x.itemIndex == y.itemIndex && x.networkID == y.networkID;
+        }
+
+        public int GetHashCode ( ItemInstance obj ) {
+            return obj.networkID.GetHashCode();
         }
     }
 }

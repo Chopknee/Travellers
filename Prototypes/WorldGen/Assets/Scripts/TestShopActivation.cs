@@ -3,6 +3,7 @@ using BaD.Modules.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestShopActivation : MonoBehaviour {
 
@@ -15,29 +16,20 @@ public class TestShopActivation : MonoBehaviour {
     public int minItems = 0;
     public int maxItems = 10;
 
+    public Slider shopID;
+
     int inventoryID;
 
     PlayerData localPlayer;
 
     public void Start() {
-        Debug.Log("Starting test shop.");
         localPlayer = new PlayerData(null);
         localPlayer.gold = 100;
-
         MainControl.LocalPlayerData = localPlayer;
-
-        //Id used to reference this specific inventory.
-        inventoryID = 69;//MainControl.Instance.GetStackSeed() + Choptilities.Vector3ToID(transform.position);
-        //Send a request for the inventory. If it is already locally cached, this will run the callback before executing the next line, elsewise;
-        //  the callback will not be run until the master client responds.
-        NetworkedInventoryManager.Instance.RequestInventory(inventoryID, RequestInventoryCallback);//Id needs to be based on the current instance id stack
-
-        //Making a copy of the shop data because idk
-        shopData = shopData.GetNew();
     }
 
     public void RequestInventoryCallback(GameObject inv, bool needsInitialize) {
-        Debug.Log("Inventory request callback has been 'called back'.");
+        Debug.Log("CALLED THE FUCK BACK FROM REQUESTING INVENTORY");
         //Once the callback is run, we assign the inventory instance object
         shopInventory = inv.GetComponent<NetInventory>();
 
@@ -49,12 +41,18 @@ public class TestShopActivation : MonoBehaviour {
             AddStartItems(noiseSeed);
         }
 
-        //Automagically instantiate the thing.
-        OpenShop();
+        if (shopUIInstance == null) {
+            Debug.Log("Could not open shop ui, instance has not been set!", this);
+            return;
+        }
+        shopGuI = shopUIInstance.GetComponent<UIShopTrade>();
+        shopGuI.OnClosed += ShopClosed;
+        shopGuI.ShowTradeWindow("Test Shop", shopInventory, localPlayer);
+        shopUIInstance.SetActive(true);
     }
 
     private void AddStartItems(int noiseSeed) {//Need to figure out how to know when the shop's items need to be initialized??
-
+        Debug.Log("ADDING ITEMS");
         //Select a random number of items to spawn based on the range of items allowed to spawn
         int itemsToSpawn = Noise.GetRandomRange(noiseSeed, minItems, maxItems);
 
@@ -68,20 +66,16 @@ public class TestShopActivation : MonoBehaviour {
     }
 
     public void OpenShop() {
-        if (shopUIInstance == null) {
-            Debug.Log("Could not open shop ui, instance has not been set!", this);
-            return;
-        }
-        shopGuI = shopUIInstance.GetComponent<UIShopTrade>();
-        shopGuI.ShowTradeWindow("Test Schopp", shopInventory, localPlayer);
-        shopGuI.OnClosed += ShopClosed;
+        Debug.Log("Starting test shop.");
+        inventoryID = (int)shopID.value;
+        NetworkedInventoryManager.Instance.RequestInventory(inventoryID, RequestInventoryCallback);
     }
 
 
     public void ShopClosed() {
         Debug.Log("Shop instance was closed!");
         shopGuI.OnClosed -= ShopClosed;
-        OpenShop();
+        shopUIInstance.SetActive(false);
     }
 
 

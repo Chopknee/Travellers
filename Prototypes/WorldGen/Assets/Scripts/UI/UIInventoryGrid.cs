@@ -29,28 +29,33 @@ public class UIInventoryGrid: MonoBehaviour {
 
     public void Open(NetInventory associatedInventory) {
         this.associatedInventory = associatedInventory;
+        FullResync();
         this.associatedInventory.OnItemsUpdated += OnInventorySynced;
         this.associatedInventory.Open();
     }
 
     public void Close() {
+        ClearItems();
         associatedInventory.OnItemsUpdated -= OnInventorySynced;
         associatedInventory.Close();
     }
 
     public void OnInventorySynced ( int originalRequestID, ItemInstance[] addedItems, ItemInstance[] removedItems ) {
         //Adding and removing specific items, rather than whole cloth clearing the list.
-        Debug.Log("Added " + addedItems.Length + " Removed " + removedItems.Length);
+        //Debug.Log("Added " + addedItems.Length + " Removed " + removedItems.Length);
+        //This part is still busted.
         foreach (ItemInstance removed in removedItems) {
-            int ind = 0;
-            foreach (ItemInstance item in associatedInventory.Items) {
-                if (item == removed) {
-                    Destroy(ItemsList.content.GetChild(ind));
+            Debug.Log("Trying to remove item.");
+            for (int i = 0; i < ItemsList.content.childCount; i++) {
+                GameObject go = ItemsList.content.GetChild(i).gameObject;
+                if (go.GetComponent<UIItemChit>().instance.Equals(removed)) {
+                    Destroy(ItemsList.content.GetChild(i).gameObject);
+                    break;
                 }
-                ind++;
             }
         }
 
+        //This part works
         foreach (ItemInstance added in addedItems) {
             GameObject wid = MakeItemWidget(added);
             wid.transform.SetParent(ItemsList.content);
@@ -67,6 +72,13 @@ public class UIInventoryGrid: MonoBehaviour {
         //    }
         //    OnItemsChanged?.Invoke(this);
         //}
+    }
+
+    public void FullResync() {
+        foreach (ItemInstance i in associatedInventory.Items) {
+            GameObject wid = MakeItemWidget(i);
+            wid.transform.SetParent(ItemsList.content);
+        }
     }
 
     //Destroys all item objects currently in the inventory gui

@@ -1,4 +1,5 @@
 ﻿using BaD.Chopknee.Utilities;
+using BaD.Modules;
 using BaD.Modules.Networking;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,64 +14,38 @@ namespace BaD.UI.DumpA {
         private UIItemInfoObject ItemDetailsComponent;
         [SerializeField]
 #pragma warning disable 0649
-        private GameObject ItemWidgetPrefab;
-        [SerializeField]
-#pragma warning disable 0649
         private Button ReturnButton;
         [SerializeField]
 #pragma warning disable 0649
-        private ScrollRect ItemsList;
+        private UIInventoryGrid ItemsList;
 
         private NetInventory LocalPlayerInventory;
 
+        public void Open () {
+            Open(MainControl.LocalPlayerData.Inventory);
+        }
+
         public void Open ( NetInventory playerInventory ) {
-            //Yay, more network based garbage
             LocalPlayerInventory = playerInventory;
-            LocalPlayerInventory.OnItemsUpdated += OnInventorySynced;
-            gameObject.SetActive(true);
+            ItemsList.Open(LocalPlayerInventory);
             ReturnButton.onClick.AddListener(Close);
-            LocalPlayerInventory.Open();
+            gameObject.SetActive(true);
+            ItemsList.OnItemHighlighted += OnItemHighlighted;
         }
 
         public void Close () {
+            ItemsList.OnItemHighlighted -= OnItemHighlighted;
             ReturnButton.onClick.RemoveListener(Close);
-            ClearItems();
-            LocalPlayerInventory.OnItemsUpdated -= OnInventorySynced;
             gameObject.SetActive(false);
+            ItemsList.Close();
         }
 
-        public void OnInventorySynced ( int originalRequestID, ItemInstance[] added, ItemInstance[] removed ) {
-            //Clear out the old children of the list.
-            ClearItems();
-            //Make new children to add in the list.
-            ItemInstance[] theItems = LocalPlayerInventory.Items;
-            foreach (ItemInstance item in theItems) {
-                GameObject wid = MakeItemWidget(item);
-                wid.transform.SetParent(ItemsList.content);
-            }
-            //ItemsList.content.chil
+        void OnItemHighlighted(UIItemChit item) {
+            ItemDetailsComponent.ItemData = item.ItemData;
         }
 
-        public void ClearItems() {
-            List<GameObject> dest = new List<GameObject>();
-            for (int i = 0; i < ItemsList.content.childCount; i++) {
-                dest.Add(ItemsList.content.GetChild(i).gameObject);
-            }
-            Choptilities.DestroyList(dest);
-        }
+        void OnItemClicked( UIItemChit item) {
 
-        GameObject MakeItemWidget ( ItemInstance data ) {
-            ItemType item = NetworkedInventoryManager.Instance.GetItemData(data);
-            GameObject go = Instantiate(ItemWidgetPrefab);
-            UIItemChit uiic = go.GetComponent<UIItemChit>();
-            uiic.ItemData = item;
-            uiic.OnClicked += ChitClicked;
-            return go;
-        }
-
-        void ChitClicked(UIItemChit oneDatDunGotClicked) {
-            //We know which one got clicked!!
-            ItemDetailsComponent.ItemData = oneDatDunGotClicked.ItemData;
         }
     }
 }

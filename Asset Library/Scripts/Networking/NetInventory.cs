@@ -124,33 +124,23 @@ namespace BaD.Modules.Networking {
 
         //When a inventory sync request has been fulfilled on the client end
         private void SyncInventoryResponse ( ItemInstance[] newItems, int originalRequestID ) {
+            //Debug.LogFormat("Inventory sync response. {0} items are in the old list. {1} items are in the received list.", items.Count(), newItems.Length);
             //Added items are items that are in the new items list, but not in the old items list
             //Removed items are items that are not in the new items list, but are in the old items list
-            List<ItemInstance> removed = new List<ItemInstance>();
-            removed.AddRange(items);
-            List<ItemInstance> added = new List<ItemInstance>();
-            added.AddRange(newItems);
-            foreach (ItemInstance newI in newItems) {
-                foreach (ItemInstance oldI in items) {
-                    if (newI == oldI) {
-                        removed.Remove(newI);
-                        added.Remove(newI);
-                    }
-                }
-            }
-
+            ItemInstance[] added = newItems.Except(items, new ItemInstanceComparer()).ToArray();
+            ItemInstance[] removed = items.Except(newItems, new ItemInstanceComparer()).ToArray();
 
             items.Clear();
             items.AddRange(newItems);
             if (requestCallbacks.ContainsKey(originalRequestID)) {
-                Debug.Log("Running request callback!");
+                //Debug.Log("Running request callback!");
                 InventoryRequest req = requestCallbacks[originalRequestID];
                 requestCallbacks.Remove(originalRequestID);
                 req.callback?.Invoke(originalRequestID, req.itemsTaken, true, req.items);
             }
-            Debug.LogFormat("Inventory {2} had {0} items removed and {1} items added.", removed.Count(), added.Count(), gameObject.name);
+            //Debug.LogFormat("Inventory {2} had {0} items removed and {1} items added.", removed.Length, added.Length, gameObject.name);
             //Always invoke this, because even the master will make requests.
-            OnItemsUpdated?.Invoke(originalRequestID, added.ToArray(), removed.ToArray());
+            OnItemsUpdated?.Invoke(originalRequestID, added, removed);
         }
 
         //This is only run by the master client.
