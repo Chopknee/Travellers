@@ -18,6 +18,9 @@ MonoBehaviour:
   value: 9
   itemSprite: {fileID: 21300000, guid: 2e6e976fc9768314b9e8c92f26e55c57, type: 3}
   cardTier: 1
+  usageType: 1
   collections:
   - {fileID: 11400000, guid: d3bfe7343a9044a4086abec5aa6a98d3, type: 2}
   - {fileID: 11400000, guid: e96d83aa509afc94987dd125cf611541, type: 2}
+  worldItemPrefab: {fileID: 9181936858947072161, guid: 048d9ea9925cde34095e177f7ca01eb5,
+    type: 3}

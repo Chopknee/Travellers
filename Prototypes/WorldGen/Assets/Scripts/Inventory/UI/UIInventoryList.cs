@@ -7,7 +7,7 @@ public class UIInventoryList : MonoBehaviour, IUIDropZone {
 
     public string debugName = "";
     [Tooltip("If left empty, all items may be dropped here.")]
-    public Collection[] GroupsList;
+    public ItemModifier[] GroupsList;
     [Tooltip("Sets if the groups list will blackist a collection, or whitelist them.")]
     public bool blackListMode;//
 
@@ -19,8 +19,8 @@ public class UIInventoryList : MonoBehaviour, IUIDropZone {
             if (GroupsList.Length == 0) {return true;}//If the group list is empty, the check automatically passes.
             if (data.collections.Length == 0) {return blackListMode;}//If the card is not part of a group, only pass it if we are in blacklist mode???
             bool passed = blackListMode;
-            foreach (Collection checkCollection in GroupsList) {
-                foreach (Collection cardCollection in data.collections) {
+            foreach (ItemModifier checkCollection in GroupsList) {
+                foreach (ItemModifier cardCollection in data.collections) {
                     if (blackListMode) {
                         //Whitelist mode if any condition is true
                         passed = passed && checkCollection != cardCollection;

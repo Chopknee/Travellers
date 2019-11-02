@@ -32,7 +32,7 @@ namespace BaD.UI.DumpA {
 #pragma warning disable 0649
         private UIInventory linkedInventoryWindow;
         [Tooltip("If left empty, all items may be dropped here.")]
-        public Collection[] GroupsList;
+        public ItemModifier[] GroupsList;
         [Tooltip("Sets if the groups list will blackist a collection, or whitelist them.")]
         public bool blackListMode;//
         [SerializeField]
@@ -117,8 +117,8 @@ namespace BaD.UI.DumpA {
                 //If there is no group filter specified, or the card is not part of a group, bypass the following nested loop
                 if (GroupsList.Length != 0 && itemData.collections.Length != 0 && !allowLinkedInventoryOnly) {
                     //Searching through the specified filter groups and the card's groups
-                    foreach (Collection checkCollection in GroupsList) {
-                        foreach (Collection cardCollection in itemData.collections) {
+                    foreach (ItemModifier checkCollection in GroupsList) {
+                        foreach (ItemModifier cardCollection in itemData.collections) {
                             if (blackListMode) {
                                 //Whitelist mode if any condition is true
                                 passed = passed && checkCollection != cardCollection;

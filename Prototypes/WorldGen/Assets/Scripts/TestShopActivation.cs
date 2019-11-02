@@ -29,7 +29,6 @@ public class TestShopActivation : MonoBehaviour {
     }
 
     public void RequestInventoryCallback(GameObject inv, bool needsInitialize) {
-        Debug.Log("CALLED THE FUCK BACK FROM REQUESTING INVENTORY");
         //Once the callback is run, we assign the inventory instance object
         shopInventory = inv.GetComponent<NetInventory>();
 
@@ -51,8 +50,7 @@ public class TestShopActivation : MonoBehaviour {
         shopUIInstance.SetActive(true);
     }
 
-    private void AddStartItems(int noiseSeed) {//Need to figure out how to know when the shop's items need to be initialized??
-        Debug.Log("ADDING ITEMS");
+    private void AddStartItems(int noiseSeed) {//Need to figure out how to know when the shop's items need to be initialized?
         //Select a random number of items to spawn based on the range of items allowed to spawn
         int itemsToSpawn = Noise.GetRandomRange(noiseSeed, minItems, maxItems);
 

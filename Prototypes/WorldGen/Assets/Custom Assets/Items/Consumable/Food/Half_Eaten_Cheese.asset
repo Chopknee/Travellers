@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
-  m_Name: Mushroom_Stew
+  m_Name: Half_Eaten_Cheese
   m_EditorClassIdentifier: 
-  autoUpdate: 0
-  itemName: Mushroom Stew
-  description: A bowla toastew.
-  value: 8
-  itemSprite: {fileID: 21300000, guid: a1c8317ab455f94499e0831f139549cb, type: 3}
-  cardTier: 1
+  autoUpdate: 1
+  itemName: Half-Eaten Cheese
+  description: "This cheese is \npretty good...."
+  value: 2
+  itemSprite: {fileID: 21300000, guid: 5d0bfe332bf362444b245291b5ce4f33, type: 3}
+  cardTier: 0
+  usageType: 2
   collections:
   - {fileID: 11400000, guid: cf61c5ab856e6e64a8db7c16b735e793, type: 2}
+  worldItemPrefab: {fileID: 0}

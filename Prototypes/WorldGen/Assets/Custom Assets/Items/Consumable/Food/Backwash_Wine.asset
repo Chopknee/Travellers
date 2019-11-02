@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
-  m_Name: Cheese_Wheel
+  m_Name: Backwash_Wine
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  itemName: Cheese Wheel
-  description: Where'd the missing wedge go?
-  value: 9
-  itemSprite: {fileID: 21300000, guid: 4fbde22719a010645b3ef255ab0fd3b6, type: 3}
-  cardTier: 1
+  itemName: Backwased Wine
+  description: I mean, it's still wine...
+  value: 3
+  itemSprite: {fileID: 21300000, guid: 355aea7aae0ca56429575e870941790b, type: 3}
+  cardTier: 0
+  usageType: 2
   collections:
   - {fileID: 11400000, guid: cf61c5ab856e6e64a8db7c16b735e793, type: 2}
+  worldItemPrefab: {fileID: 0}

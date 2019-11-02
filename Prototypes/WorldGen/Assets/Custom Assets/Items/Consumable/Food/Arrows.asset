@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
-  m_Name: Wolf_Meat
+  m_Name: Arrows
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  itemName: Wolf Meat
-  description: 'A nutritious
+  itemName: Arrows
+  description: 'Thud.
 
-    meal.'
-  value: 2
-  itemSprite: {fileID: 21300000, guid: d3089533fb60d9d49b8aaab416393b0d, type: 3}
-  cardTier: 0
+'
+  value: 5
+  itemSprite: {fileID: 21300000, guid: e9857ed1a8458364ca03b180f4d748a7, type: 3}
+  cardTier: 1
+  usageType: 2
   collections:
   - {fileID: 11400000, guid: cf61c5ab856e6e64a8db7c16b735e793, type: 2}
+  worldItemPrefab: {fileID: 0}

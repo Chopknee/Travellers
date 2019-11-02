@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
-  m_Name: Quiver
+  m_Name: Wolf_Meat
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  itemName: Quiver
-  description: Makes me shakes and quiver!
-  value: 9
-  itemSprite: {fileID: 21300000, guid: 9331804f6d675ab44a432f6797441a96, type: 3}
-  cardTier: 1
+  itemName: Wolf Meat
+  description: 'A nutritious
+
+    meal.'
+  value: 2
+  itemSprite: {fileID: 21300000, guid: d3089533fb60d9d49b8aaab416393b0d, type: 3}
+  cardTier: 0
+  usageType: 2
   collections:
   - {fileID: 11400000, guid: cf61c5ab856e6e64a8db7c16b735e793, type: 2}
+  worldItemPrefab: {fileID: 0}

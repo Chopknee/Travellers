@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dacef07533efb4948a15d0c18a217ce7, type: 3}
-  m_Name: Half_Eaten_Cheese
+  m_Name: Quiver
   m_EditorClassIdentifier: 
-  autoUpdate: 1
-  itemName: Half-Eaten Cheese
-  description: "This cheese is \npretty good...."
-  value: 2
-  itemSprite: {fileID: 21300000, guid: 5d0bfe332bf362444b245291b5ce4f33, type: 3}
-  cardTier: 0
+  autoUpdate: 0
+  itemName: Quiver
+  description: Makes me shakes and quiver!
+  value: 9
+  itemSprite: {fileID: 21300000, guid: 9331804f6d675ab44a432f6797441a96, type: 3}
+  cardTier: 1
+  usageType: 2
   collections:
   - {fileID: 11400000, guid: cf61c5ab856e6e64a8db7c16b735e793, type: 2}
+  worldItemPrefab: {fileID: 0}

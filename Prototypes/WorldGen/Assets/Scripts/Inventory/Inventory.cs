@@ -37,12 +37,12 @@ namespace BaD.Modules.Inventory {
         }
 
         //Yay, so much confusion
-        public static ItemInstance[] GetItemsByGroup ( ItemInstance[] items, Collection[] filters ) {
+        public static ItemInstance[] GetItemsByGroup ( ItemInstance[] items, ItemModifier[] filters ) {
             List<ItemInstance> filtered = new List<ItemInstance>();
-            foreach (Collection coll in filters) {
+            foreach (ItemModifier coll in filters) {
                 foreach (ItemInstance i in items) {
-                    Collection[] cardCollections = NetworkedInventoryManager.Instance.GetItemData(i).collections;
-                    foreach (Collection itemCollection in cardCollections) {
+                    ItemModifier[] cardCollections = NetworkedInventoryManager.Instance.GetItemData(i).collections;
+                    foreach (ItemModifier itemCollection in cardCollections) {
                         if (itemCollection == coll && !filtered.Contains(i)) {
                             filtered.Add(i);
                             break;

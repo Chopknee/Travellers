@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BaD.Modules.Combat {
@@ -9,17 +6,25 @@ namespace BaD.Modules.Combat {
     public class CombatController: MonoBehaviour {
         Animator anim;
 
-        public GameObject currentWeapon;
+        public GameObject northWeapon;
+        public GameObject eastWeapon;
+        public GameObject westWeapon;
+
         AttackStyle weaponScript;
 
 
 
         private void Start () {
-            if (currentWeapon.GetComponent<AttackStyle>() == null) {
+
+            //Set up to listen for changes to the currently selected items
+
+
+            if (northWeapon.GetComponent<AttackStyle>() == null) {
                 Debug.Log("Cannot use current weapon gameobject. It does not have an attack style or derivative script.");
                 return;
             }
-            SetWeapon(currentWeapon.GetComponent<AttackStyle>());
+            SetWeapon(northWeapon.GetComponent<AttackStyle>());
+
         }
 
         void Update () {
@@ -28,7 +33,7 @@ namespace BaD.Modules.Combat {
 
         public void DoAttack(InputAction.CallbackContext context) {
             //
-            if (currentWeapon != null) {
+            if (northWeapon != null) {
                 if (!weaponScript.IsAttacking) {
                     weaponScript.DoAttack();
                 }
@@ -44,7 +49,7 @@ namespace BaD.Modules.Combat {
         }
 
         public void SetWeapon ( AttackStyle weapon ) {
-            currentWeapon = weapon.gameObject;
+            northWeapon = weapon.gameObject;
             weaponScript = weapon;
             weaponScript.wielder = gameObject;
         }

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 0
   collectionName: Weapon
-  displayColor: {r: 1, g: 0, b: 0, a: 0}
+  displayColor: {r: 1, g: 0, b: 0, a: 1}

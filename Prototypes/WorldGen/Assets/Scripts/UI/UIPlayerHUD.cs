@@ -61,7 +61,9 @@ namespace BaD.UI.DumpA {
         }
 
         void OnInventoryButtonClicked() {
-            MainControl.Instance.PlayerInventoryInstance.Open(associatedPlayer.Inventory);
+            if (MainControl.Instance != null) {
+                MainControl.Instance.PlayerInventoryInstance.Open(associatedPlayer.Inventory);
+            }
         }
     }
 }

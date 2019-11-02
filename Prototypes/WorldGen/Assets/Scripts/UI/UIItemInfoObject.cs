@@ -52,7 +52,7 @@ namespace BaD.UI.DumpA {
                 ItemData.OnValuesUpdated += GenerateCard;
 
                 if (ItemData.collections != null) {
-                    foreach (Collection c in ItemData.collections) {
+                    foreach (ItemModifier c in ItemData.collections) {
                         c.OnValuesUpdated -= UpdateCollections;
                         c.OnValuesUpdated += UpdateCollections;
                     }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu()]
-public class Collection: UpdateableData {
+public class ItemModifier: UpdateableData {
 
     public string collectionName;
     public Color displayColor;

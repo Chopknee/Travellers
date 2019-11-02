@@ -40,7 +40,13 @@ namespace BaD.UI.DumpA {
         }
 
         void CardDataChanged( ItemType newCard ) {
-            itemImage.sprite = newCard.itemSprite;
+            if (newCard == null) {
+                itemImage.sprite = null;
+                itemImage.color = new Color(0, 0, 0, 0);
+            } else {
+                itemImage.sprite = newCard.itemSprite;
+                itemImage.color = new Color(1, 1, 1, 1);
+            }
         }
 
         public void OnSelect ( BaseEventData eventData ) {

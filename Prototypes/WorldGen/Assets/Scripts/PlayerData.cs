@@ -29,8 +29,45 @@ public class PlayerData {
     public delegate void PlayerActionsTakenChanged ( PlayerData player );
     public PlayerActionsTakenChanged OnActionsTakenChanged;
 
+    public delegate void EquipsChanged( Enums.Directions direction, ItemInstance item );
+    public EquipsChanged OnEquipsChanged;
+
     private int takenActions = 0;
     private int heldGold = 0;
+
+    ItemInstance _northItem;
+    public ItemInstance northEquppedItem {
+        get {
+            return _northItem;
+        }
+        set {
+            _northItem = value;
+            Debug.Log("North Equipped.");
+            OnEquipsChanged?.Invoke(Enums.Directions.North, _northItem);
+        }
+    }
+
+    ItemInstance _southItem;
+    public ItemInstance southEquippedItem {
+        get {
+            return _southItem;
+        }
+        set {
+            _southItem = value;
+            OnEquipsChanged?.Invoke(Enums.Directions.South, _southItem);
+        }
+    }
+
+    ItemInstance _eastItem;
+    public ItemInstance eastEquippedItem {
+        get {
+            return _eastItem;
+        }
+        set {
+            _eastItem = value;
+            OnEquipsChanged?.Invoke(Enums.Directions.East, _eastItem);
+        }
+    }
 
     public PlayerData(GameObject playerRef) {
         playerGameobjectRef = playerRef;

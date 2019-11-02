@@ -24,6 +24,7 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
             itemDataGuiInst = Instantiate(itemDataGui);
             itemDataGuiInst.GetComponent<UITargetObject>().target = transform;
             itemDataGuiInst.SetActive(false);
+            itemDataGuiInst.transform.SetParent(MainControl.Instance.HudUI.transform);
             //itemDataGuiInst.transform.SetParent(MainControl.Instance.ActionConfirmationUI.transform);
             itemDataGuiInst.GetComponentInChildren<Text>().text = itemData.itemName;
         }
@@ -33,6 +34,9 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
         //Click on loot?
         if (pickupSound != null) {
             //Get the loot.
+            if (netItemData == null) {
+                netItemData = NetworkedInventoryManager.Instance.MakeItemStruct(itemData);
+            }
             MainControl.LocalPlayerData.Inventory.AddItem(netItemData);
             //Then destroy self.
             NetInstanceManager.CurrentManager.DestroyObject(gameObject);
@@ -52,6 +56,7 @@ public class WorldLoot: MonoBehaviour, IPunObservable {
     }
 
     public void OnDestroy () {
+
         Destroy(itemDataGuiInst);
         //Set up the object that plays the clip we can hear.
         GameObject go = new GameObject("LootSound");

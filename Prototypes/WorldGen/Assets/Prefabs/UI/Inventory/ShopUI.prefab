@@ -1605,11 +1605,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6204288817545835741}
     m_Modifications:
-    - target: {fileID: 54144167825057676, guid: c17410eaad91a574ca2c5968d333c0af,
-        type: 3}
-      propertyPath: m_Name
-      value: ShopInventory
-      objectReference: {fileID: 0}
     - target: {fileID: 54144167825057667, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1715,10 +1710,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 54144166740848073, guid: c17410eaad91a574ca2c5968d333c0af,
+    - target: {fileID: 54144167825057676, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
+      propertyPath: m_Name
+      value: ShopInventory
       objectReference: {fileID: 0}
     - target: {fileID: 54144167006775520, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
@@ -1743,6 +1738,11 @@ PrefabInstance:
     - target: {fileID: 54144168028349879, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 54144166740848073, guid: c17410eaad91a574ca2c5968d333c0af,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1772,11 +1772,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6204288817545835741}
     m_Modifications:
-    - target: {fileID: 54144167825057676, guid: c17410eaad91a574ca2c5968d333c0af,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerInventory
-      objectReference: {fileID: 0}
     - target: {fileID: 54144167825057667, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1845,7 +1840,7 @@ PrefabInstance:
     - target: {fileID: 54144167825057667, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 436.30005
+      value: 454
       objectReference: {fileID: 0}
     - target: {fileID: 54144167825057667, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
@@ -1881,6 +1876,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 54144167825057676, guid: c17410eaad91a574ca2c5968d333c0af,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerInventory
       objectReference: {fileID: 0}
     - target: {fileID: 54144167006775520, guid: c17410eaad91a574ca2c5968d333c0af,
         type: 3}
